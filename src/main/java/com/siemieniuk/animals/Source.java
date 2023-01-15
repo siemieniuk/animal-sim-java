@@ -12,27 +12,20 @@ public abstract class Source extends Location {
 	private final String name;
 	private final float preyReplenishingSpeed;
 	private final int capacity;
-	private List<Prey> usedBy;
-
-	private Source() {
-		this.name = "";
-		this.capacity = 0;
-		this.preyReplenishingSpeed = 0.0f;
-	}
+	private final List<Prey> usedBy;
 
 	/**
-	 * @param x First coordinate
-	 * @param y Second coordinate
+	 * @param pos Object of type Coordinates
 	 * @param name Name
 	 * @param preyReplenishingSpeed Speed of replenishing water by prey
 	 * @param capacity Maximal amount of preys which can use this water source simultaneously
 	 */
-	public Source(int x, int y, String name, float preyReplenishingSpeed, int capacity) {
-		super(x, y);
+	public Source(Coordinates pos, String name, float preyReplenishingSpeed, int capacity) {
+		super(pos);
 		this.name = name;
 		this.capacity = capacity;
 		this.preyReplenishingSpeed = preyReplenishingSpeed;
-		this.usedBy = new ArrayList<Prey>();
+		this.usedBy = new ArrayList<>();
 	}
 
 	/**
@@ -40,7 +33,7 @@ public abstract class Source extends Location {
 	 * @return True if occupied, false otherwise
 	 */
 	public boolean isOccupied() {
-		return (usedBy.size() == capacity) ? true : false;
+		return usedBy.size() == capacity;
 	}
 
 	/**
@@ -48,7 +41,7 @@ public abstract class Source extends Location {
 	 * @param newPrey Prey
 	 */
 	public void addNewAnimal(Prey newPrey) {
-		if (this.isOccupied() == false) {
+		if (!this.isOccupied()) {
 			usedBy.add(newPrey);
 		}
 	}
@@ -58,9 +51,7 @@ public abstract class Source extends Location {
 	 * @param prey Prey to remove
 	 */
 	public void removeAnimal(Prey prey) {
-		if (usedBy.contains(prey)) {
-			usedBy.remove(prey);			
-		}
+		usedBy.remove(prey);
 	}
 
 	/**

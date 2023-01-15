@@ -1,5 +1,7 @@
 package com.siemieniuk.animals;
 
+import javafx.scene.canvas.GraphicsContext;
+
 /**
  * Class implementing this interface is able to draw on canva
  * @author Szymon Siemieniuk
@@ -7,6 +9,5 @@ package com.siemieniuk.animals;
  *
  */
 public interface Drawable {
-	/* TODO: Use canva as a parameter */
-	void draw();
+	void prepareToDrawOn(GraphicsContext gc);
 }

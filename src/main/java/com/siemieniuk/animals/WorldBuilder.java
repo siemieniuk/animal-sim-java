@@ -1,53 +1,74 @@
 package com.siemieniuk.animals;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Collections;
-import java.util.Iterator;
+import com.siemieniuk.animals.hobhw_parser.HobhwParser;
+import com.siemieniuk.animals.hobhw_parser.WorldParameters;
+
+import java.io.FileNotFoundException;
+import java.util.*;
 
 public class WorldBuilder {
     private static final int MIN_DIST = 4;
     private WorldBuilder() {}
     public static World create(int howManySources, int howManyHideouts, int xSize, int ySize){
+        Coordinates.setMaxDim(xSize, ySize);
         List<Coordinates> coordinates = generateCoords(xSize, ySize, howManySources+howManyHideouts);
-        System.out.println(coordinates);
-        List<Location> locations = new ArrayList<> ();
+        Hashtable<Coordinates, Location> locations = new Hashtable<> ();
         generateWaterSources(locations, coordinates.subList(0, howManySources / 2));
         generatePlantSources(locations, coordinates.subList(howManySources/2, howManySources));
         generateHideouts(locations, coordinates.subList(howManySources, coordinates.size()));
-        // TODO: create animals
-        return new World(locations, xSize, ySize);
+        return World.init(locations, xSize, ySize);
     }
 
-    private static void generatePlantSources(List<Location> locations, List<Coordinates> coordinates) {
-        Iterator<Coordinates> it = coordinates.iterator();
-        while (it.hasNext()) {
+    public static World create(String path) throws FileNotFoundException {
+        HobhwParser parser = new HobhwParser(path);
+        WorldParameters params = parser.parse();
+        Coordinates.setMaxDim(params.getxSize(), params.getySize());
+        Hashtable<Coordinates, Location> locations = new Hashtable<>();
+        generateWaterSources(locations, params.getWaterSources());
+        generatePlantSources(locations, params.getPlantSources());
+        generateHideouts(locations, params.getHideouts());
+        generateIntersections(locations, params.getIntersections());
+        generatePaths(locations, params.getPaths());
+        return World.init(locations, params.getxSize(), params.getySize());
+    }
+
+    private static void generatePlantSources(Hashtable<Coordinates, Location> locations, List<Coordinates> coordinates) {
+        for (Coordinates pos : coordinates) {
             /* TODO: Random replenishing speed */
             /* TODO: Random capacity */
-            Coordinates c = it.next();
-            PlantSource ps = new PlantSource(c.getX(), c.getY(), "a", 2, 3);
-            locations.add(ps);
+            PlantSource ps = new PlantSource(pos, "a", 2, 3);
+            locations.put(pos, ps);
         }
     }
 
-    private static void generateWaterSources(List<Location> locations, List<Coordinates> coordinates) {
-        Iterator<Coordinates> it = coordinates.iterator();
-        while (it.hasNext()) {
+    private static void generateWaterSources(Hashtable<Coordinates, Location> locations, List<Coordinates> coordinates) {
+        for (Coordinates pos : coordinates) {
             /* TODO: Random replenishing speed */
             /* TODO: Random capacity */
-            Coordinates c = it.next();
-            WaterSource ws = new WaterSource(c.getX(), c.getY(), "a", 2, 3);
-            locations.add(ws);
+            WaterSource ws = new WaterSource(pos, "a", 2, 3);
+            locations.put(pos, ws);
         }
     }
 
-    private static void generateHideouts(List<Location> locations, List<Coordinates> coordinates) {
-        Iterator<Coordinates> it = coordinates.iterator();
-        while (it.hasNext()) {
+    private static void generateHideouts(Hashtable<Coordinates, Location> locations, List<Coordinates> coordinates) {
+        for (Coordinates pos : coordinates) {
             /* TODO: Random capacity */
-            Coordinates c = it.next();
-            Hideout h = new Hideout(c.getX(), c.getY(), 3);
-            locations.add(h);
+            Hideout hideout = new Hideout(pos, 3);
+            locations.put(pos, hideout);
+        }
+    }
+
+    private static void generatePaths(Hashtable<Coordinates, Location> locations, List<Coordinates> coordinates) {
+        for (Coordinates pos : coordinates) {
+            Path path = new Path(pos);
+            locations.put(pos, path);
+        }
+    }
+
+    private static void generateIntersections(Hashtable<Coordinates, Location> locations, List<Coordinates> coordinates) {
+        for (Coordinates pos : coordinates) {
+            Intersection intersection = new Intersection(pos);
+            locations.put(pos, intersection);
         }
     }
 
@@ -59,7 +80,6 @@ public class WorldBuilder {
             }
         }
         Collections.shuffle(coordinates);
-
         int currentSize = 2;
         while (currentSize < targetSize) {
             boolean flag_to_rm = false;

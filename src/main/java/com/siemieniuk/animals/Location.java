@@ -1,30 +1,22 @@
 package com.siemieniuk.animals;
 
+import javafx.scene.canvas.GraphicsContext;
+
 /**
  * A class representing each location having its own coordinates.
  * @author Szymon Siemieniuk
  * @version 0.1
  *
  */
-public abstract class Location {
-	private int xPos;
-	private int yPos;
-	
-	public Location() {
-		this.xPos = 0;
-		this.yPos = 0;
-	}
-	
+public abstract class Location implements DetailsPrintable, Drawable {
+	private final Coordinates pos;
 	
 	/**
 	 * Creates location
-	 * 
-	 * @param x First coordinate
-	 * @param y Second coordinate
+	 * @param pos Object of class Coordinates
 	 */
-	public Location(int x, int y) {
-		this.xPos = x;
-		this.yPos = y;
+	public Location(Coordinates pos) {
+		this.pos = pos;
 	}
 	
 	/* TODO: Implement */
@@ -33,20 +25,29 @@ public abstract class Location {
 	 * @param other A destination location
 	 * @return Value representing a distance
 	 */
-	public int[] getDistanceTo(Location other) {
-		return null;
+	public int getDistanceTo(Location other) {
+		return pos.getManhattanDistanceTo(other.getPos());
 	}
 	
 	/**
 	 * Gets coordinates of position
 	 * @return A pair of coordinates (x, y)
 	 */
-	public int[] getPos() {
-		int[] pos = {xPos, yPos};
+	public Coordinates getPos() {
 		return pos;
 	}
 
+	@Override
+	public String getDetails() {
+		return "LOCATION: " +
+				"\nPosition: " + pos  +
+				"\nType: ";
+	}
+
+	@Override
+	public abstract void prepareToDrawOn(GraphicsContext gc);
+
 	public String toString() {
-		return getClass() + " (" + xPos + ", " + yPos + ")\n";
+		return getClass() + " " + pos;
 	}
 }

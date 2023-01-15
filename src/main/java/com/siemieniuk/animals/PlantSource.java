@@ -1,5 +1,8 @@
 package com.siemieniuk.animals;
 
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+
 /**
  * @author Szymon Siemieniuk
  * @version 0.1
@@ -8,13 +11,23 @@ package com.siemieniuk.animals;
 public class PlantSource extends Source {
 	
 	/**
-	 * @param x First coordinate
-	 * @param y Second coordinate
+	 * @param pos Object of class Coordinates
 	 * @param name Name
 	 * @param preyReplenishingSpeed Speed of replenishing prey's food
 	 * @param capacity Maximal amount of animals which can use this source simultaneously
 	 */
-	public PlantSource(int x, int y, String name, float preyReplenishingSpeed, int capacity) {
-		super(x, y, name, preyReplenishingSpeed, capacity);
+	public PlantSource(Coordinates pos, String name, float preyReplenishingSpeed, int capacity) {
+		super(pos, name, preyReplenishingSpeed, capacity);
+	}
+
+	@Override
+	public void prepareToDrawOn(GraphicsContext gc) {
+		gc.setFill(Color.BROWN);
+	}
+
+	/* TODO: Implement */
+	@Override
+	public String getDetails() {
+		return super.getDetails() + "Plant Source";
 	}
 }

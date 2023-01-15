@@ -1,5 +1,8 @@
 package com.siemieniuk.animals;
 
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,27 +14,26 @@ import java.util.List;
  *
  */
 public class Hideout extends Location {
-	private int capacity;
+	private final int capacity;
 	List<Prey> usedBy;
 	
 	/**
 	 * Constructor
-	 * @param x First coordinate
-	 * @param y Second coordinate
+	 * @param pos Object of class Coordinate
 	 * @param capacity Maximal amount of animals
 	 */
-	public Hideout(int x, int y, int capacity) {
-		super(x, y);
+	public Hideout(Coordinates pos, int capacity) {
+		super(pos);
 		this.capacity = capacity;
-		this.usedBy = new ArrayList<Prey> ();
+		this.usedBy = new ArrayList<> ();
 	}
-	
+
 	/**
 	 * Checks if all the slots are occupied
 	 * @return True if there is no free space, false otherwise
 	 */
 	public boolean isOccupied() {
-		return (usedBy.size() == capacity) ? true : false;
+		return usedBy.size() == capacity;
 	}
 	
 	/**
@@ -39,7 +41,7 @@ public class Hideout extends Location {
 	 * @param newPrey Prey to be added
 	 */
 	public void addNewAnimal(Prey newPrey) {
-		if (this.isOccupied() == false) {
+		if (!this.isOccupied()) {
 			usedBy.add(newPrey);
 		}
 	}
@@ -49,9 +51,7 @@ public class Hideout extends Location {
 	 * @param prey Prey to remove
 	 */
 	public void removeAnimal(Prey prey) {
-		if (usedBy.contains(prey)) {
-			usedBy.remove(prey);			
-		}
+		usedBy.remove(prey);
 	}
 	
 	/**
@@ -60,5 +60,16 @@ public class Hideout extends Location {
 	 */
 	public List<Prey> getCurrentAnimals() {
 		return usedBy;
+	}
+
+	@Override
+	public void prepareToDrawOn(GraphicsContext gc) {
+		gc.setFill(Color.ORANGE);
+	}
+
+	/* TODO: Implement */
+	@Override
+	public String getDetails() {
+		return super.getDetails() + "Hideout\n";
 	}
 }

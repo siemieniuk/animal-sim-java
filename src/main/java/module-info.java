@@ -6,4 +6,6 @@ module com.example.animals {
 
     opens com.siemieniuk.animals to javafx.fxml;
     exports com.siemieniuk.animals;
+    exports com.siemieniuk.animals.hobhw_parser;
+    opens com.siemieniuk.animals.hobhw_parser to javafx.fxml;
 }
