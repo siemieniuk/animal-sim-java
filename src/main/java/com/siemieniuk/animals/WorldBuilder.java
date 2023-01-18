@@ -2,9 +2,11 @@ package com.siemieniuk.animals;
 
 import com.siemieniuk.animals.hobhw_parser.HobhwParser;
 import com.siemieniuk.animals.hobhw_parser.WorldParameters;
+import com.siemieniuk.animals.math.Coordinates;
 
 import java.io.FileNotFoundException;
 import java.util.*;
+import java.net.URL;
 
 public class WorldBuilder {
     private static final int MIN_DIST = 4;
@@ -19,8 +21,9 @@ public class WorldBuilder {
         return World.init(locations, xSize, ySize);
     }
 
-    public static World create(String path) throws FileNotFoundException {
-        HobhwParser parser = new HobhwParser(path);
+//    public static World create(String path) throws FileNotFoundException {
+    public static World create(URL src) throws FileNotFoundException {
+        HobhwParser parser = new HobhwParser(src);
         WorldParameters params = parser.parse();
         Coordinates.setMaxDim(params.getxSize(), params.getySize());
         Hashtable<Coordinates, Location> locations = new Hashtable<>();
@@ -34,25 +37,20 @@ public class WorldBuilder {
 
     private static void generatePlantSources(Hashtable<Coordinates, Location> locations, List<Coordinates> coordinates) {
         for (Coordinates pos : coordinates) {
-            /* TODO: Random replenishing speed */
-            /* TODO: Random capacity */
-            PlantSource ps = new PlantSource(pos, "a", 2, 3);
+            PlantSource ps = new PlantSource(pos, "Baobab", 10, 4);
             locations.put(pos, ps);
         }
     }
 
     private static void generateWaterSources(Hashtable<Coordinates, Location> locations, List<Coordinates> coordinates) {
         for (Coordinates pos : coordinates) {
-            /* TODO: Random replenishing speed */
-            /* TODO: Random capacity */
-            WaterSource ws = new WaterSource(pos, "a", 2, 3);
+            WaterSource ws = new WaterSource(pos, "Lake", 10, 4);
             locations.put(pos, ws);
         }
     }
 
     private static void generateHideouts(Hashtable<Coordinates, Location> locations, List<Coordinates> coordinates) {
         for (Coordinates pos : coordinates) {
-            /* TODO: Random capacity */
             Hideout hideout = new Hideout(pos, 3);
             locations.put(pos, hideout);
         }

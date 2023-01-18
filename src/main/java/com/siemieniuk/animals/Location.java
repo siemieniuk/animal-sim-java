@@ -1,5 +1,6 @@
 package com.siemieniuk.animals;
 
+import com.siemieniuk.animals.math.Coordinates;
 import javafx.scene.canvas.GraphicsContext;
 
 /**
@@ -18,8 +19,7 @@ public abstract class Location implements DetailsPrintable, Drawable {
 	public Location(Coordinates pos) {
 		this.pos = pos;
 	}
-	
-	/* TODO: Implement */
+
 	/**
 	 * Calculates distance from this object to another location
 	 * @param other A destination location

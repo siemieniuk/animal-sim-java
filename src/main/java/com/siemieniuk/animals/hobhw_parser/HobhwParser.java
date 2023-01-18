@@ -1,27 +1,25 @@
 package com.siemieniuk.animals.hobhw_parser;
 
-import com.siemieniuk.animals.Coordinates;
+import com.siemieniuk.animals.math.Coordinates;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
 
 public class HobhwParser {
     private final WorldParameters params;
-    private final String path;
+    private final URL src;
 
-    public HobhwParser(String path) {
-        this.path = path;
+    public HobhwParser(URL src) {
+        this.src = src;
         this.params = new WorldParameters();
     }
 
     public WorldParameters parse() throws FileNotFoundException {
-        if (!validatePath(path)) {
+        if (!validatePath(src.toString())) {
             throw new FileNotFoundException("Wrong file format");
         }
-        BufferedReader br = new BufferedReader(new FileReader(path));
         try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(src.openStream()));
             readDimensions(br);
             readMapContent(br);
             br.close();

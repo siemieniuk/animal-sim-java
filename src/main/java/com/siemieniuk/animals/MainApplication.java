@@ -16,10 +16,10 @@ public class MainApplication extends Application {
             System.exit(0);
         });
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("main-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 610, 410);
+        Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Hunt Or Be Hunted?");
-        stage.setMinHeight(410);
-        stage.setMinWidth(610);
+        stage.setMinHeight(420);
+        stage.setMinWidth(620);
         stage.setScene(scene);
         stage.show();
     }

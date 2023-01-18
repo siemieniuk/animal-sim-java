@@ -1,20 +1,25 @@
 package com.siemieniuk.animals;
 
+import com.siemieniuk.animals.math.Coordinates;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class WorldCanvasPainter {
     private final World world;
-    private Canvas canvas;
+    private final Canvas canvas;
     private static int cellWidth = 0, cellHeight = 0;
 
     public WorldCanvasPainter(Canvas c) {
         this.world = World.getInstance();
         this.canvas = c;
+        canvas.widthProperty().addListener((event) -> updateCanvas());
+        canvas.heightProperty().addListener((event) -> updateCanvas());
+        setCellDimensions();
     }
 
     public void updateCanvas() {
+        setCellDimensions();
         drawBackground();
         drawLocations();
         drawAnimals();
@@ -46,7 +51,6 @@ public class WorldCanvasPainter {
 
     protected void drawLocations() {
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        setCellDimensions(gc);
         for (Location l: world.getLocations().values()) {
             l.prepareToDrawOn(gc);
             Coordinates pos = l.getPos();
@@ -58,7 +62,6 @@ public class WorldCanvasPainter {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.setLineWidth(1);
         gc.setStroke(Color.BLACK);
-        setCellDimensions(gc);
         for (int x=1; x<world.getxSize(); x++) {
             gc.strokeLine(x*cellWidth, 0, x*cellWidth, canvas.getWidth());
         }
@@ -67,13 +70,9 @@ public class WorldCanvasPainter {
         }
     }
 
-    public void setCellDimensions(GraphicsContext gc) {
+    public void setCellDimensions() {
         cellWidth = (int) canvas.getWidth() / world.getxSize();
         cellHeight = (int) canvas.getHeight() / world.getxSize();
-    }
-
-    public static int[] convert(int x, int y) {
-        return new int[] {x*cellWidth, y*cellHeight};
     }
 
     public static int[] convertToWorldPos(double x, double y) {

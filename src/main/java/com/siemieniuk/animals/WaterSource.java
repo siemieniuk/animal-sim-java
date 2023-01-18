@@ -1,5 +1,6 @@
 package com.siemieniuk.animals;
 
+import com.siemieniuk.animals.math.Coordinates;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -25,9 +26,10 @@ public class WaterSource extends Source {
 		gc.setFill(Color.BLUE);
 	}
 
-	/* TODO: Implement */
 	@Override
 	public String getDetails() {
-		return super.getDetails() + "WaterSource\n";
+		return super.getDetails() + "Water Source\n"
+				                  + "called " + getName() + "\n"
+							      + "used by " + getUsageString() + " animals\n";
 	}
 }

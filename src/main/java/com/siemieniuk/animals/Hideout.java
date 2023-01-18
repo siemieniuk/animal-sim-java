@@ -1,10 +1,12 @@
 package com.siemieniuk.animals;
 
+import com.siemieniuk.animals.math.Coordinates;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 /**
  * Represents hideout - a place where preys can reproduce and 
@@ -15,6 +17,8 @@ import java.util.List;
  */
 public class Hideout extends Location {
 	private final int capacity;
+
+	private final Semaphore sem;
 	List<Prey> usedBy;
 	
 	/**
@@ -26,6 +30,7 @@ public class Hideout extends Location {
 		super(pos);
 		this.capacity = capacity;
 		this.usedBy = new ArrayList<> ();
+		this.sem = new Semaphore(capacity);
 	}
 
 	/**
@@ -41,8 +46,12 @@ public class Hideout extends Location {
 	 * @param newPrey Prey to be added
 	 */
 	public void addNewAnimal(Prey newPrey) {
-		if (!this.isOccupied()) {
+		try {
+			sem.acquire();
 			usedBy.add(newPrey);
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+			usedBy.remove(newPrey);
 		}
 	}
 	
@@ -52,6 +61,7 @@ public class Hideout extends Location {
 	 */
 	public void removeAnimal(Prey prey) {
 		usedBy.remove(prey);
+		sem.release();
 	}
 	
 	/**
@@ -67,9 +77,9 @@ public class Hideout extends Location {
 		gc.setFill(Color.ORANGE);
 	}
 
-	/* TODO: Implement */
 	@Override
 	public String getDetails() {
-		return super.getDetails() + "Hideout\n";
+		return super.getDetails() + "Hideout\n"
+		                          + "used by " + usedBy.size() + "/" + capacity + " animals\n";
 	}
 }

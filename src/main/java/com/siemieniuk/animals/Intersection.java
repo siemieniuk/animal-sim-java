@@ -1,7 +1,10 @@
 package com.siemieniuk.animals;
 
+import com.siemieniuk.animals.math.Coordinates;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+
+import java.util.concurrent.Semaphore;
 
 /**
  * A location with exactly only 0 or 1 prey per object
@@ -10,6 +13,7 @@ import javafx.scene.paint.Color;
  *
  */
 public class Intersection extends Location {
+	private final Semaphore sem;
 	private Prey usedBy = null;
 	
 	/**
@@ -18,6 +22,7 @@ public class Intersection extends Location {
 	 */
 	public Intersection(Coordinates pos) {
 		super(pos);
+		sem = new Semaphore(1);
 	}
 	
 	/**
@@ -25,22 +30,20 @@ public class Intersection extends Location {
 	 * @param p Prey
 	 */
 	public void setUsedBy(Prey p) {
-		usedBy = p;
+		try {
+			sem.acquire();
+			usedBy = p;
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
-	
+
 	/**
 	 * Marks intersection as free
 	 */
 	public void unsetUsedBy() {
 		usedBy = null;
-	}
-	
-	/**
-	 * Returns reference to a prey using this intersection
-	 * @return A prey
-	 */
-	public Prey getUsedBy() {
-		return (usedBy == null) ? null : usedBy;
+		sem.release();
 	}
 	
 	/**
@@ -55,9 +58,8 @@ public class Intersection extends Location {
 		gc.setFill(Color.YELLOW);
 	}
 
-	/* TODO: Implement */
 	@Override
 	public String getDetails() {
-		return super.getDetails() + "Intersection\n";
+		return null;
 	}
 }

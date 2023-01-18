@@ -1,6 +1,6 @@
 package com.siemieniuk.animals.hobhw_parser;
 
-import com.siemieniuk.animals.Coordinates;
+import com.siemieniuk.animals.math.Coordinates;
 
 import java.util.ArrayList;
 import java.util.List;

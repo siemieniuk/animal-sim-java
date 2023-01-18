@@ -1,5 +1,6 @@
 package com.siemieniuk.animals;
 
+import com.siemieniuk.animals.math.Coordinates;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -28,66 +29,73 @@ public class Predator extends Animal implements DetailsPrintable {
      * @param strength Strength of animal
      * @param species Animal's species}
      */
-	public Predator(String name, int health, int speed, int strength, String species, Coordinates pos) {
-		super(name, health, speed, strength, species, pos);
+	public Predator(String name, int health, int speed, int strength, String species) {
+		super(name, health, speed, strength, species);
 		this.currentMode = PredatorMode.RELAXATION;
 	}
 
-	/* TODO: Implement */
 	@Override
 	public void run() {
 		Random rd = new Random();
-		int MAX_X = World.getInstance().getxSize();
-		int MAX_Y = World.getInstance().getySize();
-		main: while (isAlive()) {
-			if (preyToEat == null) {
-				// TODO: Switch mode
-				findNewTarget();
-			} else {
-				while (!getPos().equals(preyToEat.getPos())) {
-					move();
+		final int MIN_RELAX_MS = 1000;
+		final int MAX_RELAX_MS = 5000;
+		try {
+			while (isAlive()) {
+				if (currentMode.equals(PredatorMode.HUNTING)) {
 					try {
+						findNewTarget();
+						while (!getPos().equals(preyToEat.getPos())) {
+							move();
+							Thread.sleep(1000 / getSpeed());
+						}
+						attackMyPrey();
 						Thread.sleep(1000 / getSpeed());
-					} catch (InterruptedException e) {
-						Thread.currentThread().interrupt();
-						break main;
+					} catch (NullPointerException e) {
+						switchMode();
 					}
+				} else {
+					int timeToRelax = rd.nextInt(MIN_RELAX_MS, MAX_RELAX_MS);
+					Thread.sleep(timeToRelax);
+					switchMode();
 				}
-				attackMyPrey();
-//				System.out.println("I am predator!\tID=" + getId());
 			}
-		}
-	}
-
-	/* TODO: Implement */
-	/**
-	 * Attacks prey in preyToEat
-	 */
-	public void attackMyPrey() {
-		
-	}
-
-	/**
-	 * Eats prey in preyToEat
-	 */
-	public void eatMyPrey() {
-		if (!preyToEat.isAlive()) {
-			switchMode();
-			World.getInstance().removeAnimal(preyToEat.getId());
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
 			preyToEat = null;
 		}
 	}
 
+	/**
+	 * Attacks prey in preyToEat
+	 */
+	public synchronized void attackMyPrey() {
+		if (preyToEat != null && preyToEat.getPos().equals(this.getPos()) && preyToEat.canBeAttacked()) {
+			preyToEat.beAttacked(getStrength());
+			if (!preyToEat.isAlive()) {
+				if (preyToEat != null) {
+					World.getInstance().removeAnimal(preyToEat.getId());
+				}
+				preyToEat = null;
+				switchMode();
+			}
+		}
+	}
+
 	@Override
-	protected void findNewTarget() {
+	protected void findNewTarget() throws InterruptedException {
 		int minDist = Integer.MAX_VALUE;
 		int currentDist;
-		for (Prey p : World.getInstance().getPreys()) {
-			currentDist = getPos().getManhattanDistanceTo(p.getPos());
-			if (currentDist < minDist) {
-				minDist = currentDist;
-				preyToEat = p;
+		while (preyToEat == null) {
+			for (Prey p : World.getInstance().getPreys()) {
+				if (p.canBeAttacked()) {
+					currentDist = getPos().getManhattanDistanceTo(p.getPos());
+					if (currentDist < minDist) {
+						minDist = currentDist;
+						preyToEat = p;
+					}
+				}
 			}
+			Thread.sleep(5);
 		}
 	}
 
@@ -130,7 +138,6 @@ public class Predator extends Animal implements DetailsPrintable {
 
 	@Override
 	public String getDetails() {
-//		return "Predator:\n%s\nCurrent mode:%s".formatted(super.getDetails(), currentMode);
 		return "Predator:" +
 				"\n" + super.getDetails() +
 				"\nCurrent mode: " + currentMode + "\n";

@@ -1,5 +1,6 @@
 package com.siemieniuk.animals;
 
+import com.siemieniuk.animals.math.Coordinates;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -21,9 +22,8 @@ public class Path extends Location {
 		gc.setFill(Color.YELLOW);
 	}
 
-	/* TODO: Implement */
 	@Override
 	public String getDetails() {
-		return super.getDetails() + "Path\n";
+		return null;
 	}
 }

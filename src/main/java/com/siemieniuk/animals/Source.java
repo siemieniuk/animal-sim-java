@@ -1,7 +1,10 @@
 package com.siemieniuk.animals;
 
+import com.siemieniuk.animals.math.Coordinates;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 /**
  * @author Szymon Siemieniuk
@@ -13,6 +16,7 @@ public abstract class Source extends Location {
 	private final float preyReplenishingSpeed;
 	private final int capacity;
 	private final List<Prey> usedBy;
+	private final Semaphore sem;
 
 	/**
 	 * @param pos Object of type Coordinates
@@ -20,12 +24,13 @@ public abstract class Source extends Location {
 	 * @param preyReplenishingSpeed Speed of replenishing water by prey
 	 * @param capacity Maximal amount of preys which can use this water source simultaneously
 	 */
-	public Source(Coordinates pos, String name, float preyReplenishingSpeed, int capacity) {
+	public Source(Coordinates pos, String name, float preyReplenishingSpeed, int capacity) throws IllegalArgumentException {
 		super(pos);
 		this.name = name;
 		this.capacity = capacity;
 		this.preyReplenishingSpeed = preyReplenishingSpeed;
 		this.usedBy = new ArrayList<>();
+		this.sem = new Semaphore(capacity);
 	}
 
 	/**
@@ -41,8 +46,11 @@ public abstract class Source extends Location {
 	 * @param newPrey Prey
 	 */
 	public void addNewAnimal(Prey newPrey) {
-		if (!this.isOccupied()) {
+		try {
+			sem.acquire();
 			usedBy.add(newPrey);
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
 		}
 	}
 
@@ -52,14 +60,7 @@ public abstract class Source extends Location {
 	 */
 	public void removeAnimal(Prey prey) {
 		usedBy.remove(prey);
-	}
-
-	/**
-	 * Gets current list of animals
-	 * @return List of animals currently using this source
-	 */
-	public List<Prey> getCurrentAnimals() {
-		return usedBy;
+		sem.release();
 	}
 
 	/**
@@ -70,11 +71,15 @@ public abstract class Source extends Location {
 		return name;
 	}
 
+	protected String getUsageString() {
+		return usedBy.size() + "/" + capacity;
+	}
+
 	/**
 	 * Get prey replenishing speed
 	 * @return Prey replenishing speed
 	 */
-	public float getPreyReplenishingSpeed() {
-		return preyReplenishingSpeed;
+	public float getHowMuchToConsume() {
+		return usedBy.size() == 0 ? 0 : preyReplenishingSpeed / usedBy.size();
 	}
 }

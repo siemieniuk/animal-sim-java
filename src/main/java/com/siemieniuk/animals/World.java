@@ -1,9 +1,8 @@
 package com.siemieniuk.animals;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Random;
+import com.siemieniuk.animals.math.Coordinates;
+
+import java.util.*;
 
 /**
  * Represents world; uses singleton pattern
@@ -12,8 +11,7 @@ import java.util.Random;
  */
 public class World implements Runnable {
 	private static World instance;
-	private int howManySources = -1;
-	private int howManyHideouts = -1;
+	public static int HOW_MANY_ANIMALS = 0;
 	private final int xSize;
 	private final int ySize;
 	private final Hashtable<Integer, Animal> animals;
@@ -43,8 +41,6 @@ public class World implements Runnable {
 		this.animals = new Hashtable<> ();
 		this.threads = new Hashtable<>();
 		this.rd = new Random();
-		getHowManyHideouts();
-		getHowManySources();
 	}
 
 	public static World init(Hashtable<Coordinates, Location> locations, int xSize, int ySize) {
@@ -62,50 +58,42 @@ public class World implements Runnable {
 		return World.instance;
 	}
 
-	// TODO: AnimatioTimer
 	@Override
 	public void run() {
 		final int FPS = 30;
-		final int STEP_MS = 1000/FPS;
-		boolean flag = false;
+		final int STEP_MS = 1000 / FPS;
 		try {
 			Thread.sleep(STEP_MS);
+			int clock = 0;
+			while (true) {
+				assert threads != null;
+				for (Integer t : threads.keySet()) {
+					assert animals != null;
+					if (animals.get(t) == null) {
+						removeAnimal(t);
+					}
+				}
+				if (clock == STEP_MS) {
+					System.out.println("Animals: " + animals.keySet());
+					System.out.println("Threads: " + threads.keySet());
+					System.out.println("-----------------------------");
+					for (Prey p : getPreys()) {
+						p.decreaseStatistics();
+					}
+					clock = 0;
+				} else {
+					clock++;
+				}
+				try {
+					Thread.sleep(STEP_MS);
+				} catch (InterruptedException e) {
+					break;
+				}
+			}
 		} catch (InterruptedException e) {
-			flag = true;
+//			flag = true;
+			Thread.currentThread().interrupt();
 		}
-
-		int clock = 0;
-		while (!flag) {
-			for (Integer t : threads.keySet()) {
-				if (animals.get(t) == null) {
-					removeAnimal(t);
-				}
-			}
-			if (clock == STEP_MS) {
-				System.out.println(animals.keySet());
-				for (Prey p : getPreys()) {
-					p.decreaseStatistics();
-				}
-				clock = 0;
-			} else {
-				clock++;
-			}
-			try {
-				Thread.sleep(STEP_MS);
-			} catch (InterruptedException e) {
-				break;
-			}
-		}
-	}
-	
-	/* TODO: Implement */
-	/**
-	 * Changes route of animal
-	 * @param a Animal to modify a route
-	 * @param l A new destination
-	 */
-	public void changeRouteOfAnimal(Animal a, Location l) {
-		
 	}
 
 	/**
@@ -129,44 +117,26 @@ public class World implements Runnable {
 		Thread t = new Thread(a);
 		t.start();
 		threads.put(a.getId(), t);
+		HOW_MANY_ANIMALS++;
 	}
 
-	public void removeAnimal(Integer id) {
-		for (Animal a : animals.values()) {
-			if (a.getId().equals(id)) {
-				if (threads.get(id) != null) {
-					threads.get(id).interrupt();
-				}
-				threads.remove(id);
-				animals.remove(id);
-				System.out.println("Removed animal ID=" + id);
-				break;
-			}
+	public synchronized void removeAnimal(Integer id) {
+		if (threads.get(id) != null) {
+			threads.get(id).interrupt();
 		}
-	}
-
-	public int getHowManySources() {
-		if (howManySources == -1) {
-			howManySources = 0;
-			for (Location l : locations.values()) {
-				if (l instanceof Source) {
-					howManySources++;
-				}
-			}
+		threads.remove(id);
+		Location loc = locations.get(animals.get(id).getPos());
+		if (loc instanceof Intersection) {
+			((Intersection) loc).unsetUsedBy();
 		}
-		return howManySources;
-	}
-
-	public int getHowManyHideouts() {
-		if (howManyHideouts == -1) {
-			howManyHideouts = 0;
-			for (Location l : locations.values()) {
-				if (l instanceof Hideout) {
-					howManyHideouts++;
-				}
+		Animal animal = animals.get(id);
+		if (animal != null) {
+			if (animal instanceof Prey) {
+				((Prey) animal).releaseResources();
 			}
+			animals.remove(id);
 		}
-		return howManyHideouts;
+		HOW_MANY_ANIMALS = Math.max(0, HOW_MANY_ANIMALS-1);
 	}
 
 	public List<DetailsPrintable> getObjectsToDraw(Coordinates pos) {
@@ -184,7 +154,7 @@ public class World implements Runnable {
 
 	@Override
 	public String toString() {
-		return "Hideouts: " + howManyHideouts + ", sources: " + howManySources + "\n" + locations.toString();
+		return "World";
 	}
 
 	public int getxSize() {
@@ -195,11 +165,14 @@ public class World implements Runnable {
 		return ySize;
 	}
 
-	public List<Prey> getPreys() {
+	public synchronized List<Prey> getPreys() {
 		List<Prey> l = new ArrayList<>();
-		for (Animal a : animals.values()) {
-			if (a instanceof Prey) {
-				l.add((Prey) a);
+		Iterator<Animal> it = animals.values().iterator();
+		Animal next;
+		while (it.hasNext()) {
+			next = it.next();
+			if (next instanceof Prey) {
+				l.add((Prey) next);
 			}
 		}
 		return l;
@@ -207,6 +180,10 @@ public class World implements Runnable {
 
 	public Hashtable<Coordinates, Location> getLocations() {
 		return locations;
+	}
+
+	public Location getLocation(Coordinates locPos) {
+		return locations.get(locPos);
 	}
 
 	public List<Animal> getAnimals() { return new ArrayList<>(animals.values()); }

@@ -1,5 +1,7 @@
 package com.siemieniuk.animals;
 
+import com.siemieniuk.animals.math.Coordinates;
+
 import java.util.*;
 
 public class PreyRouter {
@@ -17,54 +19,6 @@ public class PreyRouter {
         this.source = source;
         this.target = null;
     }
-
-//    public void setTargetToNearestHideout() {
-//        Coordinates res = source;
-//        int minDistance = Integer.MAX_VALUE;
-//        for (Location l : locations.values()) {
-//            if (l instanceof Hideout) {
-//                Coordinates lPos = l.getPos();
-//                int dist = lPos.getManhattanDistanceTo(source);
-//                if (dist < minDistance) {
-//                    minDistance = dist;
-//                    res = lPos;
-//                }
-//            }
-//        }
-//        target = res;
-//    }
-//
-//    public void setTargetToNearestPlantSource() {
-//        Coordinates res = source;
-//        int minDistance = Integer.MAX_VALUE;
-//        for (Location l : locations.values()) {
-//            if (l instanceof PlantSource) {
-//                Coordinates lPos = l.getPos();
-//                int dist = lPos.getManhattanDistanceTo(source);
-//                if (dist < minDistance) {
-//                    minDistance = dist;
-//                    res = lPos;
-//                }
-//            }
-//        }
-//        target = res;
-//    }
-//
-//    public void setTargetToNearestWaterSource() {
-//        Coordinates res = source;
-//        int minDistance = Integer.MAX_VALUE;
-//        for (Location l : locations.values()) {
-//            if (l instanceof WaterSource) {
-//                Coordinates lPos = l.getPos();
-//                int dist = lPos.getManhattanDistanceTo(source);
-//                if (dist < minDistance) {
-//                    minDistance = dist;
-//                    res = lPos;
-//                }
-//            }
-//        }
-//        target = res;
-//    }
 
     public <T extends Location> void setTargetToNearest(Class<T> type) {
         Coordinates res = source;

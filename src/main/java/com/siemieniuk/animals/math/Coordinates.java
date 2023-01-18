@@ -1,4 +1,4 @@
-package com.siemieniuk.animals;
+package com.siemieniuk.animals.math;
 
 public class Coordinates {
     private static int MAX_DIM = 0;
@@ -43,16 +43,8 @@ public class Coordinates {
         return x;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
     public int getY() {
         return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
     }
 
     public static void setMaxDim(int x, int y) {
