@@ -1,21 +1,17 @@
 package com.siemieniuk.animals;
 
 import com.siemieniuk.animals.math.Coordinates;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
 /**
- * Represents hideout - a place where preys can reproduce and 
+ * This class represents a hideout - a place where preys can reproduce and
  * not worry about being eaten by predator
  * @author Szymon Siemieniuk
- * @version 0.1
- *
  */
-public class Hideout extends Location {
+public final class Hideout extends Location implements DetailsPrintable {
 	private final int capacity;
 
 	private final Semaphore sem;
@@ -42,7 +38,7 @@ public class Hideout extends Location {
 	}
 	
 	/**
-	 * Adds animal to the hideout
+	 * Adds the prey to the hideout
 	 * @param newPrey Prey to be added
 	 */
 	public void addNewAnimal(Prey newPrey) {
@@ -73,10 +69,14 @@ public class Hideout extends Location {
 	}
 
 	@Override
-	public void prepareToDrawOn(GraphicsContext gc) {
-		gc.setFill(Color.ORANGE);
+	public WorldObjectType getMetadataCode() {
+		return WorldObjectType.HIDEOUT;
 	}
 
+	/**
+	 * Sets object-specific string to describe the object's state
+	 * @return Text to display
+	 */
 	@Override
 	public String getDetails() {
 		return super.getDetails() + "Hideout\n"

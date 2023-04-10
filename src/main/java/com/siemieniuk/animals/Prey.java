@@ -1,8 +1,6 @@
 package com.siemieniuk.animals;
 
 import com.siemieniuk.animals.math.Coordinates;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 
 import java.util.Iterator;
 import java.util.List;
@@ -10,15 +8,13 @@ import java.util.List;
 /**
  * Class representing a prey - subclass of animal
  * @author Szymon Siemieniuk
- * @version 0.1
- *
  */
-public class Prey extends Animal {
+public final class Prey extends Animal {
 	private static final int MAX_FOOD_LEVEL = 100;
 	private static final int MAX_WATER_LEVEL = 100;
-	private final int foodDecreaser;
+	private final int foodDecrease;
 	private int foodLevel;
-	private final int waterDecreaser;
+	private final int waterDecrease;
 	private int waterLevel;
 	private boolean isUsingMutex;
 	private boolean isWaitingForHideout;
@@ -26,7 +22,6 @@ public class Prey extends Animal {
 	private List<Coordinates> plan;
 	private Coordinates nextStep;
 
-	/* TODO: Implement */
 	/**
 	 * Constructor
      * @param name Name of animal
@@ -34,13 +29,13 @@ public class Prey extends Animal {
      * @param speed Speed of animal
      * @param strength Strength of animal
      * @param species Animal's species
-	 * @param waterDecreaser How much water level will animal lose after each step 
-	 * @param foodDecreaser How much food level will animal lose after each step 
+	 * @param waterDecrease How much water level will animal lose after each step 
+	 * @param foodDecrease How much food level will animal lose after each step 
 	 */
-	public Prey(String name, int health, int speed, int strength, String species, int waterDecreaser, int foodDecreaser) {
+	public Prey(String name, int health, int speed, int strength, String species, int waterDecrease, int foodDecrease) {
 		super(name, health, speed, strength, species);
-		this.foodDecreaser = foodDecreaser;
-		this.waterDecreaser = waterDecreaser;
+		this.foodDecrease = foodDecrease;
+		this.waterDecrease = waterDecrease;
 		this.foodLevel = 100;
 		this.waterLevel = 100;
 		this.plan = null;
@@ -96,16 +91,15 @@ public class Prey extends Animal {
 		}
 	}
 
-	protected void findNewTarget(LocationType locType) {
+	protected void findNewTarget(WorldObjectType locType) {
 		PreyRouter router = new PreyRouter(getPos());
 		Class obj;
 		try {
-			if (locType.equals(LocationType.PLANT_SRC)) {
-				obj = Class.forName("com.siemieniuk.animals.PlantSource");
-			} else if (locType.equals(LocationType.WATER_SRC)) {
-				obj = Class.forName("com.siemieniuk.animals.WaterSource");
-			} else {
-				obj = Class.forName("com.siemieniuk.animals.Hideout");
+			switch(locType) {
+				case PLANT_SRC	-> obj = Class.forName("com.siemieniuk.animals.PlantSource");
+				case WATER_SRC	-> obj = Class.forName("com.siemieniuk.animals.WaterSource");
+				case HIDEOUT	-> obj = Class.forName("com.siemieniuk.animals.Hideout");
+				default			-> throw new IllegalArgumentException("Should be PLANT_SRC, WATER_SRC, HIDEOUT");
 			}
 			router.setTargetToNearest(obj);
 			router.setPlan();
@@ -124,12 +118,16 @@ public class Prey extends Animal {
 		return !(World.getInstance().getLocation(getPos()) instanceof Hideout);
 	}
 
-	public synchronized void beAttacked(int predStrength) {
-		int decreaser = Math.max(0, predStrength - getStrength());
-		decreaseHealth(decreaser);
+	/**
+	 * Takes damage from the predator.
+	 * @param predatorStrength Strength of the predator
+	 */
+	public synchronized void beAttacked(int predatorStrength) {
+		int value = Math.max(0, predatorStrength - getStrength());
+		decreaseHealthBy(value);
 	}
 
-	public void consume() throws InterruptedException {
+	private void consume() throws InterruptedException {
 		isUsingMutex = true;
 		if (targetLocation instanceof WaterSource) {
 			drink();
@@ -141,40 +139,38 @@ public class Prey extends Animal {
 		targetLocation = null;
 	}
 
-	public void useHideout() throws InterruptedException {
+	private void useHideout() throws InterruptedException {
 		if (targetLocation instanceof Hideout) {
+			final float P_REPRODUCE = 0.005f;
 			int maxHealth = getMAX_HEALTH();
-			while (getHealth() < 0.9*maxHealth) {
+			int i = 0;
+			final int MIN_ITERATIONS = 10;
+			while ((getHealth() < 0.9*maxHealth || (i < MIN_ITERATIONS))) {
+				i++;
 				heal(5);
 				Thread.sleep(200);
-				if (Math.random() < 0.02) {
+				if (Math.random() < P_REPRODUCE) {
 					reproduce();
 				}
 			}
 		}
 	}
 
-	/**
-	 * Refills prey's water level
-	 */
-	public void drink() throws InterruptedException {
+	private void drink() throws InterruptedException {
 		if (targetLocation instanceof WaterSource) {
 			while (waterLevel < 0.9*MAX_WATER_LEVEL) {
-				int increaser = (int)((WaterSource) targetLocation).getHowMuchToConsume();
-				waterLevel = Math.min(MAX_FOOD_LEVEL, foodLevel + increaser);
+				int increase = (int)((WaterSource) targetLocation).getHowMuchToConsume();
+				waterLevel = Math.min(MAX_WATER_LEVEL, waterLevel + increase);
 				Thread.sleep(200);
 			}
 		}
 	}
 
-	/**
-	 * Refills prey's energy
-	 */
-	public void eat() throws InterruptedException {
+	private void eat() throws InterruptedException {
 		if (targetLocation instanceof PlantSource) {
 			while (foodLevel < 0.9*MAX_FOOD_LEVEL) {
-				int increaser = (int)((PlantSource) targetLocation).getHowMuchToConsume();
-				foodLevel = Math.min(MAX_FOOD_LEVEL, foodLevel + increaser);
+				int increase = (int)((PlantSource) targetLocation).getHowMuchToConsume();
+				foodLevel = Math.min(MAX_FOOD_LEVEL, foodLevel + increase);
 				Thread.sleep(200);
 			}
 		}
@@ -185,8 +181,8 @@ public class Prey extends Animal {
 	 */
 	public synchronized void decreaseStatistics() {
 		if (!isWaitingForHideout) {
-			foodLevel = Math.max(0, foodLevel-foodDecreaser);
-			waterLevel = Math.max(0, waterLevel-waterDecreaser);
+			foodLevel = Math.max(0, foodLevel-foodDecrease);
+			waterLevel = Math.max(0, waterLevel-waterDecrease);
 		}
 	}
 
@@ -227,10 +223,10 @@ public class Prey extends Animal {
 	}
 
 	@Override
-	public void prepareToDrawOn(GraphicsContext gc) {
-		gc.setFill(Color.LIMEGREEN);
+	public WorldObjectType getMetadataCode() {
+		return WorldObjectType.PREY;
 	}
-	
+
 	/**
 	 * Checks if a prey is hungry
 	 * @return True if food level is less or equal zero, false otherwise
@@ -255,6 +251,10 @@ public class Prey extends Animal {
 		World.getInstance().createAnimal(p);
 	}
 
+	/**
+	 * Sets object-specific string to describe the object's state
+	 * @return Text to display
+	 */
 	@Override
 	public String getDetails() {
 		return "Prey:" +

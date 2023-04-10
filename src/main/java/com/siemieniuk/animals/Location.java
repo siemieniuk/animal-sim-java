@@ -1,7 +1,6 @@
 package com.siemieniuk.animals;
 
 import com.siemieniuk.animals.math.Coordinates;
-import javafx.scene.canvas.GraphicsContext;
 
 /**
  * A class representing each location having its own coordinates.
@@ -9,7 +8,7 @@ import javafx.scene.canvas.GraphicsContext;
  * @version 0.1
  *
  */
-public abstract class Location implements DetailsPrintable, Drawable {
+public abstract class Location implements WorldObjectMetadata {
 	private final Coordinates pos;
 	
 	/**
@@ -37,15 +36,15 @@ public abstract class Location implements DetailsPrintable, Drawable {
 		return pos;
 	}
 
-	@Override
+	/**
+	 * Sets object-specific string to describe the object's state
+	 * @return Text to display
+	 */
 	public String getDetails() {
 		return "LOCATION: " +
 				"\nPosition: " + pos  +
 				"\nType: ";
 	}
-
-	@Override
-	public abstract void prepareToDrawOn(GraphicsContext gc);
 
 	public String toString() {
 		return getClass() + " " + pos;

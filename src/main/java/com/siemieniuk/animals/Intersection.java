@@ -1,16 +1,12 @@
 package com.siemieniuk.animals;
 
 import com.siemieniuk.animals.math.Coordinates;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 
 import java.util.concurrent.Semaphore;
 
 /**
  * A location with exactly only 0 or 1 prey per object
  * @author Szymon Siemieniuk
- * @version 0.1
- *
  */
 public class Intersection extends Location {
 	private final Semaphore sem;
@@ -54,12 +50,8 @@ public class Intersection extends Location {
 		return usedBy != null;
 	}
 
-	public void prepareToDrawOn(GraphicsContext gc) {
-		gc.setFill(Color.YELLOW);
-	}
-
 	@Override
-	public String getDetails() {
-		return null;
+	public WorldObjectType getMetadataCode() {
+		return WorldObjectType.INTERSECTION;
 	}
 }

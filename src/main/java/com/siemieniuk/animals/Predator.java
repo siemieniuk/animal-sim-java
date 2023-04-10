@@ -1,33 +1,26 @@
 package com.siemieniuk.animals;
 
 import com.siemieniuk.animals.math.Coordinates;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 
 import java.util.Random;
 
 /**
+ * This class represents a predator. Can work as a thread. His life is simple: sleep, hunt, repeat.
  * @author Szymon Siemieniuk
  * @version 0.1
  *
  */
-public class Predator extends Animal implements DetailsPrintable {
+public final class Predator extends Animal implements DetailsPrintable {
 	private PredatorMode currentMode;
 	private Prey preyToEat = null;
-	
-	/* TODO: Implement */
-	/**
-	 * 
-	 */
-	public Predator() { }
-	
+
 	/**
      * Constructor
      * @param name Name of animal
      * @param health Initial health
      * @param speed Speed of animal
      * @param strength Strength of animal
-     * @param species Animal's species}
+     * @param species Animal's species
      */
 	public Predator(String name, int health, int speed, int strength, String species) {
 		super(name, health, speed, strength, species);
@@ -36,7 +29,7 @@ public class Predator extends Animal implements DetailsPrintable {
 
 	@Override
 	public void run() {
-		Random rd = new Random();
+		Random random = new Random();
 		final int MIN_RELAX_MS = 1000;
 		final int MAX_RELAX_MS = 5000;
 		try {
@@ -51,10 +44,11 @@ public class Predator extends Animal implements DetailsPrintable {
 						attackMyPrey();
 						Thread.sleep(1000 / getSpeed());
 					} catch (NullPointerException e) {
+						e.printStackTrace();
 						switchMode();
 					}
 				} else {
-					int timeToRelax = rd.nextInt(MIN_RELAX_MS, MAX_RELAX_MS);
+					int timeToRelax = random.nextInt(MIN_RELAX_MS, MAX_RELAX_MS);
 					Thread.sleep(timeToRelax);
 					switchMode();
 				}
@@ -65,11 +59,8 @@ public class Predator extends Animal implements DetailsPrintable {
 		}
 	}
 
-	/**
-	 * Attacks prey in preyToEat
-	 */
-	public synchronized void attackMyPrey() {
-		if (preyToEat != null && preyToEat.getPos().equals(this.getPos()) && preyToEat.canBeAttacked()) {
+	private synchronized void attackMyPrey() {
+		if (isSameLocationAsPrey() && preyToEat.canBeAttacked()) {
 			preyToEat.beAttacked(getStrength());
 			if (!preyToEat.isAlive()) {
 				if (preyToEat != null) {
@@ -99,6 +90,13 @@ public class Predator extends Animal implements DetailsPrintable {
 		}
 	}
 
+	private boolean isSameLocationAsPrey() {
+		if (preyToEat == null) {
+			return false;
+		}
+		return preyToEat.getPos().equals(this.getPos());
+	}
+
 	/**
 	 * Moves predator
 	 */
@@ -121,8 +119,8 @@ public class Predator extends Animal implements DetailsPrintable {
 	}
 
 	@Override
-	public void prepareToDrawOn(GraphicsContext gc) {
-		gc.setFill(Color.RED);
+	public WorldObjectType getMetadataCode() {
+		return WorldObjectType.PREDATOR;
 	}
 
 	/**
@@ -136,6 +134,10 @@ public class Predator extends Animal implements DetailsPrintable {
 		}
 	}
 
+	/**
+	 * Sets object-specific string to describe the object's state
+	 * @return Text to display
+	 */
 	@Override
 	public String getDetails() {
 		return "Predator:" +

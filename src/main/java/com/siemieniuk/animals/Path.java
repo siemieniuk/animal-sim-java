@@ -1,16 +1,14 @@
 package com.siemieniuk.animals;
 
 import com.siemieniuk.animals.math.Coordinates;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 
 /**
+ * This class represents a path
  * @author Szymon Siemieniuk
- * @version 0.1
- *
  */
 public class Path extends Location {
 	/**
+	 * Simple constructor
 	 * @param pos Object of class Coordinates
 	 */
 	public Path(Coordinates pos) {
@@ -18,12 +16,7 @@ public class Path extends Location {
 	}
 
 	@Override
-	public void prepareToDrawOn(GraphicsContext gc) {
-		gc.setFill(Color.YELLOW);
-	}
-
-	@Override
-	public String getDetails() {
-		return null;
+	public WorldObjectType getMetadataCode() {
+		return WorldObjectType.PATH;
 	}
 }

@@ -5,18 +5,36 @@ import com.siemieniuk.animals.math.Coordinates;
 import java.io.*;
 import java.net.URL;
 
+/**
+ * <p>This class is used for reading HOBHW files.</p>
+ * <p>How to use it?</p>
+ * <ol>
+ *     <li>Create a new object</li>
+ *     <li>Call method <em>parse()</em></li>
+ *     <li></li>
+ * </ol>
+ * @author Szymon Siemieniuk
+ */
 public class HobhwParser {
     private final WorldParameters params;
     private final URL src;
 
+    /**
+     * Recommended constructor
+     * @param src A source to the file
+     */
     public HobhwParser(URL src) {
         this.src = src;
         this.params = new WorldParameters();
     }
 
-    public WorldParameters parse() throws FileNotFoundException {
+    /**
+     * @return The set of parameters how the world should be created.
+     * @throws FileNotFoundException
+     */
+    public WorldParameters parse() throws FileNotFoundException, IllegalArgumentException {
         if (!validatePath(src.toString())) {
-            throw new FileNotFoundException("Wrong file format");
+            throw new IllegalArgumentException("Wrong file format");
         }
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(src.openStream()));
@@ -64,7 +82,12 @@ public class HobhwParser {
         params.setySize(ySize);
     }
 
-    public static boolean validatePath(String p) {
-        return p.endsWith(".hobhw");
+    /**
+     * Checks if the file is of the <em>.hobhw</em> extension.
+     * @param path A source to the file
+     * @return True if the file is valid, false otherwise
+     */
+    public static boolean validatePath(String path) {
+        return path.endsWith(".hobhw");
     }
 }

@@ -5,14 +5,18 @@ import com.siemieniuk.animals.math.Coordinates;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class stores parameters necessary to build a new world.
+ * @author Szymon Siemieniuk
+ */
 public class WorldParameters {
     private int xSize;
     private int ySize;
-    private List<Coordinates> hideouts;
-    private List<Coordinates> waterSources;
-    private List<Coordinates> plantSources;
-    private List<Coordinates> paths;
-    private List<Coordinates> intersections;
+    private final List<Coordinates> hideouts;
+    private final List<Coordinates> waterSources;
+    private final List<Coordinates> plantSources;
+    private final List<Coordinates> paths;
+    private final List<Coordinates> intersections;
 
     public WorldParameters() {
         this.xSize = 0;
@@ -33,22 +37,43 @@ public class WorldParameters {
         this.paths = paths;
         this.intersections = intersections;
     }
+
+    /**
+     * Adds water source location
+     * @param c Coordinates to the new object
+     */
     public void addWaterSource(Coordinates c) {
         waterSources.add(c);
     }
 
+    /**
+     * Adds hideout location
+     * @param c Coordinates to the new object
+     */
     public void addHideout(Coordinates c) {
         hideouts.add(c);
     }
 
+    /**
+     * Adds plant source location
+     * @param c Coordinates to the new object
+     */
     public void addPlantSource(Coordinates c) {
         plantSources.add(c);
     }
 
+    /**
+     * Adds path location
+     * @param c Coordinates to the new object
+     */
     public void addPath(Coordinates c) {
         paths.add(c);
     }
 
+    /**
+     * Adds intersection location
+     * @param c Coordinates to the new object
+     */
     public void addIntersection(Coordinates c) {
         intersections.add(c);
     }
@@ -73,40 +98,19 @@ public class WorldParameters {
         return hideouts;
     }
 
-    public void setHideouts(List<Coordinates> hideouts) {
-        this.hideouts = hideouts;
-    }
-
-
     public List<Coordinates> getWaterSources() {
         return waterSources;
-    }
-
-    public void setWaterSources(List<Coordinates> waterSources) {
-        this.waterSources = waterSources;
     }
 
     public List<Coordinates> getPlantSources() {
         return plantSources;
     }
 
-    public void setPlantSources(List<Coordinates> plantSources) {
-        this.plantSources = plantSources;
-    }
-
     public List<Coordinates> getPaths() {
         return paths;
     }
 
-    public void setPaths(List<Coordinates> paths) {
-        this.paths = paths;
-    }
-
     public List<Coordinates> getIntersections() {
         return intersections;
-    }
-
-    public void setIntersections(List<Coordinates> intersections) {
-        this.intersections = intersections;
     }
 }

@@ -28,7 +28,6 @@
          </Label>
          <Button mnemonicParsing="false" onAction="#createPrey" prefHeight="24.0" prefWidth="210.0" text="Create Prey" />
          <Button mnemonicParsing="false" onAction="#createPredator" prefHeight="24.0" prefWidth="222.0" text="Create Predator" />
-         <Button mnemonicParsing="false" onAction="#deleteAnimal" text="Dummy" />
       </VBox>
    </right>
 </BorderPane>

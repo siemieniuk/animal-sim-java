@@ -1,14 +1,12 @@
 package com.siemieniuk.animals;
 
 import com.siemieniuk.animals.math.Coordinates;
-import javafx.scene.canvas.GraphicsContext;
 
 /**
- * Abstract class for animal
+ * This class is abstract. Represents animal. Each subclass must be runnable.
  * @author Szymon Siemieniuk
- * @version 0.1
  */
-public abstract class Animal implements DetailsPrintable, Drawable, Runnable {
+public abstract class Animal implements DetailsPrintable, WorldObjectMetadata, Runnable {
     private static Integer createdAnimals = 0;
     private final Integer id;
     private Coordinates pos = null;
@@ -26,10 +24,10 @@ public abstract class Animal implements DetailsPrintable, Drawable, Runnable {
 
     /**
      * Constructor
-     * @param name Name of animal
-     * @param health Initial health
-     * @param speed Speed of animal
-     * @param strength Strength of animal
+     * @param name Name of an animal
+     * @param health Initial health (and also the maximum level)
+     * @param speed Speed of an animal
+     * @param strength Strength of an animal
      * @param species Animal's species
      */
     public Animal(String name, int health, int speed, int strength, String species) {
@@ -55,16 +53,18 @@ public abstract class Animal implements DetailsPrintable, Drawable, Runnable {
      */
     public abstract void move();
 
-    @Override
-    public abstract void run();
-
-    @Override
-    public abstract void prepareToDrawOn(GraphicsContext gc);
-
-    public void heal(int addHp) {
-        health = Math.min(health+addHp, MAX_HEALTH);
+    /**
+     * Heals animal by a specific value
+     * @param additionalHealth Amount to increase health
+     */
+    public void heal(int additionalHealth) {
+        health = Math.min(health+additionalHealth, MAX_HEALTH);
     }
 
+    /**
+     * Finds a new thing to do
+     * @throws InterruptedException Interrupted exception
+     */
     protected abstract void findNewTarget() throws InterruptedException;
 
     public Integer getId() {
@@ -95,8 +95,12 @@ public abstract class Animal implements DetailsPrintable, Drawable, Runnable {
         return strength;
     }
 
-    protected void decreaseHealth(int decreaser) {
-        this.health = health - decreaser;
+    /**
+     * Decreases health by a specific value
+     * @param value A value by which health should be decreased.
+     */
+    protected void decreaseHealthBy(int value) {
+        this.health = health - value;
     }
 
     @Override

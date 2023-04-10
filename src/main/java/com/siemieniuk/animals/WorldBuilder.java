@@ -8,12 +8,15 @@ import java.io.FileNotFoundException;
 import java.util.*;
 import java.net.URL;
 
+/**
+ * This class works similar to builder pattern. Its purpose is to construct the world.
+ */
 public class WorldBuilder {
     private static final int MIN_DIST = 4;
     private WorldBuilder() {}
     public static World create(int howManySources, int howManyHideouts, int xSize, int ySize){
-        Coordinates.setMaxDim(xSize, ySize);
-        List<Coordinates> coordinates = generateCoords(xSize, ySize, howManySources+howManyHideouts);
+        Coordinates.setMaxDimensions(xSize, ySize);
+        List<Coordinates> coordinates = generateCoordinates(xSize, ySize, howManySources+howManyHideouts);
         Hashtable<Coordinates, Location> locations = new Hashtable<> ();
         generateWaterSources(locations, coordinates.subList(0, howManySources / 2));
         generatePlantSources(locations, coordinates.subList(howManySources/2, howManySources));
@@ -21,11 +24,16 @@ public class WorldBuilder {
         return World.init(locations, xSize, ySize);
     }
 
-//    public static World create(String path) throws FileNotFoundException {
+    /**
+     * Creates world from a specific file (must be with .hobhw extension)
+     * @param src The source to HOBHW file
+     * @return the new world
+     * @throws FileNotFoundException File was not found
+     */
     public static World create(URL src) throws FileNotFoundException {
         HobhwParser parser = new HobhwParser(src);
         WorldParameters params = parser.parse();
-        Coordinates.setMaxDim(params.getxSize(), params.getySize());
+        Coordinates.setMaxDimensions(params.getxSize(), params.getySize());
         Hashtable<Coordinates, Location> locations = new Hashtable<>();
         generateWaterSources(locations, params.getWaterSources());
         generatePlantSources(locations, params.getPlantSources());
@@ -70,7 +78,7 @@ public class WorldBuilder {
         }
     }
 
-    private static List<Coordinates> generateCoords(int xSize, int ySize, int targetSize) {
+    private static List<Coordinates> generateCoordinates(int xSize, int ySize, int targetSize) {
         List<Coordinates> coordinates = new ArrayList<>();
         for (int x = 0; x < xSize; x++) {
             for (int y=0; y<ySize; y++) {

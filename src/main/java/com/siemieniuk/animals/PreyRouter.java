@@ -4,22 +4,40 @@ import com.siemieniuk.animals.math.Coordinates;
 
 import java.util.*;
 
+/**
+ * This class is used for finding a route from A to B. It can also find the nearest target to the required source.
+ * @author  Szymon Siemieniuk
+ */
 public class PreyRouter {
     private final Coordinates source;
     private Coordinates target;
     private List<Coordinates> plan;
     private static final Hashtable<Coordinates, Location> locations = World.getInstance().getLocations();
 
+    /**
+     * First source, then target (both in Coordinates)
+     * @param source first point
+     * @param target second points
+     */
     public PreyRouter(Coordinates source, Coordinates target) {
         this.source = source;
         this.target = target;
     }
 
+    /**
+     * Constructor by Coordinates
+     * @param source object of class Coordinates
+     */
     public PreyRouter(Coordinates source) {
         this.source = source;
         this.target = null;
     }
 
+    /**
+     * Finds the closest target of type T.
+     * @param type Object being any class
+     * @param <T> Generic
+     */
     public <T extends Location> void setTargetToNearest(Class<T> type) {
         Coordinates res = source;
         int minDistance = Integer.MAX_VALUE;
@@ -84,6 +102,11 @@ public class PreyRouter {
         return plan;
     }
 
+    /**
+     * Finds all neighbor locations (distance=1 horizontally, diagonally or vertically)
+     * @param pos A specific position
+     * @return All neighbors
+     */
     private List<Coordinates> getMooreNeighborhood(Coordinates pos) {
         List<Coordinates> res = new ArrayList<>();
         for (int x=-1; x<=1; x++) {
@@ -101,6 +124,11 @@ public class PreyRouter {
         return res;
     }
 
+    /**
+     * Finds all neighbor locations (distance=1 horizontally or vertically)
+     * @param pos A specific position
+     * @return All neighbors
+     */
     private List<Coordinates> getVonNeumannNeighborhood(Coordinates pos) {
         List<Coordinates> res = new ArrayList<>();
         Coordinates tmp = new Coordinates(pos.getX() + 1, pos.getY());

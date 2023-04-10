@@ -7,9 +7,8 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 
 /**
+ * This class represents a source. It is abstract.
  * @author Szymon Siemieniuk
- * @version 0.1
- *
  */
 public abstract class Source extends Location {
 	private final String name;
@@ -19,6 +18,7 @@ public abstract class Source extends Location {
 	private final Semaphore sem;
 
 	/**
+	 * A simple constructor
 	 * @param pos Object of type Coordinates
 	 * @param name Name
 	 * @param preyReplenishingSpeed Speed of replenishing water by prey
@@ -63,10 +63,6 @@ public abstract class Source extends Location {
 		sem.release();
 	}
 
-	/**
-	 * Gets name
-	 * @return Name
-	 */
 	public String getName() {
 		return name;
 	}
@@ -76,7 +72,7 @@ public abstract class Source extends Location {
 	}
 
 	/**
-	 * Get prey replenishing speed
+	 * Gets current prey replenishing speed (total/# currently using)
 	 * @return Prey replenishing speed
 	 */
 	public float getHowMuchToConsume() {

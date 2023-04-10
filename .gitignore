@@ -60,3 +60,6 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### javadoc ###
+exportToHTML

@@ -8,6 +8,10 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * This class contains the main body of JavaFX application
+ * @author Szymon Siemieniuk
+ */
 public class MainApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {

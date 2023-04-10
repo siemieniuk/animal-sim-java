@@ -5,57 +5,60 @@ import com.siemieniuk.animals.math.Coordinates;
 import java.util.*;
 
 /**
- * Represents world; uses singleton pattern
+ * <p>This class represents a HOBH world; uses singleton pattern</p>
+ * <p><strong>REMARK: </strong>Create a reference by getInstance(), create the object by using init()</p>
  * @author Szymon Siemieniuk
  * @version 0.1
  */
-public class World implements Runnable {
-	private static World instance;
+public final class World implements Runnable {
+	private static volatile World instance;
 	public static int HOW_MANY_ANIMALS = 0;
-	private final int xSize;
-	private final int ySize;
+	private final int X_SIZE;
+	private final int Y_SIZE;
 	private final Hashtable<Integer, Animal> animals;
 	private final Hashtable<Coordinates, Location> locations;
 	private final Hashtable<Integer, Thread> threads;
-
-	private Random rd;
-
-	private World() {
-		this.animals = null;
-		this.locations = null;
-		this.threads = null;
-		this.xSize = 0;
-		this.ySize = 0;
-	}
+	private final Random random;
 
 	/**
 	 * Generates a world
 	 * @param locations List containing all locations in the world
-	 * @param xSize Size in horizontal axis
-	 * @param ySize Size in vertical axis
+	 * @param X_SIZE Size in horizontal axis
+	 * @param Y_SIZE Size in vertical axis
 	 */
-	private World(Hashtable<Coordinates, Location> locations, int xSize, int ySize) {
+	private World(Hashtable<Coordinates, Location> locations, int X_SIZE, int Y_SIZE) {
 		this.locations = locations;
-		this.xSize = xSize;
-		this.ySize = ySize;
-		this.animals = new Hashtable<> ();
+		this.X_SIZE = X_SIZE;
+		this.Y_SIZE = Y_SIZE;
+		this.animals = new Hashtable<>();
 		this.threads = new Hashtable<>();
-		this.rd = new Random();
+		this.random = new Random();
 	}
 
-	public static World init(Hashtable<Coordinates, Location> locations, int xSize, int ySize) {
-		if (World.instance != null) {
+	/**
+	 * Used in place of constructor
+	 * @param locations List of possible locations
+	 * @param X_SIZE World's horizontal size
+	 * @param Y_SIZE World's vertical size
+	 * @return Instance of world
+	 */
+	public static World init(Hashtable<Coordinates, Location> locations, int X_SIZE, int Y_SIZE) {
+		if (instance != null) {
 			throw new AssertionError("World was previously created!");
 		}
-		World.instance = new World(locations, xSize, ySize);
-		return World.instance;
+		instance = new World(locations, X_SIZE, Y_SIZE);
+		return instance;
 	}
 
+	/**
+	 * Returns an instance to the world.
+	 * @return A world's instance
+	 */
 	public static World getInstance() {
-		if (World.instance == null) {
+		if (instance == null) {
 			throw new AssertionError("World does not exist!");
 		}
-		return World.instance;
+		return instance;
 	}
 
 	@Override
@@ -66,9 +69,7 @@ public class World implements Runnable {
 			Thread.sleep(STEP_MS);
 			int clock = 0;
 			while (true) {
-				assert threads != null;
 				for (Integer t : threads.keySet()) {
-					assert animals != null;
 					if (animals.get(t) == null) {
 						removeAnimal(t);
 					}
@@ -91,7 +92,6 @@ public class World implements Runnable {
 				}
 			}
 		} catch (InterruptedException e) {
-//			flag = true;
 			Thread.currentThread().interrupt();
 		}
 	}
@@ -103,14 +103,14 @@ public class World implements Runnable {
 	public void createAnimal(Animal a) {
 		if (a instanceof Prey) {
 			ArrayList<Location> locCopy = new ArrayList<>(locations.values());
-			int idx = -1;
+			int idx;
 			do {
-				idx = rd.nextInt(locCopy.size());
+				idx = random.nextInt(locCopy.size());
 			} while (!(locCopy.get(idx) instanceof Path));
 			a.setPos(locCopy.get(idx).getPos());
 		} else if (a instanceof Predator) {
-			int x = rd.nextInt(xSize);
-			int y = rd.nextInt(ySize);
+			int x = random.nextInt(X_SIZE);
+			int y = random.nextInt(Y_SIZE);
 			a.setPos(new Coordinates(x, y));
 		}
 		animals.put(a.getId(), a);
@@ -120,6 +120,10 @@ public class World implements Runnable {
 		HOW_MANY_ANIMALS++;
 	}
 
+	/**
+	 * Removes a specific animal from the world
+	 * @param id Animal's ID
+	 */
 	public synchronized void removeAnimal(Integer id) {
 		if (threads.get(id) != null) {
 			threads.get(id).interrupt();
@@ -139,10 +143,18 @@ public class World implements Runnable {
 		HOW_MANY_ANIMALS = Math.max(0, HOW_MANY_ANIMALS-1);
 	}
 
+	/**
+	 * Returns list of DetailsPrintable objects.
+	 * @param pos The position for which the list must be generated
+	 * @return A list of objects to draw on canvas
+	 */
 	public List<DetailsPrintable> getObjectsToDraw(Coordinates pos) {
 		List<DetailsPrintable> list = new ArrayList<>();
 		if (locations.get(pos) != null) {
-			list.add(locations.get(pos));
+			Location loc = locations.get(pos);
+			if (loc instanceof DetailsPrintable) {
+				list.add((DetailsPrintable) loc);
+			}
 		}
 		for (Animal a : animals.values()) {
 			if (a.getPos().equals(pos)) {
@@ -157,14 +169,18 @@ public class World implements Runnable {
 		return "World";
 	}
 
-	public int getxSize() {
-		return xSize;
+	public int getX_SIZE() {
+		return X_SIZE;
 	}
 
-	public int getySize() {
-		return ySize;
+	public int getY_SIZE() {
+		return Y_SIZE;
 	}
 
+	/**
+	 * Returns list of preys
+	 * @return list of preys
+	 */
 	public synchronized List<Prey> getPreys() {
 		List<Prey> l = new ArrayList<>();
 		Iterator<Animal> it = animals.values().iterator();
