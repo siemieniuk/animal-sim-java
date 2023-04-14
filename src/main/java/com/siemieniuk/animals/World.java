@@ -96,28 +96,39 @@ public final class World implements Runnable {
 		}
 	}
 
-	/**
-	 * Adds a new animal to the world
-	 * @param a An animal
-	 */
-	public void createAnimal(Animal a) {
-		if (a instanceof Prey) {
-			ArrayList<Location> locCopy = new ArrayList<>(locations.values());
-			int idx;
-			do {
-				idx = random.nextInt(locCopy.size());
-			} while (!(locCopy.get(idx) instanceof Path));
-			a.setPos(locCopy.get(idx).getPos());
-		} else if (a instanceof Predator) {
-			int x = random.nextInt(X_SIZE);
-			int y = random.nextInt(Y_SIZE);
-			a.setPos(new Coordinates(x, y));
-		}
-		animals.put(a.getId(), a);
-		Thread t = new Thread(a);
+	private void pushAnimal(Animal animal) {
+		animals.put(animal.getId(), animal);
+
+		Thread t = new Thread(animal);
 		t.start();
-		threads.put(a.getId(), t);
+		threads.put(animal.getId(), t);
+
 		HOW_MANY_ANIMALS++;
+	}
+
+	/**
+	 * Adds a new predator to the world
+	 * @param predator A predator
+	 */
+	public void createAnimal(Predator predator) {
+		int x = random.nextInt(X_SIZE);
+		int y = random.nextInt(Y_SIZE);
+		predator.setPos(new Coordinates(x, y));
+		pushAnimal(predator);
+	}
+
+	/**
+	 * Adds a new prey to the world
+	 * @param prey A prey
+	 */
+	public void createAnimal(Prey prey) {
+		ArrayList<Location> locCopy = new ArrayList<>(locations.values());
+		int idx;
+		do {
+			idx = random.nextInt(locCopy.size());
+		} while (!(locCopy.get(idx) instanceof Path));
+		prey.setPos(locCopy.get(idx).getPos());
+		pushAnimal(prey);
 	}
 
 	/**
