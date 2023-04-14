@@ -12,7 +12,7 @@ import java.util.*;
  */
 public final class World implements Runnable {
 	private static volatile World instance;
-	public static int HOW_MANY_ANIMALS = 0;
+	private static int HOW_MANY_ANIMALS = 0;
 	private final int X_SIZE;
 	private final int Y_SIZE;
 	private final Hashtable<Integer, Animal> animals;
@@ -182,16 +182,16 @@ public final class World implements Runnable {
 	 * @return list of preys
 	 */
 	public synchronized List<Prey> getPreys() {
-		List<Prey> l = new ArrayList<>();
+		List<Prey> preys = new ArrayList<>();
 		Iterator<Animal> it = animals.values().iterator();
 		Animal next;
 		while (it.hasNext()) {
 			next = it.next();
 			if (next instanceof Prey) {
-				l.add((Prey) next);
+				preys.add((Prey) next);
 			}
 		}
-		return l;
+		return preys;
 	}
 
 	public Hashtable<Coordinates, Location> getLocations() {

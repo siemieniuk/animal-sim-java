@@ -60,14 +60,18 @@ public final class Predator extends Animal implements DetailsPrintable {
 	}
 
 	private synchronized void attackMyPrey() {
-		if (isSameLocationAsPrey() && preyToEat.canBeAttacked()) {
-			preyToEat.beAttacked(getStrength());
-			if (!preyToEat.isAlive()) {
-				if (preyToEat != null) {
-					World.getInstance().removeAnimal(preyToEat.getId());
+		if (preyToEat == null) {
+			switchMode();
+		} else {
+			if (isSameLocationAsPrey() && preyToEat.canBeAttacked()) {
+				preyToEat.beAttacked(getStrength());
+				if (!preyToEat.isAlive()) {
+					if (preyToEat != null) {
+						World.getInstance().removeAnimal(preyToEat.getId());
+					}
+					preyToEat = null;
+					switchMode();
 				}
-				preyToEat = null;
-				switchMode();
 			}
 		}
 	}

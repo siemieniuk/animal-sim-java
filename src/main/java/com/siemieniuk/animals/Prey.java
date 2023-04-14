@@ -123,8 +123,8 @@ public final class Prey extends Animal {
 	 * @param predatorStrength Strength of the predator
 	 */
 	public synchronized void beAttacked(int predatorStrength) {
-		int value = Math.max(0, predatorStrength - getStrength());
-		decreaseHealthBy(value);
+		int lostHealth = Math.max(0, predatorStrength - getStrength());
+		decreaseHealthBy(lostHealth);
 	}
 
 	private void consume() throws InterruptedException {

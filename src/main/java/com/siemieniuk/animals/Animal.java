@@ -103,6 +103,10 @@ public abstract class Animal implements DetailsPrintable, WorldObjectMetadata, R
         this.health = health - value;
     }
 
+    public void kill() {
+        this.health = -1000;
+    }
+
     @Override
     public String getDetails() {
         return "Name: " + name +
