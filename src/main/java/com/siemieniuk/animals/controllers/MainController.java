@@ -9,7 +9,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
@@ -26,9 +25,8 @@ import java.util.ResourceBundle;
  * @author  Szymon Siemieniuk
  */
 public class MainController implements Initializable {
-    @FXML private Canvas canvas;
+    @FXML private WorldCanvas canvas;
     private World world = null;
-    private static WorldCanvasPainter wcp;
 
     /**
      * Default constructor; loads default <em>release.hobhw</em> file as a base for the world
@@ -54,11 +52,10 @@ public class MainController implements Initializable {
      */
     @Override
     public void initialize(URL src, ResourceBundle rsb) {
-        wcp = new WorldCanvasPainter(canvas);
         AnimationTimer at = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                wcp.updateCanvas();
+                canvas.redraw();
             }
         };
         at.start();
@@ -107,7 +104,7 @@ public class MainController implements Initializable {
     @FXML
     protected void showInformationWindow(MouseEvent event) {
         try {
-            Coordinates pos = new Coordinates(WorldCanvasPainter.convertToWorldPos(event.getX(), event.getY()));
+            Coordinates pos = new Coordinates(WorldCanvas.convertToWorldPos(event.getX(), event.getY()));
             List<DetailsPrintable> objectsToPrint = world.getObjectsToDraw(pos);
             if (objectsToPrint.size() > 0) {
                 URL url = MainApplication.class.getResource("information-window.fxml");
@@ -116,7 +113,7 @@ public class MainController implements Initializable {
                 InformationController ic = fxmlLoader.getController();
                 ic.changeDisplay(objectsToPrint);
                 Stage stage = new Stage();
-                stage.setTitle("Information window");
+                stage.setTitle("Details");
                 stage.setScene(new Scene(root));
                 stage.show();
             }

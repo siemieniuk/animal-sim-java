@@ -5,8 +5,8 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * This class contains the main body of JavaFX application
@@ -19,15 +19,18 @@ public class MainApplication extends Application {
             Platform.exit();
             System.exit(0);
         });
+
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("main-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Hunt Or Be Hunted?");
-        stage.setMinHeight(420);
-        stage.setMinWidth(620);
-        stage.setScene(scene);
-        stage.show();
-    }
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
 
+        stage.setTitle("Hunt Or Be Hunted?");
+        stage.setScene(scene);
+        stage.sizeToScene();
+        stage.show();
+        stage.setMinHeight(stage.getHeight());
+        stage.setMinWidth(stage.getWidth());
+    }
     public static void main(String[] args) {
         launch();
     }
