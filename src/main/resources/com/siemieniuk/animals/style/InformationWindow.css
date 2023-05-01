@@ -1,14 +1,6 @@
-.root {
+#container {
     -fx-background-color: #4F4136;
 }
-
-/*
-#canvasContainer {
-    -fx-background-color: black;
-    -fx-background-insets: 5, 5, 5, 5;
-    -fx-padding: 5;
-}
-*/
 
 .button {
     -fx-background-color: #A47551;
@@ -16,9 +8,22 @@
     -fx-max-width: infinity;
 }
 
+#title, #capacity, #position {
+    -fx-fill: #EEE8E3;
+}
+
 #title {
     -fx-alignment: center;
     -fx-max-width: infinity;
     -fx-text-alignment: center;
-    -fx-text-fill: #EEE8E3;
+}
+
+/*
+#animalsScroll {
+    -fx-background-color: black;
+}
+*/
+
+.scroll-pane > .viewport {
+    fx-background-color: transparent;
 }

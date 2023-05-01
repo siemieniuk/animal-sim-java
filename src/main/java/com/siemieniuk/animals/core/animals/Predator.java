@@ -1,5 +1,8 @@
-package com.siemieniuk.animals;
+package com.siemieniuk.animals.core;
 
+import com.siemieniuk.animals.DetailsPrintable;
+import com.siemieniuk.animals.PredatorMode;
+import com.siemieniuk.animals.WorldObjectType;
 import com.siemieniuk.animals.math.Coordinates;
 
 import java.util.Random;
@@ -29,39 +32,33 @@ public final class Predator extends Animal implements DetailsPrintable {
 
 	@Override
 	public void run() {
-		Random random = new Random();
-		final int MIN_RELAX_MS = 1000;
-		final int MAX_RELAX_MS = 5000;
 		try {
 			while (isAlive()) {
 				if (currentMode.equals(PredatorMode.HUNTING)) {
-					try {
+					if (preyToEat == null || (!preyToEat.isAlive())) {
 						findNewTarget();
-						while (!getPos().equals(preyToEat.getPos())) {
+					} else {
+						if (!getPos().equals(preyToEat.getPos())) {
 							move();
-							Thread.sleep(1000 / getSpeed());
+						} else {
+							attackMyPrey();
 						}
-						attackMyPrey();
-						Thread.sleep(1000 / getSpeed());
-					} catch (NullPointerException e) {
-						e.printStackTrace();
-						switchMode();
 					}
 				} else {
-					int timeToRelax = random.nextInt(MIN_RELAX_MS, MAX_RELAX_MS);
-					Thread.sleep(timeToRelax);
-					switchMode();
+					relax();
 				}
+				Thread.sleep(1000 / getSpeed());
 			}
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
+			kill();
 			preyToEat = null;
 		}
 	}
 
 	private synchronized void attackMyPrey() {
-		if (preyToEat == null) {
-			switchMode();
+		if (preyToEat == null || !(preyToEat.isAlive())) {
+			switchMode(PredatorMode.RELAXATION);
 		} else {
 			if (isSameLocationAsPrey() && preyToEat.canBeAttacked()) {
 				preyToEat.beAttacked(getStrength());
@@ -70,7 +67,7 @@ public final class Predator extends Animal implements DetailsPrintable {
 						World.getInstance().removeAnimal(preyToEat.getId());
 					}
 					preyToEat = null;
-					switchMode();
+					switchMode(PredatorMode.RELAXATION);
 				}
 			}
 		}
@@ -78,9 +75,9 @@ public final class Predator extends Animal implements DetailsPrintable {
 
 	@Override
 	protected void findNewTarget() throws InterruptedException {
-		int minDist = Integer.MAX_VALUE;
-		int currentDist;
-		while (preyToEat == null) {
+		if (preyToEat == null) {
+			int minDist = Integer.MAX_VALUE;
+			int currentDist;
 			for (Prey p : World.getInstance().getPreys()) {
 				if (p.canBeAttacked()) {
 					currentDist = getPos().getManhattanDistanceTo(p.getPos());
@@ -90,7 +87,6 @@ public final class Predator extends Animal implements DetailsPrintable {
 					}
 				}
 			}
-			Thread.sleep(5);
 		}
 	}
 
@@ -122,6 +118,18 @@ public final class Predator extends Animal implements DetailsPrintable {
 		}
 	}
 
+	private void relax() throws InterruptedException {
+		if (currentMode.equals(PredatorMode.RELAXATION)) {
+			Random random = new Random();
+			final int MIN_RELAX_MS = 1000;
+			final int MAX_RELAX_MS = 5000;
+
+			int timeToRelax = random.nextInt(MIN_RELAX_MS, MAX_RELAX_MS);
+			Thread.sleep(timeToRelax);
+			switchMode(PredatorMode.HUNTING);
+		}
+	}
+
 	@Override
 	public WorldObjectType getMetadataCode() {
 		return WorldObjectType.PREDATOR;
@@ -130,12 +138,8 @@ public final class Predator extends Animal implements DetailsPrintable {
 	/**
 	 * Switches mode of this predator. Hunting reaches relaxation and vice versa.
 	 */
-	public void switchMode() {
-		if (this.currentMode.equals(PredatorMode.HUNTING)) {
-			this.currentMode = PredatorMode.RELAXATION;
-		} else {
-			this.currentMode = PredatorMode.HUNTING;
-		}
+	public void switchMode(PredatorMode newMode) {
+		this.currentMode = newMode;
 	}
 
 	/**

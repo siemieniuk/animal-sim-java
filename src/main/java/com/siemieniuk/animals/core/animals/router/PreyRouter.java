@@ -1,5 +1,7 @@
-package com.siemieniuk.animals;
+package com.siemieniuk.animals.core.animals;
 
+import com.siemieniuk.animals.core.locations.Location;
+import com.siemieniuk.animals.core.World;
 import com.siemieniuk.animals.math.Coordinates;
 
 import java.util.*;

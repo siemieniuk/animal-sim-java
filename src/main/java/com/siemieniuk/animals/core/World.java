@@ -17,7 +17,6 @@ public final class World implements Runnable {
 	private final int Y_SIZE;
 	private final Hashtable<Integer, Animal> animals;
 	private final Hashtable<Coordinates, Location> locations;
-	private final Hashtable<Integer, Thread> threads;
 	private final Random random;
 
 	/**
@@ -31,7 +30,6 @@ public final class World implements Runnable {
 		this.X_SIZE = X_SIZE;
 		this.Y_SIZE = Y_SIZE;
 		this.animals = new Hashtable<>();
-		this.threads = new Hashtable<>();
 		this.random = new Random();
 	}
 
@@ -69,15 +67,7 @@ public final class World implements Runnable {
 			Thread.sleep(STEP_MS);
 			int clock = 0;
 			while (true) {
-				for (Integer t : threads.keySet()) {
-					if (animals.get(t) == null) {
-						removeAnimal(t);
-					}
-				}
 				if (clock == STEP_MS) {
-					System.out.println("Animals: " + animals.keySet());
-					System.out.println("Threads: " + threads.keySet());
-					System.out.println("-----------------------------");
 					for (Prey p : getPreys()) {
 						p.decreaseStatistics();
 					}
@@ -101,7 +91,6 @@ public final class World implements Runnable {
 
 		Thread t = new Thread(animal);
 		t.start();
-		threads.put(animal.getId(), t);
 
 		HOW_MANY_ANIMALS++;
 	}
@@ -136,16 +125,13 @@ public final class World implements Runnable {
 	 * @param id Animal's ID
 	 */
 	public synchronized void removeAnimal(Integer id) {
-		if (threads.get(id) != null) {
-			threads.get(id).interrupt();
-		}
-		threads.remove(id);
 		Location loc = locations.get(animals.get(id).getPos());
 		if (loc instanceof Intersection) {
 			((Intersection) loc).unsetUsedBy();
 		}
 		Animal animal = animals.get(id);
 		if (animal != null) {
+			animal.kill();
 			if (animal instanceof Prey) {
 				((Prey) animal).releaseResources();
 			}

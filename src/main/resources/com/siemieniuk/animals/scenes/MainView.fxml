@@ -31,13 +31,14 @@
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
-         <Label fx:id="title" prefHeight="70.0" text="Hunt Or Be Hunted" wrapText="true">
+         <Label fx:id="title" id="title" prefHeight="70.0" text="Hunt Or Be Hunted" wrapText="true">
             <font>
                <Font size="26.0" />
             </font>
          </Label>
          <Button mnemonicParsing="false" onAction="#createPrey" prefHeight="24.0" prefWidth="210.0" text="Create Prey" styleClass="button" />
          <Button mnemonicParsing="false" onAction="#createPredator" prefHeight="24.0" prefWidth="222.0" text="Create Predator" styleClass="button" />
+         <Button mnemonicParsing="false" onAction="#dummy" prefHeight="24.0" prefWidth="222.0" text="DUMMY-TEST" styleClass="button" />
       </VBox>
    </children>
 </GridPane>

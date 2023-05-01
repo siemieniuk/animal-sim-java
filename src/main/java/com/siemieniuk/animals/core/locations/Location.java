@@ -1,5 +1,6 @@
-package com.siemieniuk.animals;
+package com.siemieniuk.animals.core;
 
+import com.siemieniuk.animals.WorldObjectMetadata;
 import com.siemieniuk.animals.math.Coordinates;
 
 /**

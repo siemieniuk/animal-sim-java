@@ -1,5 +1,6 @@
-package com.siemieniuk.animals;
+package com.siemieniuk.animals.core;
 
+import com.siemieniuk.animals.WorldObjectType;
 import com.siemieniuk.animals.math.Coordinates;
 
 import java.util.concurrent.Semaphore;
@@ -48,6 +49,11 @@ public class Intersection extends Location {
 	 */
 	public boolean isOccupied() {
 		return usedBy != null;
+	}
+
+	@Override
+	public String toString() {
+		return "Intersection";
 	}
 
 	@Override

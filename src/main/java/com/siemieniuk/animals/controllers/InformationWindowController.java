@@ -1,10 +1,9 @@
 package com.siemieniuk.animals.controllers;
 
-import com.siemieniuk.animals.Animal;
-import com.siemieniuk.animals.AnimalComponent;
-import com.siemieniuk.animals.DetailsPrintable;
-import com.siemieniuk.animals.Location;
+import com.siemieniuk.animals.*;
 import javafx.fxml.FXML;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -17,6 +16,36 @@ import java.util.List;
  */
 public class InformationController {
     @FXML private VBox animalsVB;
+    @FXML private ImageView icon;
+    @FXML private Text title;
+    @FXML private Text position;
+    @FXML private Text capacity;
+
+//    public void changeLocation(Source src) {
+//        capacity.setText(src.getUsageString());
+//        fillRemainingLocationDetails(src);
+//    }
+//
+//    public void changeLocation(Intersection intersection) {
+//        if (intersection.isOccupied()) {
+//            capacity.setText("Occupied");
+//        } else {
+//            capacity.setText("Free");
+//        }
+//        fillRemainingLocationDetails(intersection);
+//    }
+//
+//    public void changeLocation(Hideout hideout) {
+//        capacity.setText(hideout.getUsageString());
+//        fillRemainingLocationDetails(hideout);
+//    }
+
+    public void changeLocation(Location loc) {
+        Image img = ImageLoader.getImage(loc.getMetadataCode());
+        icon.setImage(img);
+        position.setText(loc.getPos().toString());
+        title.setText("Hello world!");
+    }
 
     /**
      * This method is used for changing content of window.
@@ -38,5 +67,4 @@ public class InformationController {
             animalsVB.getChildren().add(new AnimalComponent((Animal) currentObj));
         }
     }
-
 }

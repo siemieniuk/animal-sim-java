@@ -1,5 +1,9 @@
 package com.siemieniuk.animals;
 
+import com.siemieniuk.animals.core.WorldObjectType;
+import com.siemieniuk.animals.core.animals.Animal;
+import com.siemieniuk.animals.core.locations.Location;
+import com.siemieniuk.animals.core.World;
 import com.siemieniuk.animals.math.Coordinates;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -43,15 +47,11 @@ public final class WorldCanvas extends Canvas {
     public WorldCanvas() {
         super();
         world = World.getInstance();
-//        widthProperty().addListener(e -> redraw());
-//        heightProperty().addListener(e -> redraw());
     }
 
     public WorldCanvas(double size) {
         super(size, size);
         world = World.getInstance();
-//        widthProperty().addListener(e -> redraw());
-//        heightProperty().addListener(e -> redraw());
     }
 
     private static int cellWidth = 0, cellHeight = 0;

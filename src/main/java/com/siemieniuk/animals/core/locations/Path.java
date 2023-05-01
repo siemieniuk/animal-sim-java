@@ -1,5 +1,6 @@
-package com.siemieniuk.animals;
+package com.siemieniuk.animals.core;
 
+import com.siemieniuk.animals.WorldObjectType;
 import com.siemieniuk.animals.math.Coordinates;
 
 /**
@@ -18,5 +19,10 @@ public class Path extends Location {
 	@Override
 	public WorldObjectType getMetadataCode() {
 		return WorldObjectType.PATH;
+	}
+
+	@Override
+	public String toString() {
+		return "Path";
 	}
 }

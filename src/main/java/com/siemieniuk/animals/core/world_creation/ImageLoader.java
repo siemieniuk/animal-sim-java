@@ -1,5 +1,6 @@
 package com.siemieniuk.animals;
 
+import com.siemieniuk.animals.core.WorldObjectType;
 import javafx.scene.image.Image;
 
 import java.util.Hashtable;

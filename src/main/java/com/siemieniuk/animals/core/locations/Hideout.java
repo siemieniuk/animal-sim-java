@@ -1,5 +1,8 @@
 package com.siemieniuk.animals;
 
+import com.siemieniuk.animals.core.WorldObjectType;
+import com.siemieniuk.animals.core.locations.Location;
+import com.siemieniuk.animals.core.animals.Prey;
 import com.siemieniuk.animals.math.Coordinates;
 
 import java.util.ArrayList;
@@ -71,6 +74,15 @@ public final class Hideout extends Location implements DetailsPrintable {
 	@Override
 	public WorldObjectType getMetadataCode() {
 		return WorldObjectType.HIDEOUT;
+	}
+
+	public String getUsageString() {
+		return "Usage: " + usedBy.size() + "/" + capacity;
+	}
+
+	@Override
+	public String toString() {
+		return "Hideout";
 	}
 
 	/**

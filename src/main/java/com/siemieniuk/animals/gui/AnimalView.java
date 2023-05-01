@@ -1,5 +1,9 @@
 package com.siemieniuk.animals;
 
+import com.siemieniuk.animals.core.WorldObjectType;
+import com.siemieniuk.animals.core.animals.Animal;
+import com.siemieniuk.animals.core.animals.Prey;
+import com.siemieniuk.animals.core.World;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
@@ -9,6 +13,8 @@ import javafx.scene.text.Text;
  * @author  Szymon Siemieniuk
  */
 public class AnimalComponent extends GridPane {
+    private boolean wasDeleteClicked = false;
+
     /**
      * Constructor
      * @param animal The animal to wrap
@@ -16,9 +22,14 @@ public class AnimalComponent extends GridPane {
     public AnimalComponent(Animal animal) {
         Text text = new Text();
         text.setText(animal.getDetails());
+        text.getStyleClass().clear();
+        text.getStyleClass().add("ac-text");
 
         Button removeBtn = new Button("Delete animal");
-        removeBtn.setOnAction((event) -> World.getInstance().removeAnimal(animal.getId()));
+        removeBtn.setOnAction((event) -> {
+            World.getInstance().removeAnimal(animal.getId());
+            wasDeleteClicked = true;
+        });
 
         if (animal instanceof Prey) {
             Button hideoutBtn = new Button("Send to hideout");
@@ -37,5 +48,7 @@ public class AnimalComponent extends GridPane {
         add(text, 0, 0, 3, 1);
         setHgap(10.0);
         setPrefWidth(Double.MAX_VALUE);
+        this.getStyleClass().clear();
+        this.getStyleClass().add("animal-component");
     }
 }

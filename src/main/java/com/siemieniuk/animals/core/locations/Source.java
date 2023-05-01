@@ -1,4 +1,4 @@
-package com.siemieniuk.animals;
+package com.siemieniuk.animals.core;
 
 import com.siemieniuk.animals.math.Coordinates;
 
@@ -67,8 +67,8 @@ public abstract class Source extends Location {
 		return name;
 	}
 
-	protected String getUsageString() {
-		return usedBy.size() + "/" + capacity;
+	public String getUsageString() {
+		return "Usage: " + usedBy.size() + "/" + capacity;
 	}
 
 	/**

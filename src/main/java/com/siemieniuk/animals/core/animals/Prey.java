@@ -1,5 +1,8 @@
-package com.siemieniuk.animals;
+package com.siemieniuk.animals.core;
 
+import com.siemieniuk.animals.Hideout;
+import com.siemieniuk.animals.PreyRouter;
+import com.siemieniuk.animals.WorldObjectType;
 import com.siemieniuk.animals.math.Coordinates;
 
 import java.util.Iterator;
@@ -53,16 +56,17 @@ public final class Prey extends Animal {
 					}
 				} else {
 					assert planIterator != null;
-					while (!getPos().equals(targetLocation.getPos())) {
+					if (getPos().equals(targetLocation.getPos())) {
+						consume();
+						releaseResources();
+					} else {
 						if (planIterator.hasNext()) {
 							nextStep = planIterator.next();
 						}
 						releaseResources();
 						move();
-						Thread.sleep(1000/getSpeed());
 					}
-					consume();
-					releaseResources();
+					Thread.sleep(1000/getSpeed());
 				}
 			}
 		} catch (InterruptedException e) {
@@ -76,9 +80,9 @@ public final class Prey extends Animal {
 		Class obj;
 		try {
 			if (isHungry()) {
-				obj = Class.forName("com.siemieniuk.animals.PlantSource");
+				obj = Class.forName("com.siemieniuk.animals.core.PlantSource");
 			} else if (isThirsty()) {
-				obj = Class.forName("com.siemieniuk.animals.WaterSource");
+				obj = Class.forName("com.siemieniuk.animals.core.WaterSource");
 			} else {
 				obj = Class.forName("com.siemieniuk.animals.Hideout");
 			}
@@ -91,13 +95,13 @@ public final class Prey extends Animal {
 		}
 	}
 
-	protected void findNewTarget(WorldObjectType locType) {
+	public void findNewTarget(WorldObjectType locType) {
 		PreyRouter router = new PreyRouter(getPos());
 		Class obj;
 		try {
 			switch(locType) {
-				case PLANT_SRC	-> obj = Class.forName("com.siemieniuk.animals.PlantSource");
-				case WATER_SRC	-> obj = Class.forName("com.siemieniuk.animals.WaterSource");
+				case PLANT_SRC	-> obj = Class.forName("com.siemieniuk.animals.core.PlantSource");
+				case WATER_SRC	-> obj = Class.forName("com.siemieniuk.animals.core.WaterSource");
 				case HIDEOUT	-> obj = Class.forName("com.siemieniuk.animals.Hideout");
 				default			-> throw new IllegalArgumentException("Should be PLANT_SRC, WATER_SRC, HIDEOUT");
 			}
@@ -141,11 +145,11 @@ public final class Prey extends Animal {
 
 	private void useHideout() throws InterruptedException {
 		if (targetLocation instanceof Hideout) {
-			final float P_REPRODUCE = 0.005f;
+			final float P_REPRODUCE = 0.01f;
 			int maxHealth = getMAX_HEALTH();
 			int i = 0;
-			final int MIN_ITERATIONS = 10;
-			while ((getHealth() < 0.9*maxHealth || (i < MIN_ITERATIONS))) {
+			final int MIN_ITERATIONS = 5;
+			while (isAlive() && (getHealth() < 0.9*maxHealth || (i < MIN_ITERATIONS))) {
 				i++;
 				heal(5);
 				Thread.sleep(200);
@@ -158,7 +162,7 @@ public final class Prey extends Animal {
 
 	private void drink() throws InterruptedException {
 		if (targetLocation instanceof WaterSource) {
-			while (waterLevel < 0.9*MAX_WATER_LEVEL) {
+			while (isAlive() && waterLevel < 0.95*MAX_WATER_LEVEL) {
 				int increase = (int)((WaterSource) targetLocation).getHowMuchToConsume();
 				waterLevel = Math.min(MAX_WATER_LEVEL, waterLevel + increase);
 				Thread.sleep(200);
@@ -168,7 +172,7 @@ public final class Prey extends Animal {
 
 	private void eat() throws InterruptedException {
 		if (targetLocation instanceof PlantSource) {
-			while (foodLevel < 0.9*MAX_FOOD_LEVEL) {
+			while (isAlive() && foodLevel < 0.95*MAX_FOOD_LEVEL) {
 				int increase = (int)((PlantSource) targetLocation).getHowMuchToConsume();
 				foodLevel = Math.min(MAX_FOOD_LEVEL, foodLevel + increase);
 				Thread.sleep(200);

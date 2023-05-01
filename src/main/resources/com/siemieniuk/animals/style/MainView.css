@@ -1,0 +1,16 @@
+.root {
+    -fx-background-color: #4F4136;
+}
+
+.button {
+    -fx-background-color: #A47551;
+    -fx-text-fill: #FFFFFF;
+    -fx-max-width: infinity;
+}
+
+#title {
+    -fx-alignment: center;
+    -fx-max-width: infinity;
+    -fx-text-alignment: center;
+    -fx-text-fill: #EEE8E3;
+}

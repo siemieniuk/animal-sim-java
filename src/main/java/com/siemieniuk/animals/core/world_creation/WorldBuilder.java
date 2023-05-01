@@ -1,5 +1,8 @@
-package com.siemieniuk.animals;
+package com.siemieniuk.animals.core.worldbuild;
 
+import com.siemieniuk.animals.core.locations.Hideout;
+import com.siemieniuk.animals.core.*;
+import com.siemieniuk.animals.core.locations.*;
 import com.siemieniuk.animals.hobhw_parser.HobhwParser;
 import com.siemieniuk.animals.hobhw_parser.WorldParameters;
 import com.siemieniuk.animals.math.Coordinates;
