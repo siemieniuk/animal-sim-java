@@ -1,7 +1,7 @@
 package com.siemieniuk.animals.core.locations;
 
 import com.siemieniuk.animals.core.DetailsPrintable;
-import com.siemieniuk.animals.core.WorldObjectType;
+import com.siemieniuk.animals.core.typing.WorldObjectType;
 import com.siemieniuk.animals.math.Coordinates;
 
 /**
@@ -21,6 +21,10 @@ public final class WaterSource extends Source implements DetailsPrintable {
 	public WaterSource(Coordinates pos, String name, float preyReplenishingSpeed, int capacity) {
 		super(pos, name, preyReplenishingSpeed, capacity);
 	}
+
+	public WaterSource() {
+        super();
+    }
 
 	/**
 	 * Sets object-specific string to describe the object's state

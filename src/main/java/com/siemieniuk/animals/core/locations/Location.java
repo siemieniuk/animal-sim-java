@@ -11,7 +11,11 @@ import com.siemieniuk.animals.math.Coordinates;
  */
 public abstract class Location implements WorldObjectMetadata {
 	private final Coordinates pos;
-	
+
+	public Location() {
+		this.pos = null;
+	}
+
 	/**
 	 * Creates location
 	 * @param pos Object of class Coordinates

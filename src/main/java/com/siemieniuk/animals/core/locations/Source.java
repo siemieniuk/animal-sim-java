@@ -34,6 +34,15 @@ public abstract class Source extends Location {
 		this.sem = new Semaphore(capacity);
 	}
 
+	public Source() {
+        super();
+		this.name = null;
+		this.preyReplenishingSpeed = 0;
+		this.capacity = 0;
+		this.usedBy = new ArrayList<>();
+		this.sem = new Semaphore(0);
+    }
+
 	/**
 	 * Checks if there is some place for next creature
 	 * @return True if occupied, false otherwise

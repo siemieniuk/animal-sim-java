@@ -1,6 +1,6 @@
 package com.siemieniuk.animals.gui;
 
-import com.siemieniuk.animals.core.WorldObjectType;
+import com.siemieniuk.animals.core.typing.WorldObjectType;
 import com.siemieniuk.animals.core.animals.Animal;
 import com.siemieniuk.animals.core.animals.Prey;
 import com.siemieniuk.animals.core.World;

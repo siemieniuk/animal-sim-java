@@ -2,7 +2,7 @@ package com.siemieniuk.animals.controllers;
 
 import com.siemieniuk.animals.core.DetailsPrintable;
 import com.siemieniuk.animals.core.world_creation.ImageLoader;
-import com.siemieniuk.animals.core.WorldObjectType;
+import com.siemieniuk.animals.core.typing.WorldObjectType;
 import com.siemieniuk.animals.core.animals.Animal;
 import com.siemieniuk.animals.core.locations.Hideout;
 import com.siemieniuk.animals.core.locations.Intersection;

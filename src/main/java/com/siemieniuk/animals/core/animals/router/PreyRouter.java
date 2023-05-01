@@ -1,5 +1,6 @@
 package com.siemieniuk.animals.core.animals.router;
 
+import com.siemieniuk.animals.core.typing.WorldObjectType;
 import com.siemieniuk.animals.core.locations.Location;
 import com.siemieniuk.animals.core.World;
 import com.siemieniuk.animals.math.Coordinates;
@@ -10,21 +11,11 @@ import java.util.*;
  * This class is used for finding a route from A to B. It can also find the nearest target to the required source.
  * @author  Szymon Siemieniuk
  */
-public class PreyRouter {
+public abstract class PreyRouter {
     private final Coordinates source;
     private Coordinates target;
     private List<Coordinates> plan;
     private static final Hashtable<Coordinates, Location> locations = World.getInstance().getLocations();
-
-    /**
-     * First source, then target (both in Coordinates)
-     * @param source first point
-     * @param target second points
-     */
-    public PreyRouter(Coordinates source, Coordinates target) {
-        this.source = source;
-        this.target = target;
-    }
 
     /**
      * Constructor by Coordinates
@@ -35,16 +26,21 @@ public class PreyRouter {
         this.target = null;
     }
 
+    protected void findPlanToNearest(WorldObjectType type) {
+        setTargetToNearest(type);
+        setPlan();
+    }
+
     /**
      * Finds the closest target of type T.
      * @param type Object being any class
-     * @param <T> Generic
      */
-    public <T extends Location> void setTargetToNearest(Class<T> type) {
+    private void setTargetToNearest(WorldObjectType type) {
+        assert type.isLocation();
         Coordinates res = source;
         int minDistance = Integer.MAX_VALUE;
         for (Location l : locations.values()) {
-            if (type.isInstance(l)) {
+            if (l.getMetadataCode().equals(type)) {
                 Coordinates lPos = l.getPos();
                 int dist = lPos.getManhattanDistanceTo(source);
                 if (dist < minDistance) {
@@ -63,7 +59,8 @@ public class PreyRouter {
     /**
      * Find new plan using BFS algorithm
      */
-    public void setPlan() {
+    private void setPlan() {
+        assert source != null;
         // source is equal to target, then no plan
         if (source.equals(target)) {
             return;

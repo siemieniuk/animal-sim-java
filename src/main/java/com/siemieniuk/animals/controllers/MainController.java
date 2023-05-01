@@ -3,7 +3,7 @@ package com.siemieniuk.animals.controllers;
 import com.siemieniuk.animals.*;
 import com.siemieniuk.animals.core.DetailsPrintable;
 import com.siemieniuk.animals.core.world_creation.ImageLoader;
-import com.siemieniuk.animals.core.WorldObjectType;
+import com.siemieniuk.animals.core.typing.WorldObjectType;
 import com.siemieniuk.animals.core.locations.Location;
 import com.siemieniuk.animals.core.animals.Predator;
 import com.siemieniuk.animals.core.animals.Prey;

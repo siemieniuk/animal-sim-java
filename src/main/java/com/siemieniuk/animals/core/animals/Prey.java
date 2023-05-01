@@ -1,8 +1,11 @@
 package com.siemieniuk.animals.core.animals;
 
+import com.siemieniuk.animals.core.animals.router.HideoutRouter;
+import com.siemieniuk.animals.core.animals.router.PlantSourceRouter;
 import com.siemieniuk.animals.core.animals.router.PreyRouter;
+import com.siemieniuk.animals.core.animals.router.WaterSourceRouter;
 import com.siemieniuk.animals.core.locations.Hideout;
-import com.siemieniuk.animals.core.WorldObjectType;
+import com.siemieniuk.animals.core.typing.WorldObjectType;
 import com.siemieniuk.animals.core.World;
 import com.siemieniuk.animals.core.locations.*;
 import com.siemieniuk.animals.math.Coordinates;
@@ -79,42 +82,28 @@ public final class Prey extends Animal {
 
 	@Override
 	protected void findNewTarget() {
-		PreyRouter router = new PreyRouter(getPos());
-		Class obj;
-		try {
-			if (isHungry()) {
-				obj = Class.forName("com.siemieniuk.animals.core.locations.PlantSource");
-			} else if (isThirsty()) {
-				obj = Class.forName("com.siemieniuk.animals.core.locations.WaterSource");
-			} else {
-				obj = Class.forName("com.siemieniuk.animals.core.locations.Hideout");
-			}
-			router.setTargetToNearest(obj);
-			router.setPlan();
-			plan = router.getPlan();
-			targetLocation = router.getTarget();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+		PreyRouter router;
+		if (isHungry()) {
+			router = new PlantSourceRouter(getPos());
+		} else if (isThirsty()) {
+			router = new PlantSourceRouter(getPos());
+		} else {
+			router = new HideoutRouter(getPos());
 		}
+		plan = router.getPlan();
+		targetLocation = router.getTarget();
 	}
 
 	public void findNewTarget(WorldObjectType locType) {
-		PreyRouter router = new PreyRouter(getPos());
-		Class obj;
-		try {
-			switch(locType) {
-				case PLANT_SRC -> obj = Class.forName("com.siemieniuk.animals.core.locations.PlantSource");
-				case WATER_SRC -> obj = Class.forName("com.siemieniuk.animals.core.locations.WaterSource");
-				case HIDEOUT -> obj = Class.forName("com.siemieniuk.animals.core.locations.Hideout");
-				default -> throw new IllegalArgumentException("Should be PLANT_SRC, WATER_SRC, HIDEOUT");
-			}
-			router.setTargetToNearest(obj);
-			router.setPlan();
-			plan = router.getPlan();
-			targetLocation = router.getTarget();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+		PreyRouter router;
+		switch(locType) {
+			case PLANT_SRC -> router = new PlantSourceRouter(getPos());
+			case WATER_SRC -> router = new WaterSourceRouter(getPos());
+			case HIDEOUT   -> router = new HideoutRouter(getPos());
+			default        -> throw new IllegalArgumentException("Should be PLANT_SRC, WATER_SRC, HIDEOUT");
 		}
+		plan = router.getPlan();
+		targetLocation = router.getTarget();
 	}
 
 	/**

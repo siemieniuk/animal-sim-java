@@ -1,4 +1,7 @@
-package com.siemieniuk.animals.core;
+package com.siemieniuk.animals.core.typing;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This enum can be used for distinguishing between different objects available in the world.
@@ -52,5 +55,16 @@ public enum WorldObjectType {
         @Override public String toString() {
             return "hideout";
         }
+    };
+
+    public boolean isLocation() {
+        List<WorldObjectType> locations = new ArrayList<>();
+        locations.add(HIDEOUT);
+        locations.add(WATER_SRC);
+        locations.add(PLANT_SRC);
+        locations.add(INTERSECTION);
+        locations.add(PATH);
+
+        return locations.contains(this);
     }
 }
