@@ -1,11 +1,12 @@
-package com.siemieniuk.animals.core;
+package com.siemieniuk.animals.core.animals;
 
-import com.siemieniuk.animals.DetailsPrintable;
-import com.siemieniuk.animals.PredatorMode;
-import com.siemieniuk.animals.WorldObjectType;
+import com.siemieniuk.animals.core.DetailsPrintable;
+import com.siemieniuk.animals.core.WorldObjectType;
+import com.siemieniuk.animals.core.World;
 import com.siemieniuk.animals.math.Coordinates;
 
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 /**
  * This class represents a predator. Can work as a thread. His life is simple: sleep, hunt, repeat.
@@ -47,7 +48,7 @@ public final class Predator extends Animal implements DetailsPrintable {
 				} else {
 					relax();
 				}
-				Thread.sleep(1000 / getSpeed());
+				TimeUnit.MILLISECONDS.sleep(1000/getSpeed());
 			}
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();

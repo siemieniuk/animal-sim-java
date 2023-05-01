@@ -1,6 +1,15 @@
 package com.siemieniuk.animals.controllers;
 
-import com.siemieniuk.animals.*;
+import com.siemieniuk.animals.core.DetailsPrintable;
+import com.siemieniuk.animals.core.world_creation.ImageLoader;
+import com.siemieniuk.animals.core.WorldObjectType;
+import com.siemieniuk.animals.core.animals.Animal;
+import com.siemieniuk.animals.core.locations.Hideout;
+import com.siemieniuk.animals.core.locations.Intersection;
+import com.siemieniuk.animals.core.locations.Location;
+import com.siemieniuk.animals.core.locations.Source;
+import com.siemieniuk.animals.gui.AnimalView;
+import com.siemieniuk.animals.math.Coordinates;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -14,37 +23,45 @@ import java.util.List;
  * This class is a controller for information window. Displays all animals and locations at a specified point.
  * @author Szymon Siemieniuk
  */
-public class InformationController {
+public class InformationWindowController {
     @FXML private VBox animalsVB;
     @FXML private ImageView icon;
     @FXML private Text title;
     @FXML private Text position;
     @FXML private Text capacity;
 
-//    public void changeLocation(Source src) {
-//        capacity.setText(src.getUsageString());
-//        fillRemainingLocationDetails(src);
-//    }
-//
-//    public void changeLocation(Intersection intersection) {
-//        if (intersection.isOccupied()) {
-//            capacity.setText("Occupied");
-//        } else {
-//            capacity.setText("Free");
-//        }
-//        fillRemainingLocationDetails(intersection);
-//    }
-//
-//    public void changeLocation(Hideout hideout) {
-//        capacity.setText(hideout.getUsageString());
-//        fillRemainingLocationDetails(hideout);
-//    }
-
     public void changeLocation(Location loc) {
         Image img = ImageLoader.getImage(loc.getMetadataCode());
         icon.setImage(img);
-        position.setText(loc.getPos().toString());
-        title.setText("Hello world!");
+        Coordinates pos = loc.getPos();
+        String displayPosition = "X=" + pos.getX() + ", Y=" + pos.getY();
+        position.setText(displayPosition);
+        if (loc instanceof Source) {
+            title.setText(((Source) loc).getName());
+            capacity.setText(((Source) loc).getUsageString());
+        } else {
+            title.setText(loc.toString());
+        }
+
+        if (loc instanceof Intersection intersection) {
+            if (intersection.isOccupied()) {
+                capacity.setText("Occupied");
+            } else {
+                capacity.setText("Busy");
+            }
+        }
+
+        if (loc instanceof Hideout hideout) {
+            capacity.setText(hideout.getUsageString());
+        }
+    }
+
+    public void configureNoLocation(Coordinates pos) {
+        Image img = ImageLoader.getImage(WorldObjectType.GRASS);
+        icon.setImage(img);
+        title.setText("Grass");
+        String displayPosition = "X=" + pos.getX() + ", Y=" + pos.getY();
+        position.setText(displayPosition);
     }
 
     /**
@@ -56,15 +73,13 @@ public class InformationController {
         Iterator<DetailsPrintable> it = dpList.iterator();
         DetailsPrintable currentObj = it.next();
         if (currentObj != null) {
-            if (currentObj instanceof Location) {
-                animalsVB.getChildren().add(new Text(currentObj.getDetails()));
-            } else {
-                animalsVB.getChildren().add(new AnimalComponent((Animal) currentObj));
+            if (currentObj instanceof Animal animal) {
+                animalsVB.getChildren().add(new AnimalView(animal));
             }
         }
         while (it.hasNext()) {
             currentObj = it.next();
-            animalsVB.getChildren().add(new AnimalComponent((Animal) currentObj));
+            animalsVB.getChildren().add(new AnimalView((Animal) currentObj));
         }
     }
 }

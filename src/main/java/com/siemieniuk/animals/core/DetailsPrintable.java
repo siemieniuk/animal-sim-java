@@ -1,4 +1,4 @@
-package com.siemieniuk.animals;
+package com.siemieniuk.animals.core;
 
 /**
  * This interface is implemented by all objects which could be displayed in information window

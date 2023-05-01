@@ -1,7 +1,7 @@
-package com.siemieniuk.animals.core;
+package com.siemieniuk.animals.core.animals;
 
-import com.siemieniuk.animals.DetailsPrintable;
-import com.siemieniuk.animals.WorldObjectMetadata;
+import com.siemieniuk.animals.core.DetailsPrintable;
+import com.siemieniuk.animals.core.WorldObjectMetadata;
 import com.siemieniuk.animals.math.Coordinates;
 
 /**

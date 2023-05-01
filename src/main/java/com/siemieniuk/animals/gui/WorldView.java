@@ -1,5 +1,6 @@
-package com.siemieniuk.animals;
+package com.siemieniuk.animals.gui;
 
+import com.siemieniuk.animals.core.world_creation.ImageLoader;
 import com.siemieniuk.animals.core.WorldObjectType;
 import com.siemieniuk.animals.core.animals.Animal;
 import com.siemieniuk.animals.core.locations.Location;
@@ -10,7 +11,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
-public final class WorldCanvas extends Canvas {
+public final class WorldView extends Canvas {
     private final World world;
 
     @Override
@@ -44,12 +45,12 @@ public final class WorldCanvas extends Canvas {
         this.setHeight(Math.min(width, height));
     }
 
-    public WorldCanvas() {
+    public WorldView() {
         super();
         world = World.getInstance();
     }
 
-    public WorldCanvas(double size) {
+    public WorldView(double size) {
         super(size, size);
         world = World.getInstance();
     }

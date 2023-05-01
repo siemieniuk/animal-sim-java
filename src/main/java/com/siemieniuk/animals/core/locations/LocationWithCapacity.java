@@ -1,4 +1,4 @@
-package com.siemieniuk.animals;
+package com.siemieniuk.animals.core.locations;
 
 // TODO: Write
 public interface LocationWithCapacity {

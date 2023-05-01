@@ -1,4 +1,4 @@
-package com.siemieniuk.animals;
+package com.siemieniuk.animals.gui;
 
 import com.siemieniuk.animals.core.WorldObjectType;
 import com.siemieniuk.animals.core.animals.Animal;
@@ -12,14 +12,14 @@ import javafx.scene.text.Text;
  * This class is animal custom JavaFX component. It wraps animal into the GridPane
  * @author  Szymon Siemieniuk
  */
-public class AnimalComponent extends GridPane {
+public class AnimalView extends GridPane {
     private boolean wasDeleteClicked = false;
 
     /**
      * Constructor
      * @param animal The animal to wrap
      */
-    public AnimalComponent(Animal animal) {
+    public AnimalView(Animal animal) {
         Text text = new Text();
         text.setText(animal.getDetails());
         text.getStyleClass().clear();

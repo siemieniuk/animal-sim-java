@@ -1,4 +1,4 @@
-package com.siemieniuk.animals;
+package com.siemieniuk.animals.core;
 
 /**
  * This enum can be used for distinguishing between different objects available in the world.

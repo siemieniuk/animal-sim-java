@@ -1,5 +1,5 @@
 #container {
-    -fx-background-color: #4F4136;
+    -fx-background-color: #825F45;
 }
 
 .button {
@@ -18,12 +18,21 @@
     -fx-text-alignment: center;
 }
 
-/*
-#animalsScroll {
-    -fx-background-color: black;
+#animalsScroll > .viewport {
+    -fx-background-color: transparent;
 }
-*/
 
-.scroll-pane > .viewport {
-    fx-background-color: transparent;
+#animalsScroll {
+    -fx-background-color: transparent;
+    -fx-padding: 5;
+}
+
+.animal-component {
+    -fx-background-color: #4F4136;
+    -fx-background-radius: 5;
+    -fx-padding: 5;
+}
+
+#animalsScroll > #animalsVB > .text, .ac-text {
+    -fx-fill: white;
 }

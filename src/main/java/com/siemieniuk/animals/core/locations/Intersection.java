@@ -1,6 +1,7 @@
-package com.siemieniuk.animals.core;
+package com.siemieniuk.animals.core.locations;
 
-import com.siemieniuk.animals.WorldObjectType;
+import com.siemieniuk.animals.core.WorldObjectType;
+import com.siemieniuk.animals.core.animals.Prey;
 import com.siemieniuk.animals.math.Coordinates;
 
 import java.util.concurrent.Semaphore;

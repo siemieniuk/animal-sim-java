@@ -1,4 +1,4 @@
-package com.siemieniuk.animals;
+package com.siemieniuk.animals.core.animals;
 
 /**
  * Represents states of Predator

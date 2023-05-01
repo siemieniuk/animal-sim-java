@@ -3,9 +3,11 @@ package com.siemieniuk.animals;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Objects;
 
 /**
@@ -20,9 +22,15 @@ public class MainApplication extends Application {
             System.exit(0);
         });
 
-        FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("main-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
+        final FXMLLoader parentLoader = new FXMLLoader();
+
+        Parent root;
+        try (InputStream sceneStream = MainApplication.class.getResourceAsStream("scenes/MainView.fxml")) {
+            root = parentLoader.load(sceneStream);
+        }
+
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(0, Objects.requireNonNull(getClass().getResource("style/MainView.css")).toExternalForm());
 
         stage.setTitle("Hunt Or Be Hunted?");
         stage.setScene(scene);

@@ -1,12 +1,15 @@
-package com.siemieniuk.animals.core;
+package com.siemieniuk.animals.core.animals;
 
-import com.siemieniuk.animals.Hideout;
-import com.siemieniuk.animals.PreyRouter;
-import com.siemieniuk.animals.WorldObjectType;
+import com.siemieniuk.animals.core.animals.router.PreyRouter;
+import com.siemieniuk.animals.core.locations.Hideout;
+import com.siemieniuk.animals.core.WorldObjectType;
+import com.siemieniuk.animals.core.World;
+import com.siemieniuk.animals.core.locations.*;
 import com.siemieniuk.animals.math.Coordinates;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Class representing a prey - subclass of animal
@@ -32,8 +35,8 @@ public final class Prey extends Animal {
      * @param speed Speed of animal
      * @param strength Strength of animal
      * @param species Animal's species
-	 * @param waterDecrease How much water level will animal lose after each step 
-	 * @param foodDecrease How much food level will animal lose after each step 
+	 * @param waterDecrease How much water level will animal lose after each step
+	 * @param foodDecrease How much food level will animal lose after each step
 	 */
 	public Prey(String name, int health, int speed, int strength, String species, int waterDecrease, int foodDecrease) {
 		super(name, health, speed, strength, species);
@@ -66,7 +69,7 @@ public final class Prey extends Animal {
 						releaseResources();
 						move();
 					}
-					Thread.sleep(1000/getSpeed());
+					TimeUnit.MILLISECONDS.sleep(1000/getSpeed());
 				}
 			}
 		} catch (InterruptedException e) {
@@ -80,11 +83,11 @@ public final class Prey extends Animal {
 		Class obj;
 		try {
 			if (isHungry()) {
-				obj = Class.forName("com.siemieniuk.animals.core.PlantSource");
+				obj = Class.forName("com.siemieniuk.animals.core.locations.PlantSource");
 			} else if (isThirsty()) {
-				obj = Class.forName("com.siemieniuk.animals.core.WaterSource");
+				obj = Class.forName("com.siemieniuk.animals.core.locations.WaterSource");
 			} else {
-				obj = Class.forName("com.siemieniuk.animals.Hideout");
+				obj = Class.forName("com.siemieniuk.animals.core.locations.Hideout");
 			}
 			router.setTargetToNearest(obj);
 			router.setPlan();
@@ -100,10 +103,10 @@ public final class Prey extends Animal {
 		Class obj;
 		try {
 			switch(locType) {
-				case PLANT_SRC	-> obj = Class.forName("com.siemieniuk.animals.core.PlantSource");
-				case WATER_SRC	-> obj = Class.forName("com.siemieniuk.animals.core.WaterSource");
-				case HIDEOUT	-> obj = Class.forName("com.siemieniuk.animals.Hideout");
-				default			-> throw new IllegalArgumentException("Should be PLANT_SRC, WATER_SRC, HIDEOUT");
+				case PLANT_SRC -> obj = Class.forName("com.siemieniuk.animals.core.locations.PlantSource");
+				case WATER_SRC -> obj = Class.forName("com.siemieniuk.animals.core.locations.WaterSource");
+				case HIDEOUT -> obj = Class.forName("com.siemieniuk.animals.core.locations.Hideout");
+				default -> throw new IllegalArgumentException("Should be PLANT_SRC, WATER_SRC, HIDEOUT");
 			}
 			router.setTargetToNearest(obj);
 			router.setPlan();
@@ -152,7 +155,7 @@ public final class Prey extends Animal {
 			while (isAlive() && (getHealth() < 0.9*maxHealth || (i < MIN_ITERATIONS))) {
 				i++;
 				heal(5);
-				Thread.sleep(200);
+				TimeUnit.MILLISECONDS.sleep(200);
 				if (Math.random() < P_REPRODUCE) {
 					reproduce();
 				}
@@ -165,7 +168,7 @@ public final class Prey extends Animal {
 			while (isAlive() && waterLevel < 0.95*MAX_WATER_LEVEL) {
 				int increase = (int)((WaterSource) targetLocation).getHowMuchToConsume();
 				waterLevel = Math.min(MAX_WATER_LEVEL, waterLevel + increase);
-				Thread.sleep(200);
+				TimeUnit.MILLISECONDS.sleep(200);
 			}
 		}
 	}
@@ -175,7 +178,7 @@ public final class Prey extends Animal {
 			while (isAlive() && foodLevel < 0.95*MAX_FOOD_LEVEL) {
 				int increase = (int)((PlantSource) targetLocation).getHowMuchToConsume();
 				foodLevel = Math.min(MAX_FOOD_LEVEL, foodLevel + increase);
-				Thread.sleep(200);
+				TimeUnit.MILLISECONDS.sleep(200);
 			}
 		}
 	}
@@ -238,7 +241,7 @@ public final class Prey extends Animal {
 	public boolean isHungry() {
 		return foodLevel <= 0;
 	}
-	
+
 	/**
 	 * Checks if a prey is thirsty
 	 * @return True if water level is less or equal zero, false otherwise

@@ -1,4 +1,4 @@
-package com.siemieniuk.animals;
+package com.siemieniuk.animals.math;
 
 public class Pair<L, R> {
     private final L left;

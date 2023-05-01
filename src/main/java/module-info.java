@@ -1,4 +1,4 @@
-module com.example.animals {
+module com.siemieniuk.animals {
     requires javafx.controls;
     requires javafx.fxml;
 
@@ -12,4 +12,16 @@ module com.example.animals {
     opens com.siemieniuk.animals.math to javafx.fxml;
     exports com.siemieniuk.animals.controllers;
     opens com.siemieniuk.animals.controllers to javafx.fxml;
+    exports com.siemieniuk.animals.core;
+    opens com.siemieniuk.animals.core to javafx.fxml;
+    exports com.siemieniuk.animals.core.locations;
+    opens com.siemieniuk.animals.core.locations to javafx.fxml;
+    exports com.siemieniuk.animals.core.animals;
+    opens com.siemieniuk.animals.core.animals to javafx.fxml;
+    exports com.siemieniuk.animals.core.world_creation;
+    opens com.siemieniuk.animals.core.world_creation to javafx.fxml;
+    exports com.siemieniuk.animals.gui;
+    opens com.siemieniuk.animals.gui to javafx.fxml;
+    exports com.siemieniuk.animals.core.animals.router;
+    opens com.siemieniuk.animals.core.animals.router to javafx.fxml;
 }

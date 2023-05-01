@@ -1,4 +1,4 @@
-package com.siemieniuk.animals.core.worldbuild;
+package com.siemieniuk.animals.core.world_creation;
 
 import com.siemieniuk.animals.core.locations.Hideout;
 import com.siemieniuk.animals.core.*;

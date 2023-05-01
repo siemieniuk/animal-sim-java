@@ -1,6 +1,7 @@
-package com.siemieniuk.animals;
+package com.siemieniuk.animals.core.world_creation;
 
 import com.siemieniuk.animals.core.WorldObjectType;
+import com.siemieniuk.animals.math.Pair;
 import javafx.scene.image.Image;
 
 import java.util.Hashtable;
