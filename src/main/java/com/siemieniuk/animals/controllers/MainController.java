@@ -2,16 +2,14 @@ package com.siemieniuk.animals.controllers;
 
 import com.siemieniuk.animals.*;
 import com.siemieniuk.animals.core.DetailsPrintable;
-import com.siemieniuk.animals.core.world_creation.ImageLoader;
-import com.siemieniuk.animals.core.typing.WorldObjectType;
 import com.siemieniuk.animals.core.locations.Location;
 import com.siemieniuk.animals.core.animals.Predator;
 import com.siemieniuk.animals.core.animals.Prey;
 import com.siemieniuk.animals.core.World;
+import com.siemieniuk.animals.images.ImageLoader;
 import com.siemieniuk.animals.gui.WorldView;
 import com.siemieniuk.animals.math.Coordinates;
 import com.siemieniuk.animals.core.world_creation.WorldBuilder;
-import com.siemieniuk.animals.math.Pair;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -24,12 +22,11 @@ import javafx.stage.Stage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 /**
- * This class represents the main window of the application.
+ * This class represents the controller of the main window.
  * @author  Szymon Siemieniuk
  */
 public class MainController {
@@ -43,9 +40,9 @@ public class MainController {
         try {
             URL path = MainApplication.class.getResource("conf/release.hobhw");
             world = WorldBuilder.create(path);
+            ImageLoader.init();
             Thread threadWorld = new Thread(world);
             threadWorld.start();
-            loadImages();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             Platform.exit();
@@ -74,34 +71,6 @@ public class MainController {
     protected void createPredator() {
         Predator p = new Predator("Simba", 100, 2, 13, "Lion");
         world.createAnimal(p);
-    }
-
-    protected void loadImages() {
-        String[] paths = new String[] {
-                "images/grass.png",
-                "images/hideout.png",
-                "images/intersection.png",
-                "images/path.png",
-                "images/water.png",
-                "images/plant.png"
-        };
-
-        WorldObjectType[] types = new WorldObjectType[] {
-                WorldObjectType.GRASS,
-                WorldObjectType.HIDEOUT,
-                WorldObjectType.INTERSECTION,
-                WorldObjectType.PATH,
-                WorldObjectType.WATER_SRC,
-                WorldObjectType.PLANT_SRC
-        };
-
-        List<Pair<WorldObjectType, String>> entriesToLoad = new ArrayList<>();
-
-        for (int i=0; i<paths.length; i++) {
-            String path = Objects.requireNonNull(MainApplication.class.getResource(paths[i])).toString();
-            entriesToLoad.add(new Pair<>(types[i], path));
-        }
-        ImageLoader.init(entriesToLoad);
     }
 
     @FXML

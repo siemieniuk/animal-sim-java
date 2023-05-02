@@ -67,4 +67,12 @@ public enum WorldObjectType {
 
         return locations.contains(this);
     }
+
+    public boolean isAnimal() {
+        List<WorldObjectType> animals = new ArrayList<>();
+        animals.add(PREDATOR);
+        animals.add(PREY);
+
+        return animals.contains(this);
+    }
 }

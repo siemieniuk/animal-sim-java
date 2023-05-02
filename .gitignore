@@ -63,3 +63,6 @@ build/
 
 ### javadoc ###
 exportToHTML
+
+### java junks ###
+.attach_pid*

@@ -1,7 +1,7 @@
 package com.siemieniuk.animals.controllers;
 
 import com.siemieniuk.animals.core.DetailsPrintable;
-import com.siemieniuk.animals.core.world_creation.ImageLoader;
+import com.siemieniuk.animals.images.ImageLoader;
 import com.siemieniuk.animals.core.typing.WorldObjectType;
 import com.siemieniuk.animals.core.animals.Animal;
 import com.siemieniuk.animals.core.locations.Hideout;
@@ -9,6 +9,7 @@ import com.siemieniuk.animals.core.locations.Intersection;
 import com.siemieniuk.animals.core.locations.Location;
 import com.siemieniuk.animals.core.locations.Source;
 import com.siemieniuk.animals.gui.AnimalView;
+import com.siemieniuk.animals.gui.AnimalViewFactory;
 import com.siemieniuk.animals.math.Coordinates;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
@@ -74,12 +75,14 @@ public class InformationWindowController {
         DetailsPrintable currentObj = it.next();
         if (currentObj != null) {
             if (currentObj instanceof Animal animal) {
-                animalsVB.getChildren().add(new AnimalView(animal));
+                AnimalView view = AnimalViewFactory.getAnimalView(animal);
+                animalsVB.getChildren().add(view);
             }
         }
         while (it.hasNext()) {
             currentObj = it.next();
-            animalsVB.getChildren().add(new AnimalView((Animal) currentObj));
+            AnimalView view = AnimalViewFactory.getAnimalView((Animal) currentObj);
+            animalsVB.getChildren().add(view);
         }
     }
 }

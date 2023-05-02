@@ -1,5 +1,9 @@
 #container {
-    -fx-background-color: #825F45;
+    -fx-background-color: #4F4136;
+}
+
+.icon {
+    -fx-background-radius: 5;
 }
 
 .button {
@@ -28,11 +32,26 @@
 }
 
 .animal-component {
-    -fx-background-color: #4F4136;
+    -fx-background-color: #282727;
     -fx-background-radius: 5;
     -fx-padding: 5;
 }
 
 #animalsScroll > #animalsVB > .text, .ac-text {
     -fx-fill: white;
+}
+
+
+
+// TODO: FIX
+.animal-component #healthBar {
+    -fx-accent: red;
+}
+
+.animal-component #foodBar {
+    -fx-accent: yellow;
+}
+
+.animal-component #waterBar {
+    -fx-accent: blue;
 }

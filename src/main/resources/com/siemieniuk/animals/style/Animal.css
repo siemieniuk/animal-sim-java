@@ -1,0 +1,11 @@
+#healthBar {
+    -fx-background-color: red;
+}
+
+#foodBar {
+    -fx-background-color: yellow;
+}
+
+#waterBar {
+    -fx-background-color: blue;
+}

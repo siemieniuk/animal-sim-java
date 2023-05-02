@@ -26,4 +26,6 @@ module com.siemieniuk.animals {
     opens com.siemieniuk.animals.core.animals.router to javafx.fxml;
     exports com.siemieniuk.animals.core.typing;
     opens com.siemieniuk.animals.core.typing to javafx.fxml;
+    exports com.siemieniuk.animals.images;
+    opens com.siemieniuk.animals.images to javafx.fxml;
 }
