@@ -153,4 +153,12 @@ public final class Predator extends Animal implements DetailsPrintable {
 				"\n" + super.getDetails() +
 				"\nCurrent mode: " + currentMode + "\n";
 	}
+
+	public PredatorMode getCurrentMode() {
+		return currentMode;
+	}
+
+	public Prey getPreyToEat() {
+		return preyToEat;
+	}
 }

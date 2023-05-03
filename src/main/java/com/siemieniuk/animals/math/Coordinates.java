@@ -68,7 +68,7 @@ public class Coordinates {
         if (MAX_DIM == 0) {
             MAX_DIM = Math.max(x, y);
         } else {
-            System.out.println("MAX_DIM has currently been modified!");
+            throw new IllegalArgumentException("MAX_DIM has currently been modified!");
         }
     }
 }

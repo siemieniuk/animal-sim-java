@@ -10,6 +10,7 @@
     -fx-background-color: #A47551;
     -fx-text-fill: #FFFFFF;
     -fx-max-width: infinity;
+    -fx-font-size: 13;
 }
 
 #title, #capacity, #position {
@@ -31,27 +32,75 @@
     -fx-padding: 5;
 }
 
-.animal-component {
+.bgArea {
     -fx-background-color: #282727;
-    -fx-background-radius: 5;
-    -fx-padding: 5;
 }
 
-#animalsScroll > #animalsVB > .text, .ac-text {
-    -fx-fill: white;
+#name, #species, #stats, #currentMode {
+    -fx-fill: #EEE8E3;
+}
+
+.removeBtn {
+    -fx-background-color: red;
+    -fx-fill: red;
+}
+
+.animal-view {
+    -fx-border-insets: 5;
+    -fx-border-color: black;
+}
+
+.progress-bar {
+    -fx-shadow-highlight-color: transparent;
+}
+
+.progress-bar .track {
+    -fx-text-box-border: black;
+    -fx-control-inner-background: black;
+}
+
+.animal-view #healthBar {
+    -fx-accent: #A45151;
+}
+
+#healthLabel, #waterLabel, #foodLabel {
+    -fx-fill: #EEE7E2;
+    -fx-font-style: italic;
+}
+
+.barText, .barValueText {
+    -fx-fill: #EEE7E2;
+    -fx-font-style: italic;
+}
+
+/*
+#healthLabel {
+    -fx-fill: #A45151;
+    -fx-fill: #EEE7E2;
+    -fx-font-style: italic;
+}
+
+#waterLabel {
+    -fx-fill: #5170A4;
+}
+
+#foodLabel {
+    -fx-fill: #A4A251;
+}
+*/
+.animal-view #foodBar {
+    -fx-accent: #A4A251;
+}
+
+.animal-view #waterBar {
+    -fx-accent: #5170A4;
 }
 
 
+/*
+#A45151;
 
-// TODO: FIX
-.animal-component #healthBar {
-    -fx-accent: red;
-}
+#A4A251;
 
-.animal-component #foodBar {
-    -fx-accent: yellow;
-}
-
-.animal-component #waterBar {
-    -fx-accent: blue;
-}
+#5170A4
+*/

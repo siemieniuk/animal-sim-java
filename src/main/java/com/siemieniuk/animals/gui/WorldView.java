@@ -72,21 +72,10 @@ public final class WorldView extends Canvas {
 
     private void drawAnimals() {
         GraphicsContext gc = getGraphicsContext2D();
-        gc.setFill(Color.PINK);
-        gc.setStroke(Color.BLACK);
-        final double scalingVal = 0.5;
-        int v2 = (int)(scalingVal*cellWidth);
-        int v3 = (int)(scalingVal*cellHeight);
         for (Animal a : world.getAnimals()) {
-            switch(a.getMetadataCode()) {
-                case PREDATOR -> gc.setFill(Color.RED);
-                case PREY -> gc.setFill(Color.YELLOW);
-            }
+            Image img = ImageLoader.getImage(a.getMetadataCode());
             Coordinates pos = a.getPos();
-            int v = (int)(cellWidth*(pos.getX()+(1-scalingVal)/2));
-            int v1 = (int)(cellHeight*(pos.getY()+(1-scalingVal)/2));
-            gc.fillOval(v, v1, v2, v3);
-            gc.strokeOval(v, v1, v2, v3);
+            gc.drawImage(img, pos.getX()*cellWidth, pos.getY()*cellHeight, cellWidth, cellHeight);
         }
     }
 

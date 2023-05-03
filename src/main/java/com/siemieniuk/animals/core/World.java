@@ -131,19 +131,21 @@ public final class World implements Runnable {
 	 * @param id Animal's ID
 	 */
 	public synchronized void removeAnimal(Integer id) {
-		Location loc = locations.get(animals.get(id).getPos());
-		if (loc instanceof Intersection) {
-			((Intersection) loc).unsetUsedBy();
-		}
-		Animal animal = animals.get(id);
-		if (animal != null) {
-			animal.kill();
-			if (animal instanceof Prey) {
-				((Prey) animal).releaseResources();
+		if (animals.containsKey(id)) {
+			Location loc = locations.get(animals.get(id).getPos());
+			if (loc instanceof Intersection) {
+				((Intersection) loc).unsetUsedBy();
 			}
-			animals.remove(id);
+			Animal animal = animals.get(id);
+			if (animal != null) {
+				animal.kill();
+				if (animal instanceof Prey) {
+					((Prey) animal).releaseResources();
+				}
+				animals.remove(id);
+			}
+			HOW_MANY_ANIMALS = Math.max(0, HOW_MANY_ANIMALS-1);
 		}
-		HOW_MANY_ANIMALS = Math.max(0, HOW_MANY_ANIMALS-1);
 	}
 
 	/**
@@ -205,5 +207,5 @@ public final class World implements Runnable {
 		return locations.get(locPos);
 	}
 
-	public List<Animal> getAnimals() { return new ArrayList<>(animals.values()); }
+	public synchronized List<Animal> getAnimals() { return new ArrayList<>(animals.values()); }
 }

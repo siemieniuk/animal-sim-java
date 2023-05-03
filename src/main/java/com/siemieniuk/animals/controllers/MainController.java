@@ -16,14 +16,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * This class represents the controller of the main window.
@@ -31,6 +32,7 @@ import java.util.Objects;
  */
 public class MainController {
     @FXML private WorldView canvas;
+    @FXML private ImageView bigLogo;
     private World world = null;
 
     /**
@@ -52,6 +54,11 @@ public class MainController {
 
     @FXML
     private void initialize() {
+        String path = Objects.requireNonNull(MainApplication.class.getResource("images/logo_big.png")).toExternalForm();
+        Image img = new Image(path, 100.0, 100.0, true, false);
+        bigLogo.setImage(img);
+        System.out.println(bigLogo.getParent().getScaleX());
+
         AnimationTimer at = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -63,7 +70,7 @@ public class MainController {
 
     @FXML
     protected void createPrey() {
-        Prey p = new Prey("Affe", 100, 1, 4, "Giraffe", 3, 5);
+        Prey p = new Prey("Affe", 100, 1, 4, "Giraffe", 2, 3);
         world.createAnimal(p);
     }
 
@@ -98,15 +105,14 @@ public class MainController {
                 Stage stage = new Stage();
                 stage.setTitle("Details");
                 stage.setScene(scene);
+                stage.sizeToScene();
                 stage.show();
+                stage.setMinHeight(stage.getHeight());
+                stage.setMaxHeight(stage.getHeight());
+                stage.setMinWidth(240.0);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    //TODO: Remove
-    @FXML protected void dummy() {
-        System.out.println(Thread.getAllStackTraces().keySet());
     }
 }

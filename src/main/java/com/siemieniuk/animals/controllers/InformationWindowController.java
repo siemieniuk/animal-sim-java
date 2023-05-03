@@ -14,6 +14,7 @@ import com.siemieniuk.animals.math.Coordinates;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -25,7 +26,7 @@ import java.util.List;
  * @author Szymon Siemieniuk
  */
 public class InformationWindowController {
-    @FXML private VBox animalsVB;
+    @FXML private Pane animalsVB;
     @FXML private ImageView icon;
     @FXML private Text title;
     @FXML private Text position;

@@ -1,9 +1,9 @@
 package com.siemieniuk.animals.core.animals;
 
-import com.siemieniuk.animals.core.animals.router.HideoutRouter;
-import com.siemieniuk.animals.core.animals.router.PlantSourceRouter;
-import com.siemieniuk.animals.core.animals.router.PreyRouter;
-import com.siemieniuk.animals.core.animals.router.WaterSourceRouter;
+import com.siemieniuk.animals.core.animals.preyrouter.HideoutRouter;
+import com.siemieniuk.animals.core.animals.preyrouter.PlantSourceRouter;
+import com.siemieniuk.animals.core.animals.preyrouter.PreyRouter;
+import com.siemieniuk.animals.core.animals.preyrouter.WaterSourceRouter;
 import com.siemieniuk.animals.core.locations.Hideout;
 import com.siemieniuk.animals.core.typing.WorldObjectType;
 import com.siemieniuk.animals.core.World;
@@ -27,6 +27,7 @@ public final class Prey extends Animal {
 	private int waterLevel;
 	private boolean isUsingMutex;
 	private boolean isWaitingForHideout;
+	private boolean isInTarget;
 	private Location targetLocation;
 	private List<Coordinates> plan;
 	private Coordinates nextStep;
@@ -48,6 +49,7 @@ public final class Prey extends Animal {
 		this.foodLevel = 100;
 		this.waterLevel = 100;
 		this.plan = null;
+		this.isInTarget = false;
 	}
 
 	@Override
@@ -61,14 +63,15 @@ public final class Prey extends Animal {
 						planIterator = plan.iterator();
 					}
 				} else {
-					assert planIterator != null;
-					if (getPos().equals(targetLocation.getPos())) {
+					if (isInTarget) {
 						consume();
-						releaseResources();
 					} else {
-						if (planIterator.hasNext()) {
-							nextStep = planIterator.next();
+						if (getPos().equals(targetLocation.getPos())) {
+							isInTarget = true;
+							continue;
 						}
+						assert planIterator != null;
+						nextStep = planIterator.next();
 						releaseResources();
 						move();
 					}
@@ -86,7 +89,7 @@ public final class Prey extends Animal {
 		if (isHungry()) {
 			router = new PlantSourceRouter(getPos());
 		} else if (isThirsty()) {
-			router = new PlantSourceRouter(getPos());
+			router = new WaterSourceRouter(getPos());
 		} else {
 			router = new HideoutRouter(getPos());
 		}
@@ -94,7 +97,7 @@ public final class Prey extends Animal {
 		targetLocation = router.getTarget();
 	}
 
-	public void findNewTarget(WorldObjectType locType) {
+	public synchronized void findNewTarget(WorldObjectType locType) {
 		PreyRouter router;
 		switch(locType) {
 			case PLANT_SRC -> router = new PlantSourceRouter(getPos());
@@ -125,19 +128,24 @@ public final class Prey extends Animal {
 
 	private void consume() throws InterruptedException {
 		isUsingMutex = true;
+		boolean haveThisUsedResource;
 		if (targetLocation instanceof WaterSource) {
-			drink();
+			haveThisUsedResource = drink();
 		} else if (targetLocation instanceof PlantSource) {
-			eat();
+			haveThisUsedResource = eat();
 		} else {
-			useHideout();
+			haveThisUsedResource = useHideout();
 		}
-		targetLocation = null;
+		if (!haveThisUsedResource) {
+			targetLocation = null;
+			isInTarget = false;
+			releaseResources();
+		}
 	}
 
-	private void useHideout() throws InterruptedException {
+	private boolean useHideout() throws InterruptedException {
 		if (targetLocation instanceof Hideout) {
-			final float P_REPRODUCE = 0.01f;
+			final float P_REPRODUCE = 0.005f;
 			int maxHealth = getMAX_HEALTH();
 			int i = 0;
 			final int MIN_ITERATIONS = 5;
@@ -150,26 +158,33 @@ public final class Prey extends Animal {
 				}
 			}
 		}
+		return false;
 	}
 
-	private void drink() throws InterruptedException {
+	private boolean drink() {
 		if (targetLocation instanceof WaterSource) {
-			while (isAlive() && waterLevel < 0.95*MAX_WATER_LEVEL) {
-				int increase = (int)((WaterSource) targetLocation).getHowMuchToConsume();
+			if (isAlive() && waterLevel < 0.95 * MAX_WATER_LEVEL) {
+				int increase = (int) ((WaterSource) targetLocation).getHowMuchToConsume();
 				waterLevel = Math.min(MAX_WATER_LEVEL, waterLevel + increase);
-				TimeUnit.MILLISECONDS.sleep(200);
+				return true;
+			} else {
+				return false;
 			}
 		}
+		return false;
 	}
 
-	private void eat() throws InterruptedException {
+	private boolean eat() {
 		if (targetLocation instanceof PlantSource) {
-			while (isAlive() && foodLevel < 0.95*MAX_FOOD_LEVEL) {
-				int increase = (int)((PlantSource) targetLocation).getHowMuchToConsume();
+			if (isAlive() && foodLevel < 0.95 * MAX_FOOD_LEVEL) {
+				int increase = (int) ((PlantSource) targetLocation).getHowMuchToConsume();
 				foodLevel = Math.min(MAX_FOOD_LEVEL, foodLevel + increase);
-				TimeUnit.MILLISECONDS.sleep(200);
+				return true;
+			} else {
+				return false;
 			}
 		}
+		return false;
 	}
 
 	/**
@@ -247,6 +262,22 @@ public final class Prey extends Animal {
 		World.getInstance().createAnimal(p);
 	}
 
+	public double getWaterRatio() {
+		return waterLevel / (double) MAX_WATER_LEVEL;
+	}
+
+	public String getWaterDetails() {
+		return waterLevel + " / " + MAX_WATER_LEVEL;
+	}
+
+	public double getFoodRatio() {
+		return foodLevel / (double) MAX_FOOD_LEVEL;
+	}
+
+	public String getFoodDetails() {
+		return foodLevel + " / " + MAX_FOOD_LEVEL;
+	}
+
 	/**
 	 * Sets object-specific string to describe the object's state
 	 * @return Text to display
@@ -258,4 +289,5 @@ public final class Prey extends Animal {
 				"\nFood level: " + foodLevel +
 				"\nWater level: " + waterLevel + "\n";
 	}
+
 }

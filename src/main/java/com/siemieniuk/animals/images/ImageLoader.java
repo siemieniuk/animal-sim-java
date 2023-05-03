@@ -1,6 +1,5 @@
 package com.siemieniuk.animals.images;
 
-import com.siemieniuk.animals.MainApplication;
 import com.siemieniuk.animals.core.typing.WorldObjectType;
 import javafx.scene.image.Image;
 
@@ -24,7 +23,9 @@ public class ImageLoader {
                 "intersection.png",
                 "path.png",
                 "water.png",
-                "plant.png"
+                "plant.png",
+                "predator.png",
+                "prey.png"
         };
 
         WorldObjectType[] types = new WorldObjectType[] {
@@ -33,7 +34,9 @@ public class ImageLoader {
                 WorldObjectType.INTERSECTION,
                 WorldObjectType.PATH,
                 WorldObjectType.WATER_SRC,
-                WorldObjectType.PLANT_SRC
+                WorldObjectType.PLANT_SRC,
+                WorldObjectType.PREDATOR,
+                WorldObjectType.PREY
         };
 
         for (int i=0; i<paths.length; i++) {

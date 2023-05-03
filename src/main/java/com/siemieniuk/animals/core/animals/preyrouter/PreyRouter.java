@@ -1,4 +1,4 @@
-package com.siemieniuk.animals.core.animals.router;
+package com.siemieniuk.animals.core.animals.preyrouter;
 
 import com.siemieniuk.animals.core.typing.WorldObjectType;
 import com.siemieniuk.animals.core.locations.Location;

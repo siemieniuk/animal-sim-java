@@ -85,8 +85,20 @@ public abstract class Animal implements DetailsPrintable, WorldObjectMetadata, R
         return health;
     }
 
+    public double getHealthRatio() {
+        return health / (double) MAX_HEALTH;
+    }
+
     public int getMAX_HEALTH() {
         return MAX_HEALTH;
+    }
+
+    public String getHealthDetails() {
+        if (health < 0) {
+            return "DIED";
+        } else {
+            return health + " / " + MAX_HEALTH;
+        }
     }
 
     protected int getSpeed() {
@@ -116,5 +128,13 @@ public abstract class Animal implements DetailsPrintable, WorldObjectMetadata, R
                 "\nHealth: " + health +
                 "\nSpeed: " + speed +
                 "\nStrength: " + strength;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getSpecies() {
+        return species;
     }
 }
