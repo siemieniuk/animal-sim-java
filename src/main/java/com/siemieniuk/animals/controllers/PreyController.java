@@ -42,7 +42,7 @@ public final class PreyController extends AnimalController {
     @FXML
     public void sendToWaterSource() {
         try {
-            ((Prey)getAnimal()).findNewTarget(WorldObjectType.WATER_SRC);
+            ((Prey)getAnimal()).setNewTarget(WorldObjectType.WATER_SRC);
         } catch (InterruptedException e) {
             System.out.println("ERROR!");
             getAnimal().kill();
@@ -52,7 +52,7 @@ public final class PreyController extends AnimalController {
     @FXML
     public void sendToPlantSource() {
         try {
-            ((Prey)getAnimal()).findNewTarget(WorldObjectType.PLANT_SRC);
+            ((Prey)getAnimal()).setNewTarget(WorldObjectType.PLANT_SRC);
         } catch (InterruptedException e) {
             getAnimal().kill();
             System.out.println("ERROR!");

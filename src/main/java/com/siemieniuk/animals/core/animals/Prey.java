@@ -27,7 +27,6 @@ public final class Prey extends Animal {
 	private int waterLevel;
 	private boolean isUsingMutex;
 	private boolean isWaitingForHideout;
-//	private boolean isInTarget;
 	private boolean isUsingResource;
 	private Location targetLocation;
 	private volatile List<Coordinates> plan;
@@ -59,10 +58,7 @@ public final class Prey extends Animal {
 		try {
 			while (isAlive()) {
 				if (targetLocation == null) {
-					findNewTarget();
-					if (plan != null) {
-						planIterator = plan.iterator();
-					}
+					setNewTarget();
 				} else {
 					if (isInTarget()) {
 						consume();
@@ -82,7 +78,7 @@ public final class Prey extends Animal {
 	}
 
 	@Override
-	protected void findNewTarget() throws InterruptedException {
+	protected void setNewTarget() throws InterruptedException {
 		PreyRouter router;
 		if (isHungry()) {
 			router = new PlantSourceRouter(getPos());
@@ -98,7 +94,7 @@ public final class Prey extends Animal {
 		}
 	}
 
-	public void findNewTarget(WorldObjectType locType) throws InterruptedException {
+	public void setNewTarget(WorldObjectType locType) throws InterruptedException {
 		PreyRouter router;
 		switch(locType) {
 			case PLANT_SRC -> router = new PlantSourceRouter(getPos());

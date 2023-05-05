@@ -37,7 +37,7 @@ public final class Predator extends Animal implements DetailsPrintable {
 			while (isAlive()) {
 				if (currentMode.equals(PredatorMode.HUNTING)) {
 					if (preyToEat == null || !preyToEat.isAlive()) {
-						findNewTarget();
+						setNewTarget();
 					} else {
 						if (!getPos().equals(preyToEat.getPos())) {
 							move();
@@ -73,7 +73,7 @@ public final class Predator extends Animal implements DetailsPrintable {
 	}
 
 	@Override
-	protected void findNewTarget() throws InterruptedException {
+	protected void setNewTarget() throws InterruptedException {
 		if (preyToEat != null) {
 			preyToEat = null;
 		}

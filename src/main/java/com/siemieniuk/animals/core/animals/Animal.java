@@ -67,7 +67,7 @@ public abstract class Animal implements DetailsPrintable, WorldObjectMetadata, R
      * Finds a new thing to do
      * @throws InterruptedException Interrupted exception
      */
-    protected abstract void findNewTarget() throws InterruptedException;
+    protected abstract void setNewTarget() throws InterruptedException;
 
     public void releaseResources() {}
 
