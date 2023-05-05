@@ -11,9 +11,9 @@ import com.siemieniuk.animals.math.Coordinates;
 public abstract class Animal implements DetailsPrintable, WorldObjectMetadata, Runnable {
     private static Integer createdAnimals = 0;
     private final Integer id;
-    private Coordinates pos = null;
+    private volatile Coordinates pos = null;
     private String name;
-    private int health;
+    private volatile int health;
     private final int MAX_HEALTH;
     private int speed;
     private int strength;
@@ -59,7 +59,7 @@ public abstract class Animal implements DetailsPrintable, WorldObjectMetadata, R
      * Heals animal by a specific value
      * @param additionalHealth Amount to increase health
      */
-    public void heal(int additionalHealth) {
+    public synchronized void heal(int additionalHealth) {
         health = Math.min(health+additionalHealth, MAX_HEALTH);
     }
 
@@ -68,6 +68,8 @@ public abstract class Animal implements DetailsPrintable, WorldObjectMetadata, R
      * @throws InterruptedException Interrupted exception
      */
     protected abstract void findNewTarget() throws InterruptedException;
+
+    public void releaseResources() {}
 
     public Integer getId() {
         return id;
@@ -113,7 +115,7 @@ public abstract class Animal implements DetailsPrintable, WorldObjectMetadata, R
      * Decreases health by a specific value
      * @param value A value by which health should be decreased.
      */
-    protected void decreaseHealthBy(int value) {
+    protected synchronized void decreaseHealthBy(int value) {
         this.health = health - value;
     }
 

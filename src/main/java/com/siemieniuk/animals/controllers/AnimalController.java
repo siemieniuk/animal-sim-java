@@ -2,7 +2,6 @@ package com.siemieniuk.animals.controllers;
 
 import com.siemieniuk.animals.core.World;
 import com.siemieniuk.animals.core.animals.Animal;
-import com.siemieniuk.animals.core.animals.Prey;
 import com.siemieniuk.animals.core.typing.AnimalObservable;
 import com.siemieniuk.animals.gui.AnimalView;
 import com.siemieniuk.animals.images.ImageLoader;
@@ -54,7 +53,7 @@ public abstract class AnimalController implements AnimalObservable {
     @FXML
     public void deleteAnimal() {
         if (observedAnimal != null) {
-            World.getInstance().removeAnimal(observedAnimal.getId());
+            World.getInstance().removeAnimal(observedAnimal);
         }
         ((Pane)observedView.getParent()).getChildren().remove(observedView);
     }

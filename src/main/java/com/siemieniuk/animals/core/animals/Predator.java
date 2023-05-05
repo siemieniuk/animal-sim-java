@@ -36,7 +36,7 @@ public final class Predator extends Animal implements DetailsPrintable {
 		try {
 			while (isAlive()) {
 				if (currentMode.equals(PredatorMode.HUNTING)) {
-					if (preyToEat == null || (!preyToEat.isAlive())) {
+					if (preyToEat == null || !preyToEat.isAlive()) {
 						findNewTarget();
 					} else {
 						if (!getPos().equals(preyToEat.getPos())) {
@@ -58,15 +58,13 @@ public final class Predator extends Animal implements DetailsPrintable {
 	}
 
 	private synchronized void attackMyPrey() {
-		if (preyToEat == null || !(preyToEat.isAlive())) {
+		if (!(preyToEat.isAlive())) {
 			switchMode(PredatorMode.RELAXATION);
 		} else {
 			if (isSameLocationAsPrey() && preyToEat.canBeAttacked()) {
 				preyToEat.beAttacked(getStrength());
 				if (!preyToEat.isAlive()) {
-					if (preyToEat != null) {
-						World.getInstance().removeAnimal(preyToEat.getId());
-					}
+					World.getInstance().removeAnimal(preyToEat);
 					preyToEat = null;
 					switchMode(PredatorMode.RELAXATION);
 				}
@@ -76,16 +74,17 @@ public final class Predator extends Animal implements DetailsPrintable {
 
 	@Override
 	protected void findNewTarget() throws InterruptedException {
-		if (preyToEat == null) {
-			int minDist = Integer.MAX_VALUE;
-			int currentDist;
-			for (Prey p : World.getInstance().getPreys()) {
-				if (p.canBeAttacked()) {
-					currentDist = getPos().getManhattanDistanceTo(p.getPos());
-					if (currentDist < minDist) {
-						minDist = currentDist;
-						preyToEat = p;
-					}
+		if (preyToEat != null) {
+			preyToEat = null;
+		}
+		int minDist = Integer.MAX_VALUE;
+		int currentDist;
+		for (Prey p : World.getInstance().getPreys()) {
+			if (p.canBeAttacked()) {
+				currentDist = getPos().getManhattanDistanceTo(p.getPos());
+				if (currentDist < minDist) {
+					minDist = currentDist;
+					preyToEat = p;
 				}
 			}
 		}
@@ -103,6 +102,10 @@ public final class Predator extends Animal implements DetailsPrintable {
 	 */
 	@Override
 	public void move() {
+		if (preyToEat == null) {
+			switchMode(PredatorMode.RELAXATION);
+			return;
+		}
 		Coordinates preyCoords = preyToEat.getPos();
 		if (getPos().equals(preyCoords)) {
 			// position is the same; do not move

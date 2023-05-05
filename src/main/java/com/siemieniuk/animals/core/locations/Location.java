@@ -23,15 +23,6 @@ public abstract class Location implements WorldObjectMetadata {
 	public Location(Coordinates pos) {
 		this.pos = pos;
 	}
-
-	/**
-	 * Calculates distance from this object to another location
-	 * @param other A destination location
-	 * @return Value representing a distance
-	 */
-	public int getDistanceTo(Location other) {
-		return pos.getManhattanDistanceTo(other.getPos());
-	}
 	
 	/**
 	 * Gets coordinates of position

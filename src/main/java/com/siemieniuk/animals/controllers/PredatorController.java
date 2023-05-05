@@ -19,9 +19,7 @@ public final class PredatorController extends AnimalController {
     public void initialize() {
         super.initialize();
         Timeline timeline = new Timeline(
-            new KeyFrame(Duration.seconds(1.0), e -> {
-                update();
-            })
+            new KeyFrame(Duration.seconds(1.0), e -> update())
         );
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();

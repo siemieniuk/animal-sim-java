@@ -44,6 +44,7 @@ public class MainController {
             world = WorldBuilder.create(path);
             ImageLoader.init();
             Thread threadWorld = new Thread(world);
+            threadWorld.setName("World");
             threadWorld.start();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -57,7 +58,6 @@ public class MainController {
         String path = Objects.requireNonNull(MainApplication.class.getResource("images/logo_big.png")).toExternalForm();
         Image img = new Image(path, 100.0, 100.0, true, false);
         bigLogo.setImage(img);
-        System.out.println(bigLogo.getParent().getScaleX());
 
         AnimationTimer at = new AnimationTimer() {
             @Override

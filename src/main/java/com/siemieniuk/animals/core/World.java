@@ -3,12 +3,12 @@ package com.siemieniuk.animals.core;
 import com.siemieniuk.animals.core.animals.Animal;
 import com.siemieniuk.animals.core.animals.Predator;
 import com.siemieniuk.animals.core.animals.Prey;
-import com.siemieniuk.animals.core.locations.Intersection;
 import com.siemieniuk.animals.core.locations.Location;
 import com.siemieniuk.animals.core.locations.Path;
 import com.siemieniuk.animals.math.Coordinates;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>This class represents a HOBH world; uses singleton pattern</p>
@@ -82,7 +82,7 @@ public final class World implements Runnable {
 					clock++;
 				}
 				try {
-					Thread.sleep(STEP_MS);
+					TimeUnit.MILLISECONDS.sleep(STEP_MS);
 				} catch (InterruptedException e) {
 					break;
 				}
@@ -90,15 +90,6 @@ public final class World implements Runnable {
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
 		}
-	}
-
-	private void pushAnimal(Animal animal) {
-		animals.put(animal.getId(), animal);
-
-		Thread t = new Thread(animal);
-		t.start();
-
-		HOW_MANY_ANIMALS++;
 	}
 
 	/**
@@ -126,24 +117,25 @@ public final class World implements Runnable {
 		pushAnimal(prey);
 	}
 
+	private void pushAnimal(Animal animal) {
+		animals.put(animal.getId(), animal);
+
+		Thread t = new Thread(animal);
+		t.setName(animal.getMetadataCode().toString()+"-"+animal.getId());
+		t.start();
+
+		HOW_MANY_ANIMALS++;
+	}
+
 	/**
 	 * Removes a specific animal from the world
-	 * @param id Animal's ID
+	 * @param animalToRemove Animal to remove
 	 */
-	public synchronized void removeAnimal(Integer id) {
-		if (animals.containsKey(id)) {
-			Location loc = locations.get(animals.get(id).getPos());
-			if (loc instanceof Intersection) {
-				((Intersection) loc).unsetUsedBy();
-			}
-			Animal animal = animals.get(id);
-			if (animal != null) {
-				animal.kill();
-				if (animal instanceof Prey) {
-					((Prey) animal).releaseResources();
-				}
-				animals.remove(id);
-			}
+	public synchronized void removeAnimal(Animal animalToRemove) {
+		if (animals.containsValue(animalToRemove)) {
+			animalToRemove.kill();
+			animalToRemove.releaseResources();
+			animals.remove(animalToRemove.getId());
 			HOW_MANY_ANIMALS = Math.max(0, HOW_MANY_ANIMALS-1);
 		}
 	}

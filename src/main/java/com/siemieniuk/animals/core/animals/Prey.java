@@ -27,10 +27,12 @@ public final class Prey extends Animal {
 	private int waterLevel;
 	private boolean isUsingMutex;
 	private boolean isWaitingForHideout;
-	private boolean isInTarget;
+//	private boolean isInTarget;
+	private boolean isUsingResource;
 	private Location targetLocation;
-	private List<Coordinates> plan;
-	private Coordinates nextStep;
+	private volatile List<Coordinates> plan;
+	private volatile Iterator<Coordinates> planIterator = null;
+	private volatile Coordinates nextStep;
 
 	/**
 	 * Constructor
@@ -45,16 +47,15 @@ public final class Prey extends Animal {
 	public Prey(String name, int health, int speed, int strength, String species, int waterDecrease, int foodDecrease) {
 		super(name, health, speed, strength, species);
 		this.foodDecrease = foodDecrease;
+		this.foodLevel = MAX_FOOD_LEVEL;
 		this.waterDecrease = waterDecrease;
-		this.foodLevel = 100;
-		this.waterLevel = 100;
+		this.waterLevel = MAX_WATER_LEVEL;
 		this.plan = null;
-		this.isInTarget = false;
+		this.isUsingResource = false;
 	}
 
 	@Override
 	public void run() {
-		Iterator<Coordinates> planIterator = null;
 		try {
 			while (isAlive()) {
 				if (targetLocation == null) {
@@ -63,15 +64,12 @@ public final class Prey extends Animal {
 						planIterator = plan.iterator();
 					}
 				} else {
-					if (isInTarget) {
+					if (isInTarget()) {
 						consume();
 					} else {
-						if (getPos().equals(targetLocation.getPos())) {
-							isInTarget = true;
-							continue;
+						if (planIterator.hasNext()) {
+							nextStep = planIterator.next();
 						}
-						assert planIterator != null;
-						nextStep = planIterator.next();
 						releaseResources();
 						move();
 					}
@@ -84,7 +82,7 @@ public final class Prey extends Animal {
 	}
 
 	@Override
-	protected void findNewTarget() {
+	protected void findNewTarget() throws InterruptedException {
 		PreyRouter router;
 		if (isHungry()) {
 			router = new PlantSourceRouter(getPos());
@@ -95,9 +93,12 @@ public final class Prey extends Animal {
 		}
 		plan = router.getPlan();
 		targetLocation = router.getTarget();
+		if (plan != null) {
+			planIterator = plan.iterator();
+		}
 	}
 
-	public synchronized void findNewTarget(WorldObjectType locType) {
+	public void findNewTarget(WorldObjectType locType) throws InterruptedException {
 		PreyRouter router;
 		switch(locType) {
 			case PLANT_SRC -> router = new PlantSourceRouter(getPos());
@@ -107,6 +108,9 @@ public final class Prey extends Animal {
 		}
 		plan = router.getPlan();
 		targetLocation = router.getTarget();
+		if (plan != null) {
+			planIterator = plan.iterator();
+		}
 	}
 
 	/**
@@ -121,24 +125,22 @@ public final class Prey extends Animal {
 	 * Takes damage from the predator.
 	 * @param predatorStrength Strength of the predator
 	 */
-	public synchronized void beAttacked(int predatorStrength) {
+	public void beAttacked(int predatorStrength) {
 		int lostHealth = Math.max(0, predatorStrength - getStrength());
 		decreaseHealthBy(lostHealth);
 	}
 
 	private void consume() throws InterruptedException {
 		isUsingMutex = true;
-		boolean haveThisUsedResource;
 		if (targetLocation instanceof WaterSource) {
-			haveThisUsedResource = drink();
+			isUsingResource = drink();
 		} else if (targetLocation instanceof PlantSource) {
-			haveThisUsedResource = eat();
+			isUsingResource = eat();
 		} else {
-			haveThisUsedResource = useHideout();
+			isUsingResource = useHideout();
 		}
-		if (!haveThisUsedResource) {
+		if (!isUsingResource) {
 			targetLocation = null;
-			isInTarget = false;
 			releaseResources();
 		}
 	}
@@ -200,6 +202,7 @@ public final class Prey extends Animal {
 	/**
 	 * Releases used semaphores
 	 */
+	@Override
 	public void releaseResources() {
 		if (isUsingMutex) {
 			Location loc = (World.getInstance().getLocation(getPos()));
@@ -236,6 +239,16 @@ public final class Prey extends Animal {
 	@Override
 	public WorldObjectType getMetadataCode() {
 		return WorldObjectType.PREY;
+	}
+
+	public boolean isInTarget() {
+		if (plan == null) {
+			return true;
+		}
+		if (getPos().equals(targetLocation.getPos())) {
+			return true;
+		}
+		return isUsingResource;
 	}
 
 	/**

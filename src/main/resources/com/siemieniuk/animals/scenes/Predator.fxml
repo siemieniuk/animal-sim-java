@@ -81,7 +81,7 @@
          <children>
              <StackPane alignment="CENTER_LEFT" prefHeight="150.0" prefWidth="200.0" styleClass="bgArea" GridPane.rowIndex="2">
                 <children>
-                   <Text fx:id="healthLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="HEALTH" StackPane.alignment="BOTTOM_LEFT">
+                   <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="barText" text="HEALTH" StackPane.alignment="BOTTOM_LEFT">
                       <font>
                          <Font size="10.0" />
                       </font>
@@ -99,7 +99,7 @@
              </StackPane>
             <StackPane prefHeight="150.0" prefWidth="200.0" styleClass="bgArea" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="barValueText" text="100 / 100" StackPane.alignment="BOTTOM_RIGHT">
+                  <Text fx:id="healthLabel" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="barValueText" text="100 / 100" StackPane.alignment="BOTTOM_RIGHT">
                      <font>
                         <Font size="10.0" />
                      </font>
@@ -113,6 +113,11 @@
                </padding>
             </StackPane>
          </children>
+         <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+         </rowConstraints>
       </GridPane>
        <StackPane prefHeight="150.0" prefWidth="200.0" styleClass="bgArea" GridPane.columnSpan="2" GridPane.rowIndex="4">
           <children>
