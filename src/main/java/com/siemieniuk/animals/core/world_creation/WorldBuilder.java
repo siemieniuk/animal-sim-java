@@ -2,7 +2,6 @@ package com.siemieniuk.animals.core.world_creation;
 
 import com.siemieniuk.animals.hobhw_parser.HobhwParser;
 import com.siemieniuk.animals.hobhw_parser.WorldParameters;
-import siemieniuk.animals.core.locations.*;
 import com.siemieniuk.animals.core.locations.*;
 import com.siemieniuk.animals.math.Coordinates;
 import com.siemieniuk.animals.core.World;

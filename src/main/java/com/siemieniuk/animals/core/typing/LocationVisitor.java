@@ -1,7 +1,6 @@
 package com.siemieniuk.animals.core.typing;
 
 import com.siemieniuk.animals.core.locations.*;
-import siemieniuk.animals.core.locations.*;
 
 public interface LocationVisitor {
 

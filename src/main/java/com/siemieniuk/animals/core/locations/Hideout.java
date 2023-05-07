@@ -69,7 +69,6 @@ public final class Hideout extends Location implements DetailsPrintable {
 		visitor.visitHideout(this);
 	}
 
-import com.siemieniuk.animals.core.typing.WorldObjectType;
 	/**
 	 * Returns list of current animals
 	 * @return List of current animals

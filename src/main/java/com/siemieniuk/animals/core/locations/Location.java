@@ -1,6 +1,7 @@
 package com.siemieniuk.animals.core.locations;
 
 import com.siemieniuk.animals.core.WorldObjectMetadata;
+import com.siemieniuk.animals.core.typing.LocationVisitor;
 import com.siemieniuk.animals.math.Coordinates;
 
 /**
@@ -9,7 +10,7 @@ import com.siemieniuk.animals.math.Coordinates;
  * @version 0.1
  *
  */
-public abstract class Location implements WorldObjectMetadata {
+public abstract class Location implements WorldObjectMetadata  {
 	private final Coordinates pos;
 
 	public Location() {
@@ -23,6 +24,8 @@ public abstract class Location implements WorldObjectMetadata {
 	public Location(Coordinates pos) {
 		this.pos = pos;
 	}
+
+	public abstract void accept(LocationVisitor visitor);
 	
 	/**
 	 * Gets coordinates of position

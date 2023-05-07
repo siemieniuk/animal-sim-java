@@ -77,8 +77,12 @@ public abstract class Source extends Location {
 		return name;
 	}
 
-	public String getUsageString() {
-		return "Usage: " + usedBy.size() + "/" + capacity;
+	public int getHowManyPreysNow() {
+		return usedBy.size();
+	}
+
+	public int getCapacity() {
+		return capacity;
 	}
 
 	/**

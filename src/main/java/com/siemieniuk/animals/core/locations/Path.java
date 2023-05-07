@@ -1,5 +1,6 @@
 package com.siemieniuk.animals.core.locations;
 
+import com.siemieniuk.animals.core.typing.LocationVisitor;
 import com.siemieniuk.animals.core.typing.WorldObjectType;
 import com.siemieniuk.animals.math.Coordinates;
 
@@ -14,6 +15,10 @@ public class Path extends Location {
 	 */
 	public Path(Coordinates pos) {
 		super(pos);
+	}
+
+	public void accept(LocationVisitor visitor) {
+		visitor.visitPath(this);
 	}
 
 	@Override

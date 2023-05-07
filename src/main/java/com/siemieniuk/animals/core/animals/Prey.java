@@ -6,7 +6,6 @@ import com.siemieniuk.animals.math.Coordinates;
 import com.siemieniuk.animals.core.animals.preyrouter.PlantSourceRouter;
 import com.siemieniuk.animals.core.animals.preyrouter.PreyRouter;
 import com.siemieniuk.animals.core.animals.preyrouter.WaterSourceRouter;
-import siemieniuk.animals.core.locations.*;
 import com.siemieniuk.animals.core.typing.WorldObjectType;
 import com.siemieniuk.animals.core.locations.*;
 
@@ -95,17 +94,11 @@ public final class Prey extends Animal {
 	}
 
 	public void setNewTarget(WorldObjectType locType) throws InterruptedException {
-		PreyRouter router;
 		switch(locType) {
-			case PLANT_SRC -> router = new PlantSourceRouter(getPos());
-			case WATER_SRC -> router = new WaterSourceRouter(getPos());
-			case HIDEOUT   -> router = new HideoutRouter(getPos());
+			case PLANT_SRC -> foodLevel = 0;
+			case WATER_SRC -> waterLevel = 0;
+			case HIDEOUT   -> {}
 			default        -> throw new IllegalArgumentException("Should be PLANT_SRC, WATER_SRC, HIDEOUT");
-		}
-		plan = router.getPlan();
-		targetLocation = router.getTarget();
-		if (plan != null) {
-			planIterator = plan.iterator();
 		}
 	}
 
