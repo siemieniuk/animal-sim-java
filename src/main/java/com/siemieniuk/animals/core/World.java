@@ -1,10 +1,10 @@
 package com.siemieniuk.animals.core;
 
+import com.siemieniuk.animals.core.locations.Path;
 import com.siemieniuk.animals.core.animals.Animal;
 import com.siemieniuk.animals.core.animals.Predator;
 import com.siemieniuk.animals.core.animals.Prey;
 import com.siemieniuk.animals.core.locations.Location;
-import com.siemieniuk.animals.core.locations.Path;
 import com.siemieniuk.animals.math.Coordinates;
 
 import java.util.*;

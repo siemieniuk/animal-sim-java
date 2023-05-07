@@ -1,7 +1,8 @@
 package com.siemieniuk.animals.core.locations;
 
-import com.siemieniuk.animals.core.typing.WorldObjectType;
 import com.siemieniuk.animals.core.animals.Prey;
+import com.siemieniuk.animals.core.typing.LocationVisitor;
+import com.siemieniuk.animals.core.typing.WorldObjectType;
 import com.siemieniuk.animals.math.Coordinates;
 
 import java.util.concurrent.Semaphore;
@@ -10,7 +11,7 @@ import java.util.concurrent.Semaphore;
  * A location with exactly only 0 or 1 prey per object
  * @author Szymon Siemieniuk
  */
-public class Intersection extends Location {
+public final class Intersection extends Location {
 	private final Semaphore sem;
 	private Prey usedBy = null;
 	
@@ -50,6 +51,11 @@ public class Intersection extends Location {
 	 */
 	public boolean isOccupied() {
 		return usedBy != null;
+	}
+
+	@Override
+	public void accept(LocationVisitor visitor) {
+		visitor.visitIntersection(this);
 	}
 
 	@Override

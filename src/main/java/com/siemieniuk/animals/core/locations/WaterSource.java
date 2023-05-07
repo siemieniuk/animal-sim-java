@@ -1,8 +1,9 @@
 package com.siemieniuk.animals.core.locations;
 
 import com.siemieniuk.animals.core.DetailsPrintable;
-import com.siemieniuk.animals.core.typing.WorldObjectType;
+import com.siemieniuk.animals.core.typing.LocationVisitor;
 import com.siemieniuk.animals.math.Coordinates;
+import com.siemieniuk.animals.core.typing.WorldObjectType;
 
 /**
  * This class represents Water Source.
@@ -33,8 +34,12 @@ public final class WaterSource extends Source implements DetailsPrintable {
 	@Override
 	public String getDetails() {
 		return super.getDetails() + "Water Source\n"
-				                  + "called " + getName() + "\n"
-							      + "used by " + getUsageString() + " animals\n";
+				                  + "called " + getName() + "\n";
+	}
+
+	@Override
+	public void accept(LocationVisitor visitor) {
+		visitor.visitWaterSource(this);
 	}
 
 	@Override

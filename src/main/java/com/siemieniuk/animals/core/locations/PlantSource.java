@@ -1,8 +1,9 @@
 package com.siemieniuk.animals.core.locations;
 
 import com.siemieniuk.animals.core.DetailsPrintable;
-import com.siemieniuk.animals.core.typing.WorldObjectType;
+import com.siemieniuk.animals.core.typing.LocationVisitor;
 import com.siemieniuk.animals.math.Coordinates;
+import com.siemieniuk.animals.core.typing.WorldObjectType;
 
 /**
  * This class represents a plant source - a place where preys can eat well (or being eaten by predators)
@@ -26,18 +27,12 @@ public final class PlantSource extends Source implements DetailsPrintable {
 	}
 
 	@Override
-	public WorldObjectType getMetadataCode() {
-		return WorldObjectType.PLANT_SRC;
+	public void accept(LocationVisitor visitor) {
+		visitor.visitPlantSource(this);
 	}
 
-	/**
-	 * Sets object-specific string to describe the object's state
-	 * @return Text to display
-	 */
 	@Override
-	public String getDetails() {
-		return super.getDetails() + "Plant Source\n"
-				+ "called " + getName() + "\n"
-				+ "used by " + getUsageString() + " animals\n";
+	public WorldObjectType getMetadataCode() {
+		return WorldObjectType.PLANT_SRC;
 	}
 }

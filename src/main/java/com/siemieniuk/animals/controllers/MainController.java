@@ -1,15 +1,15 @@
 package com.siemieniuk.animals.controllers;
 
-import com.siemieniuk.animals.*;
 import com.siemieniuk.animals.core.DetailsPrintable;
+import com.siemieniuk.animals.core.World;
+import com.siemieniuk.animals.core.world_creation.WorldBuilder;
+import com.siemieniuk.animals.math.Coordinates;
 import com.siemieniuk.animals.core.locations.Location;
 import com.siemieniuk.animals.core.animals.Predator;
 import com.siemieniuk.animals.core.animals.Prey;
-import com.siemieniuk.animals.core.World;
+import com.siemieniuk.animals.gui.ParametrizedAnimalCreationView;
 import com.siemieniuk.animals.images.ImageLoader;
 import com.siemieniuk.animals.gui.WorldView;
-import com.siemieniuk.animals.math.Coordinates;
-import com.siemieniuk.animals.core.world_creation.WorldBuilder;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -19,7 +19,9 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import com.siemieniuk.animals.MainApplication;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -30,9 +32,10 @@ import java.util.*;
  * This class represents the controller of the main window.
  * @author  Szymon Siemieniuk
  */
-public class MainController {
+public final class MainController {
     @FXML private WorldView canvas;
     @FXML private ImageView bigLogo;
+    @FXML private VBox sidebar;
     private World world = null;
 
     /**
@@ -59,6 +62,8 @@ public class MainController {
         Image img = new Image(path, 100.0, 100.0, true, false);
         bigLogo.setImage(img);
 
+        sidebar.getChildren().add(new ParametrizedAnimalCreationView());
+//        paramAnimalView = new ParametrizedAnimalCreationView();
         AnimationTimer at = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -86,14 +91,17 @@ public class MainController {
             Coordinates pos = new Coordinates(WorldView.convertToWorldPos(event.getX(), event.getY()));
             List<DetailsPrintable> objectsToPrint = world.getObjectsToDraw(pos);
             Location loc = world.getLocation(pos);
+
             if (objectsToPrint.size() > 0) {
                 URL url = MainApplication.class.getResource("scenes/InformationWindow.fxml");
                 FXMLLoader fxmlLoader = new FXMLLoader(url);
                 Parent root = fxmlLoader.load();
                 Scene scene = new Scene(root);
+
                 String css = Objects.requireNonNull(MainApplication.class.getResource("style/InformationWindow.css"))
-                             .toExternalForm();
+                        .toExternalForm();
                 scene.getStylesheets().add(css);
+
                 InformationWindowController ic = fxmlLoader.getController();
                 if (loc != null) {
                     ic.changeLocation(loc);

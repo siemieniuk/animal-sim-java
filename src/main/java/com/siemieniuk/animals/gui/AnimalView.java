@@ -1,6 +1,5 @@
 package com.siemieniuk.animals.gui;
 
-import com.siemieniuk.animals.core.typing.AnimalObservable;
 import javafx.scene.layout.GridPane;
 
 /**

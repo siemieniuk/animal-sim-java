@@ -1,9 +1,10 @@
 package com.siemieniuk.animals.core.locations;
 
 import com.siemieniuk.animals.core.DetailsPrintable;
-import com.siemieniuk.animals.core.typing.WorldObjectType;
 import com.siemieniuk.animals.core.animals.Prey;
+import com.siemieniuk.animals.core.typing.LocationVisitor;
 import com.siemieniuk.animals.math.Coordinates;
+import com.siemieniuk.animals.core.typing.WorldObjectType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,7 @@ public final class Hideout extends Location implements DetailsPrintable {
 
 	private final Semaphore sem;
 	List<Prey> usedBy;
-	
+
 	/**
 	 * Constructor
 	 * @param pos Object of class Coordinate
@@ -39,7 +40,7 @@ public final class Hideout extends Location implements DetailsPrintable {
 	public boolean isOccupied() {
 		return usedBy.size() == capacity;
 	}
-	
+
 	/**
 	 * Adds the prey to the hideout
 	 * @param newPrey Prey to be added
@@ -53,7 +54,7 @@ public final class Hideout extends Location implements DetailsPrintable {
 			usedBy.remove(newPrey);
 		}
 	}
-	
+
 	/**
 	 * Removes animal from hideout (does nothing if it is not)
 	 * @param prey Prey to remove
@@ -62,7 +63,13 @@ public final class Hideout extends Location implements DetailsPrintable {
 		usedBy.remove(prey);
 		sem.release();
 	}
-	
+
+	@Override
+	public void accept(LocationVisitor visitor) {
+		visitor.visitHideout(this);
+	}
+
+import com.siemieniuk.animals.core.typing.WorldObjectType;
 	/**
 	 * Returns list of current animals
 	 * @return List of current animals
@@ -76,8 +83,12 @@ public final class Hideout extends Location implements DetailsPrintable {
 		return WorldObjectType.HIDEOUT;
 	}
 
-	public String getUsageString() {
-		return "Usage: " + usedBy.size() + "/" + capacity;
+	public int getHowManyPreysNow() {
+		return usedBy.size();
+	}
+
+	public int getCapacity() {
+		return capacity;
 	}
 
 	@Override
@@ -92,6 +103,6 @@ public final class Hideout extends Location implements DetailsPrintable {
 	@Override
 	public String getDetails() {
 		return super.getDetails() + "Hideout\n"
-		                          + "used by " + usedBy.size() + "/" + capacity + " animals\n";
+				+ "used by " + usedBy.size() + "/" + capacity + " animals\n";
 	}
 }

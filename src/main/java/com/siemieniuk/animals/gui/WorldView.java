@@ -1,10 +1,10 @@
 package com.siemieniuk.animals.gui;
 
-import com.siemieniuk.animals.images.ImageLoader;
-import com.siemieniuk.animals.core.typing.WorldObjectType;
+import com.siemieniuk.animals.core.World;
 import com.siemieniuk.animals.core.animals.Animal;
 import com.siemieniuk.animals.core.locations.Location;
-import com.siemieniuk.animals.core.World;
+import com.siemieniuk.animals.core.typing.WorldObjectType;
+import com.siemieniuk.animals.images.ImageLoader;
 import com.siemieniuk.animals.math.Coordinates;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;

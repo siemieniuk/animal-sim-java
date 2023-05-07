@@ -1,14 +1,14 @@
 package com.siemieniuk.animals.core.animals;
 
+import com.siemieniuk.animals.core.World;
 import com.siemieniuk.animals.core.animals.preyrouter.HideoutRouter;
+import com.siemieniuk.animals.math.Coordinates;
 import com.siemieniuk.animals.core.animals.preyrouter.PlantSourceRouter;
 import com.siemieniuk.animals.core.animals.preyrouter.PreyRouter;
 import com.siemieniuk.animals.core.animals.preyrouter.WaterSourceRouter;
-import com.siemieniuk.animals.core.locations.Hideout;
+import siemieniuk.animals.core.locations.*;
 import com.siemieniuk.animals.core.typing.WorldObjectType;
-import com.siemieniuk.animals.core.World;
 import com.siemieniuk.animals.core.locations.*;
-import com.siemieniuk.animals.math.Coordinates;
 
 import java.util.Iterator;
 import java.util.List;

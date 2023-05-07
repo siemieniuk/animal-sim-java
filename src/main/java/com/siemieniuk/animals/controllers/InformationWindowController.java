@@ -1,16 +1,14 @@
 package com.siemieniuk.animals.controllers;
 
 import com.siemieniuk.animals.core.DetailsPrintable;
+import com.siemieniuk.animals.gui.AnimalView;
+import com.siemieniuk.animals.math.Coordinates;
+import com.siemieniuk.animals.core.locations.*;
+import com.siemieniuk.animals.core.typing.LocationVisitor;
 import com.siemieniuk.animals.images.ImageLoader;
 import com.siemieniuk.animals.core.typing.WorldObjectType;
 import com.siemieniuk.animals.core.animals.Animal;
-import com.siemieniuk.animals.core.locations.Hideout;
-import com.siemieniuk.animals.core.locations.Intersection;
-import com.siemieniuk.animals.core.locations.Location;
-import com.siemieniuk.animals.core.locations.Source;
-import com.siemieniuk.animals.gui.AnimalView;
 import com.siemieniuk.animals.gui.AnimalViewFactory;
-import com.siemieniuk.animals.math.Coordinates;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -24,37 +22,80 @@ import java.util.List;
  * This class is a controller for information window. Displays all animals and locations at a specified point.
  * @author Szymon Siemieniuk
  */
-public class InformationWindowController {
+public final class InformationWindowController implements LocationVisitor {
     @FXML private Pane animalsVB;
     @FXML private ImageView icon;
     @FXML private Text title;
     @FXML private Text position;
     @FXML private Text capacity;
 
-    public void changeLocation(Location loc) {
-        Image img = ImageLoader.getImage(loc.getMetadataCode());
+    public void changeLocation(Location location) {
+        location.accept(this);
+    }
+
+    @Override
+    public void visitWaterSource(WaterSource waterSource) {
+        visitSource(waterSource);
+
+        Image img = ImageLoader.getImage(WorldObjectType.WATER_SRC);
         icon.setImage(img);
-        Coordinates pos = loc.getPos();
+    }
+
+    @Override
+    public void visitPlantSource(PlantSource plantSource) {
+        visitSource(plantSource);
+
+        Image img = ImageLoader.getImage(WorldObjectType.PLANT_SRC);
+        icon.setImage(img);
+    }
+
+    private void visitSource(Source source) {
+        getPositionFromLocation(source);
+        title.setText(source.getName());
+        String usage = "Usage: " + source.getHowManyPreysNow() + "/" + source.getCapacity();
+        capacity.setText(usage);
+    }
+
+    @Override
+    public void visitHideout(Hideout hideout) {
+        getPositionFromLocation(hideout);
+        title.setText(hideout.toString());
+
+        String usage = "Usage: " + hideout.getHowManyPreysNow() + "/" + hideout.getCapacity();
+        capacity.setText(usage);
+
+        Image img = ImageLoader.getImage(WorldObjectType.HIDEOUT);
+        icon.setImage(img);
+    }
+
+    @Override
+    public void visitPath(Path path) {
+        getPositionFromLocation(path);
+        title.setText(path.toString());
+
+        Image img = ImageLoader.getImage(WorldObjectType.PATH);
+        icon.setImage(img);
+    }
+
+    @Override
+    public void visitIntersection(Intersection intersection) {
+        getPositionFromLocation(intersection);
+        title.setText(intersection.toString());
+
+        if (intersection.isOccupied()) {
+            capacity.setText("Occupied");
+        } else {
+            capacity.setText("Busy");
+        }
+
+        Image img = ImageLoader.getImage(WorldObjectType.INTERSECTION);
+        icon.setImage(img);
+    }
+
+    private void getPositionFromLocation(Location location) {
+        Coordinates pos = location.getPos();
         String displayPosition = "X=" + pos.getX() + ", Y=" + pos.getY();
         position.setText(displayPosition);
-        if (loc instanceof Source) {
-            title.setText(((Source) loc).getName());
-            capacity.setText(((Source) loc).getUsageString());
-        } else {
-            title.setText(loc.toString());
-        }
-
-        if (loc instanceof Intersection intersection) {
-            if (intersection.isOccupied()) {
-                capacity.setText("Occupied");
-            } else {
-                capacity.setText("Busy");
-            }
-        }
-
-        if (loc instanceof Hideout hideout) {
-            capacity.setText(hideout.getUsageString());
-        }
     }
 
     public void configureNoLocation(Coordinates pos) {

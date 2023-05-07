@@ -1,9 +1,9 @@
 package com.siemieniuk.animals.controllers;
 
 import com.siemieniuk.animals.core.World;
+import com.siemieniuk.animals.gui.AnimalView;
 import com.siemieniuk.animals.core.animals.Animal;
 import com.siemieniuk.animals.core.typing.AnimalObservable;
-import com.siemieniuk.animals.gui.AnimalView;
 import com.siemieniuk.animals.images.ImageLoader;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
