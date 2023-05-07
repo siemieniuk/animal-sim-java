@@ -96,7 +96,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.siemieniuk.animals/com.siemieniuk.animals.MainApplication</mainClass>
+                            <mainClass>com.siemieniuk.animals/siemieniuk.animals.MainApplication</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
