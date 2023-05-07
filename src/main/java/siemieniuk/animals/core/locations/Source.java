@@ -44,14 +44,6 @@ public abstract class Source extends Location {
     }
 
 	/**
-	 * Checks if there is some place for next creature
-	 * @return True if occupied, false otherwise
-	 */
-	public boolean isOccupied() {
-		return usedBy.size() == capacity;
-	}
-
-	/**
 	 * Adds prey which consumes this source
 	 * @param newPrey Prey
 	 */
