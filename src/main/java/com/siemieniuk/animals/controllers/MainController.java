@@ -62,7 +62,7 @@ public final class MainController {
         Image img = new Image(path, 100.0, 100.0, true, false);
         bigLogo.setImage(img);
 
-        sidebar.getChildren().add(new ParametrizedAnimalCreationView());
+//        sidebar.getChildren().add(new ParametrizedAnimalCreationView());
 //        paramAnimalView = new ParametrizedAnimalCreationView();
         AnimationTimer at = new AnimationTimer() {
             @Override
