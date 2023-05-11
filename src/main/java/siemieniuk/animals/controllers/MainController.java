@@ -1,5 +1,6 @@
 package siemieniuk.animals.controllers;
 
+import javafx.scene.layout.StackPane;
 import siemieniuk.animals.core.DetailsPrintable;
 import siemieniuk.animals.core.World;
 import siemieniuk.animals.core.world_creation.WorldBuilder;

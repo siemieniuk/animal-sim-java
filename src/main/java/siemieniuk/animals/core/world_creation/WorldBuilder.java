@@ -9,6 +9,7 @@ import siemieniuk.animals.core.World;
 import java.io.FileNotFoundException;
 import java.util.*;
 import java.net.URL;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This class works similar to builder pattern. Its purpose is to construct the world.
@@ -19,7 +20,7 @@ public class WorldBuilder {
     public static World create(int howManySources, int howManyHideouts, int xSize, int ySize){
         Coordinates.setMaxDimensions(xSize, ySize);
         List<Coordinates> coordinates = generateCoordinates(xSize, ySize, howManySources+howManyHideouts);
-        Hashtable<Coordinates, Location> locations = new Hashtable<> ();
+        ConcurrentHashMap<Coordinates, Location> locations = new ConcurrentHashMap<>();
         generateWaterSources(locations, coordinates.subList(0, howManySources / 2));
         generatePlantSources(locations, coordinates.subList(howManySources/2, howManySources));
         generateHideouts(locations, coordinates.subList(howManySources, coordinates.size()));
@@ -36,7 +37,7 @@ public class WorldBuilder {
         HobhwParser parser = new HobhwParser(src);
         WorldParameters params = parser.parse();
         Coordinates.setMaxDimensions(params.getxSize(), params.getySize());
-        Hashtable<Coordinates, Location> locations = new Hashtable<>();
+        ConcurrentHashMap<Coordinates, Location> locations = new ConcurrentHashMap<>();
         generateWaterSources(locations, params.getWaterSources());
         generatePlantSources(locations, params.getPlantSources());
         generateHideouts(locations, params.getHideouts());
@@ -45,35 +46,35 @@ public class WorldBuilder {
         return World.init(locations, params.getxSize(), params.getySize());
     }
 
-    private static void generatePlantSources(Hashtable<Coordinates, Location> locations, List<Coordinates> coordinates) {
+    private static void generatePlantSources(ConcurrentHashMap<Coordinates, Location> locations, List<Coordinates> coordinates) {
         for (Coordinates pos : coordinates) {
             PlantSource ps = new PlantSource(pos, "Baobab", 10, 4);
             locations.put(pos, ps);
         }
     }
 
-    private static void generateWaterSources(Hashtable<Coordinates, Location> locations, List<Coordinates> coordinates) {
+    private static void generateWaterSources(ConcurrentHashMap<Coordinates, Location> locations, List<Coordinates> coordinates) {
         for (Coordinates pos : coordinates) {
             WaterSource ws = new WaterSource(pos, "Lake", 10, 4);
             locations.put(pos, ws);
         }
     }
 
-    private static void generateHideouts(Hashtable<Coordinates, Location> locations, List<Coordinates> coordinates) {
+    private static void generateHideouts(ConcurrentHashMap<Coordinates, Location> locations, List<Coordinates> coordinates) {
         for (Coordinates pos : coordinates) {
             Hideout hideout = new Hideout(pos, 3);
             locations.put(pos, hideout);
         }
     }
 
-    private static void generatePaths(Hashtable<Coordinates, Location> locations, List<Coordinates> coordinates) {
+    private static void generatePaths(ConcurrentHashMap<Coordinates, Location> locations, List<Coordinates> coordinates) {
         for (Coordinates pos : coordinates) {
             Path path = new Path(pos);
             locations.put(pos, path);
         }
     }
 
-    private static void generateIntersections(Hashtable<Coordinates, Location> locations, List<Coordinates> coordinates) {
+    private static void generateIntersections(ConcurrentHashMap<Coordinates, Location> locations, List<Coordinates> coordinates) {
         for (Coordinates pos : coordinates) {
             Intersection intersection = new Intersection(pos);
             locations.put(pos, intersection);

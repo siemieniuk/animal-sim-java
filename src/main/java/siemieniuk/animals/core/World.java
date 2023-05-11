@@ -8,7 +8,9 @@ import siemieniuk.animals.core.locations.Location;
 import siemieniuk.animals.math.Coordinates;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * <p>This class represents a HOBH world; uses singleton pattern</p>
@@ -21,8 +23,8 @@ public final class World implements Runnable {
 	private static int HOW_MANY_ANIMALS = 0;
 	private final int X_SIZE;
 	private final int Y_SIZE;
-	private final Hashtable<Integer, Animal> animals;
-	private final Hashtable<Coordinates, Location> locations;
+	private final ConcurrentHashMap<Integer, Animal> animals;
+	private final ConcurrentHashMap<Coordinates, Location> locations;
 	private final Random random;
 
 	/**
@@ -31,11 +33,11 @@ public final class World implements Runnable {
 	 * @param X_SIZE Size in horizontal axis
 	 * @param Y_SIZE Size in vertical axis
 	 */
-	private World(Hashtable<Coordinates, Location> locations, int X_SIZE, int Y_SIZE) {
+	private World(ConcurrentHashMap<Coordinates, Location> locations, int X_SIZE, int Y_SIZE) {
 		this.locations = locations;
 		this.X_SIZE = X_SIZE;
 		this.Y_SIZE = Y_SIZE;
-		this.animals = new Hashtable<>();
+		this.animals = new ConcurrentHashMap<>();
 		this.random = new Random();
 	}
 
@@ -46,7 +48,7 @@ public final class World implements Runnable {
 	 * @param Y_SIZE World's vertical size
 	 * @return Instance of world
 	 */
-	public static World init(Hashtable<Coordinates, Location> locations, int X_SIZE, int Y_SIZE) {
+	public static World init(ConcurrentHashMap<Coordinates, Location> locations, int X_SIZE, int Y_SIZE) {
 		if (instance != null) {
 			throw new AssertionError("World was previously created!");
 		}
@@ -179,19 +181,13 @@ public final class World implements Runnable {
 	 * @return list of preys
 	 */
 	public synchronized List<Prey> getPreys() {
-		List<Prey> preys = new ArrayList<>();
-		Iterator<Animal> it = animals.values().iterator();
-		Animal next;
-		while (it.hasNext()) {
-			next = it.next();
-			if (next instanceof Prey) {
-				preys.add((Prey) next);
-			}
-		}
-		return preys;
+		return animals.values().stream()
+				.filter(Prey.class::isInstance)
+				.map(Prey.class::cast)
+				.collect(Collectors.toList());
 	}
 
-	public Hashtable<Coordinates, Location> getLocations() {
+	public ConcurrentHashMap<Coordinates, Location> getLocations() {
 		return locations;
 	}
 

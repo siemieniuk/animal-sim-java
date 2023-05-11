@@ -4,7 +4,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane ?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.GridPane?>
@@ -21,8 +20,8 @@
       <RowConstraints vgrow="ALWAYS" />
    </rowConstraints>
    <children>
-      <StackPane fx:id="canvasContainer" style="-fx-padding: 5;">
-         <WorldView fx:id="canvas" height="400.0" onMouseClicked="#showInformationWindow" BorderPane.alignment="CENTER" styleClass="canvas" />
+      <StackPane style="-fx-padding: 5;">
+         <WorldView fx:id="canvas" height="400.0" onMouseClicked="#showInformationWindow" styleClass="canvas" />
       </StackPane>
       <VBox spacing="10.0" GridPane.columnIndex="1">
          <opaqueInsets>
@@ -31,7 +30,7 @@
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
-         <StackPane fx:id="logoPane">
+         <StackPane>
             <ImageView fx:id="bigLogo"/>
          </StackPane>
          <Button mnemonicParsing="false" onAction="#createPrey" prefHeight="24.0" prefWidth="210.0" text="Create Prey" styleClass="button" />

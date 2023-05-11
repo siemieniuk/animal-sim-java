@@ -6,6 +6,7 @@ import siemieniuk.animals.core.typing.WorldObjectType;
 import siemieniuk.animals.math.Coordinates;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This class is used for finding a route from A to B. It can also find the nearest target to the required source.
@@ -15,7 +16,7 @@ public abstract class PreyRouter {
     private final Coordinates source;
     private Coordinates target;
     private List<Coordinates> plan;
-    private static final Hashtable<Coordinates, Location> locations = World.getInstance().getLocations();
+    private static final ConcurrentHashMap<Coordinates, Location> locations = World.getInstance().getLocations();
 
     /**
      * Constructor by Coordinates

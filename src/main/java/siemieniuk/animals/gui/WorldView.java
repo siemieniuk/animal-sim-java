@@ -50,11 +50,6 @@ public final class WorldView extends Canvas {
         world = World.getInstance();
     }
 
-    public WorldView(double size) {
-        super(size, size);
-        world = World.getInstance();
-    }
-
     private static int cellWidth = 0, cellHeight = 0;
 
     /**
