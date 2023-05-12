@@ -3,8 +3,8 @@ package siemieniuk.animals.core.locations;
 import siemieniuk.animals.core.DetailsPrintable;
 import siemieniuk.animals.core.animals.Prey;
 import siemieniuk.animals.core.typing.LocationVisitor;
-import siemieniuk.animals.math.Coordinates;
 import siemieniuk.animals.core.typing.WorldObjectType;
+import siemieniuk.animals.math.Coordinates;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,13 +1,15 @@
 package siemieniuk.animals.core;
 
-import siemieniuk.animals.core.locations.Path;
 import siemieniuk.animals.core.animals.Animal;
 import siemieniuk.animals.core.animals.Predator;
 import siemieniuk.animals.core.animals.Prey;
 import siemieniuk.animals.core.locations.Location;
+import siemieniuk.animals.core.locations.Path;
 import siemieniuk.animals.math.Coordinates;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;

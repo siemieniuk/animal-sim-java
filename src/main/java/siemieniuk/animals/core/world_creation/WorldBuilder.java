@@ -1,14 +1,16 @@
 package siemieniuk.animals.core.world_creation;
 
+import siemieniuk.animals.core.World;
 import siemieniuk.animals.core.locations.*;
 import siemieniuk.animals.hobhw_parser.HobhwParser;
 import siemieniuk.animals.hobhw_parser.WorldParameters;
 import siemieniuk.animals.math.Coordinates;
-import siemieniuk.animals.core.World;
 
 import java.io.FileNotFoundException;
-import java.util.*;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**

@@ -1,7 +1,7 @@
 package siemieniuk.animals.core.animals.preyrouter;
 
-import siemieniuk.animals.math.Coordinates;
 import siemieniuk.animals.core.typing.WorldObjectType;
+import siemieniuk.animals.math.Coordinates;
 
 public final class HideoutRouter extends PreyRouter {
     public HideoutRouter(Coordinates pos) {

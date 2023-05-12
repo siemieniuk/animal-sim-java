@@ -2,8 +2,8 @@ package siemieniuk.animals.core.locations;
 
 import siemieniuk.animals.core.DetailsPrintable;
 import siemieniuk.animals.core.typing.LocationVisitor;
-import siemieniuk.animals.math.Coordinates;
 import siemieniuk.animals.core.typing.WorldObjectType;
+import siemieniuk.animals.math.Coordinates;
 
 /**
  * This class represents a plant source - a place where preys can eat well (or being eaten by predators)

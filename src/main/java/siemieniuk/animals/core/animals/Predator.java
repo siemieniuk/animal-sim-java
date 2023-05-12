@@ -2,8 +2,8 @@ package siemieniuk.animals.core.animals;
 
 import siemieniuk.animals.core.DetailsPrintable;
 import siemieniuk.animals.core.World;
-import siemieniuk.animals.math.Coordinates;
 import siemieniuk.animals.core.typing.WorldObjectType;
+import siemieniuk.animals.math.Coordinates;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
