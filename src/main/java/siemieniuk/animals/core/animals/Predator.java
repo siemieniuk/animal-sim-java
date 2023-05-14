@@ -45,10 +45,10 @@ public final class Predator extends Animal implements DetailsPrintable {
 							attackMyPrey();
 						}
 					}
+					TimeUnit.MILLISECONDS.sleep(1000/getSpeed());
 				} else {
 					relax();
 				}
-				TimeUnit.MILLISECONDS.sleep(1000/getSpeed());
 			}
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
