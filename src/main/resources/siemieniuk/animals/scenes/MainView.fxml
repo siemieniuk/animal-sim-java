@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import siemieniuk.animals.gui.WorldView?>
+<?import siemieniuk.animals.gui.ParametrizedAnimalCreationView?>
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
@@ -33,8 +34,9 @@
          <StackPane>
             <ImageView fx:id="bigLogo"/>
          </StackPane>
-         <Button mnemonicParsing="false" onAction="#createPrey" prefHeight="24.0" prefWidth="210.0" text="Create Prey" styleClass="button" />
-         <Button mnemonicParsing="false" onAction="#createPredator" prefHeight="24.0" prefWidth="222.0" text="Create Predator" styleClass="button" />
+         <Button mnemonicParsing="false" onAction="#createRandomPrey" prefHeight="24.0" prefWidth="210.0" text="Random Prey" styleClass="button" />
+         <Button mnemonicParsing="false" onAction="#createRandomPredator" prefHeight="24.0" prefWidth="222.0" text="Random Predator" styleClass="button" />
+         <ParametrizedAnimalCreationView />
       </VBox>
    </children>
 </GridPane>

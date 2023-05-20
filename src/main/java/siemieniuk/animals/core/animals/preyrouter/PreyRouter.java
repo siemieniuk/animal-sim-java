@@ -66,22 +66,27 @@ public abstract class PreyRouter {
         if (source.equals(target)) {
             return;
         }
+
         plan = new ArrayList<>();
         HashMap<Coordinates, Coordinates> nodes = new HashMap<>();
         nodes.put(target, null);
+
         Set<Coordinates> visited = new HashSet<>();
         Queue<Coordinates> q = new LinkedList<>();
         q.add(target);
+
         Coordinates current;
         while (!q.isEmpty()) {
             current = q.poll();
             List<Coordinates> neighbors = getVonNeumannNeighborhood(current);
+
             for (Coordinates neighbor : neighbors) {
                 if (visited.contains(neighbor)) {
                     continue;
                 }
                 q.add(neighbor);
                 visited.add(current);
+
                 if (neighbor.equals(source)) {
                     plan.add(neighbor);
                     Coordinates it = current;

@@ -14,6 +14,7 @@ public class ParametrizedAnimalCreationView extends GridPane {
         try {
             URL path = Objects.requireNonNull(MainApplication.class.getResource("scenes/ParametrizedAnimalCreation.fxml"));
             FXMLLoader fxmlLoader = new FXMLLoader(path);
+//            fxmlLoader.setRoot(this);
             fxmlLoader.load();
         } catch (IOException e) {
             e.printStackTrace();

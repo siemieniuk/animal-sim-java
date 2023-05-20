@@ -13,10 +13,10 @@ public abstract class Animal implements DetailsPrintable, WorldObjectMetadata, R
     private final Integer id;
     private volatile Coordinates pos = null;
     private String name;
-    private volatile int health;
-    private final int MAX_HEALTH;
-    private int speed;
-    private int strength;
+    private volatile double health;
+    private final double MAX_HEALTH;
+    private double speed;
+    private double strength;
     private String species;
 
     public Animal() {
@@ -83,15 +83,15 @@ public abstract class Animal implements DetailsPrintable, WorldObjectMetadata, R
         this.pos = pos;
     }
 
-    public int getHealth() {
+    public double getHealth() {
         return health;
     }
 
     public double getHealthRatio() {
-        return health / (double) MAX_HEALTH;
+        return health / MAX_HEALTH;
     }
 
-    public int getMAX_HEALTH() {
+    public double getMAX_HEALTH() {
         return MAX_HEALTH;
     }
 
@@ -99,15 +99,15 @@ public abstract class Animal implements DetailsPrintable, WorldObjectMetadata, R
         if (health < 0) {
             return "DIED";
         } else {
-            return health + " / " + MAX_HEALTH;
+            return String.format("%.0f / %.0f", health, MAX_HEALTH);
         }
     }
 
-    protected int getSpeed() {
+    protected double getSpeed() {
         return speed;
     }
 
-    public int getStrength() {
+    public double getStrength() {
         return strength;
     }
 
@@ -115,12 +115,12 @@ public abstract class Animal implements DetailsPrintable, WorldObjectMetadata, R
      * Decreases health by a specific value
      * @param value A value by which health should be decreased.
      */
-    protected synchronized void decreaseHealthBy(int value) {
+    protected synchronized void decreaseHealthBy(double value) {
         this.health = health - value;
     }
 
     public void kill() {
-        this.health = -1000;
+        this.health = -1000.0;
     }
 
     @Override

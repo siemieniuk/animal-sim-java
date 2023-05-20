@@ -25,7 +25,8 @@ public class MainApplication extends Application {
         final FXMLLoader parentLoader = new FXMLLoader();
 
         Parent root;
-        try (InputStream sceneStream = MainApplication.class.getResourceAsStream("scenes/MainView.fxml")) {
+//        try (InputStream sceneStream = MainApplication.class.getResourceAsStream("scenes/MainView.fxml")) {
+        try (InputStream sceneStream = MainApplication.class.getResourceAsStream("scenes/MainViewNew.fxml")) {
             root = parentLoader.load(sceneStream);
         }
 

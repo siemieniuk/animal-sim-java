@@ -6,6 +6,7 @@ import siemieniuk.animals.core.animals.preyrouter.PlantSourceRouter;
 import siemieniuk.animals.core.animals.preyrouter.PreyRouter;
 import siemieniuk.animals.core.animals.preyrouter.WaterSourceRouter;
 import siemieniuk.animals.core.locations.*;
+import siemieniuk.animals.core.randanimal.RandomAnimalAppender;
 import siemieniuk.animals.core.typing.WorldObjectType;
 import siemieniuk.animals.math.Coordinates;
 
@@ -54,6 +55,7 @@ public final class Prey extends Animal {
 
 	@Override
 	public void run() {
+		long stepMS = (long)(1000.0/getSpeed());
 		try {
 			while (isAlive()) {
 				if (targetLocation == null) {
@@ -61,14 +63,15 @@ public final class Prey extends Animal {
 				} else {
 					if (isInTarget()) {
 						consume();
+						TimeUnit.MILLISECONDS.sleep(500);
 					} else {
 						if (planIterator.hasNext()) {
 							nextStep = planIterator.next();
 						}
 						releaseResources();
 						move();
+						TimeUnit.MILLISECONDS.sleep(stepMS);
 					}
-					TimeUnit.MILLISECONDS.sleep(1000/getSpeed());
 				}
 			}
 		} catch (InterruptedException e) {
@@ -114,8 +117,8 @@ public final class Prey extends Animal {
 	 * Takes damage from the predator.
 	 * @param predatorStrength Strength of the predator
 	 */
-	public void beAttacked(int predatorStrength) {
-		int lostHealth = Math.max(0, predatorStrength - getStrength());
+	public void beAttacked(double predatorStrength) {
+		double lostHealth = Math.max(0, predatorStrength - getStrength());
 		decreaseHealthBy(lostHealth);
 	}
 
@@ -136,17 +139,15 @@ public final class Prey extends Animal {
 
 	private boolean useHideout() throws InterruptedException {
 		if (targetLocation instanceof Hideout) {
-			final float P_REPRODUCE = 0.005f;
-			int maxHealth = getMAX_HEALTH();
+			final double P_REPRODUCE = 0.005D;
+			double maxHealth = getMAX_HEALTH();
 			int i = 0;
 			final int MIN_ITERATIONS = 5;
 			while (isAlive() && (getHealth() < 0.9*maxHealth || (i < MIN_ITERATIONS))) {
 				i++;
 				heal(5);
 				TimeUnit.MILLISECONDS.sleep(200);
-				if (Math.random() < P_REPRODUCE) {
-					reproduce();
-				}
+				reproduceWithProbability(P_REPRODUCE);
 			}
 		}
 		return false;
@@ -259,9 +260,10 @@ public final class Prey extends Animal {
 	/**
 	 * Reproduces prey
 	 */
-	public void reproduce() {
-		Prey p = new Prey("Melman", 100, 1, 4, "Giraffe", 3, 5);
-		World.getInstance().createAnimal(p);
+	public void reproduceWithProbability(double probability) {
+		if (Math.random() < probability) {
+			RandomAnimalAppender.newPrey();
+		}
 	}
 
 	public double getWaterRatio() {

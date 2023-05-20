@@ -45,7 +45,7 @@ public final class Predator extends Animal implements DetailsPrintable {
 							attackMyPrey();
 						}
 					}
-					TimeUnit.MILLISECONDS.sleep(1000/getSpeed());
+					TimeUnit.MILLISECONDS.sleep((long)(1000.0/getSpeed()));
 				} else {
 					relax();
 				}

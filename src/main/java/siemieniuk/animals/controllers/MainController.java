@@ -1,13 +1,11 @@
 package siemieniuk.animals.controllers;
 
-import javafx.scene.layout.StackPane;
 import siemieniuk.animals.core.DetailsPrintable;
 import siemieniuk.animals.core.World;
+import siemieniuk.animals.core.randanimal.RandomAnimalAppender;
 import siemieniuk.animals.core.world_creation.WorldBuilder;
 import siemieniuk.animals.math.Coordinates;
 import siemieniuk.animals.core.locations.Location;
-import siemieniuk.animals.core.animals.Predator;
-import siemieniuk.animals.core.animals.Prey;
 import siemieniuk.animals.images.ImageLoader;
 import siemieniuk.animals.gui.WorldView;
 import javafx.animation.AnimationTimer;
@@ -74,19 +72,17 @@ public final class MainController {
     }
 
     @FXML
-    protected void createPrey() {
-        Prey p = new Prey("Affe", 100, 1, 4, "Giraffe", 2, 3);
-        world.createAnimal(p);
+    private void createRandomPrey() {
+        RandomAnimalAppender.newPrey();
     }
 
     @FXML
-    protected void createPredator() {
-        Predator p = new Predator("Simba", 100, 2, 13, "Lion");
-        world.createAnimal(p);
+    private void createRandomPredator() {
+        RandomAnimalAppender.newPredator();
     }
 
     @FXML
-    protected void showInformationWindow(MouseEvent event) {
+    private void showInformationWindow(MouseEvent event) {
         try {
             Coordinates pos = new Coordinates(WorldView.convertToWorldPos(event.getX(), event.getY()));
             List<DetailsPrintable> objectsToPrint = world.getObjectsToDraw(pos);

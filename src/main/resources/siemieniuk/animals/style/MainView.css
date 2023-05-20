@@ -15,7 +15,17 @@
     -fx-text-fill: #EEE8E3;
 }
 
+.header {
+    -fx-max-width: infinity;
+    -fx-text-alignment: center;
+    -fx-fill: #EEE8E3;
+}
+
 #bigLogo {
     -fx-width: 30;
     -fx-height: 30;
+}
+
+.bgArea {
+    -fx-background-color: #282727;
 }
