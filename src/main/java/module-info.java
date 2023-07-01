@@ -5,7 +5,7 @@ module com.siemieniuk.animals {
     requires org.kordamp.ikonli.javafx;
 
     opens siemieniuk.animals to javafx.fxml;
-    exports siemieniuk.animals;
+    exports siemieniuk.animals to javafx.graphics;
     exports siemieniuk.animals.hobhw_parser;
     opens siemieniuk.animals.hobhw_parser to javafx.fxml;
     exports siemieniuk.animals.math;

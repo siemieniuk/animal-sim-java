@@ -14,7 +14,7 @@ import java.util.Objects;
  * This class contains the main body of JavaFX application
  * @author Szymon Siemieniuk
  */
-public class MainApplication extends Application {
+public class MainGUI extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         stage.setOnCloseRequest((evt) -> {
@@ -26,7 +26,7 @@ public class MainApplication extends Application {
 
         Parent root;
 //        try (InputStream sceneStream = MainApplication.class.getResourceAsStream("scenes/MainView.fxml")) {
-        try (InputStream sceneStream = MainApplication.class.getResourceAsStream("scenes/MainViewNew.fxml")) {
+        try (InputStream sceneStream = MainGUI.class.getResourceAsStream("scenes/MainViewNew.fxml")) {
             root = parentLoader.load(sceneStream);
         }
 

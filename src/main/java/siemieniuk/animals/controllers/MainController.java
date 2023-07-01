@@ -19,7 +19,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import siemieniuk.animals.MainApplication;
+import siemieniuk.animals.MainGUI;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -41,7 +41,7 @@ public final class MainController {
      */
     public MainController() {
         try {
-            URL path = MainApplication.class.getResource("conf/release.hobhw");
+            URL path = MainGUI.class.getResource("conf/release.hobhw");
             world = WorldBuilder.create(path);
             ImageLoader.init();
             Thread threadWorld = new Thread(world);
@@ -56,7 +56,7 @@ public final class MainController {
 
     @FXML
     private void initialize() {
-        String path = Objects.requireNonNull(MainApplication.class.getResource("images/logo_big.png")).toExternalForm();
+        String path = Objects.requireNonNull(MainGUI.class.getResource("images/logo_big.png")).toExternalForm();
         Image img = new Image(path, 100.0, 100.0, true, false);
         bigLogo.setImage(img);
 
@@ -89,12 +89,12 @@ public final class MainController {
             Location loc = world.getLocation(pos);
 
             if (objectsToPrint.size() > 0) {
-                URL url = MainApplication.class.getResource("scenes/InformationWindow.fxml");
+                URL url = MainGUI.class.getResource("scenes/InformationWindow.fxml");
                 FXMLLoader fxmlLoader = new FXMLLoader(url);
                 Parent root = fxmlLoader.load();
                 Scene scene = new Scene(root);
 
-                String css = Objects.requireNonNull(MainApplication.class.getResource("style/InformationWindow.css"))
+                String css = Objects.requireNonNull(MainGUI.class.getResource("style/InformationWindow.css"))
                         .toExternalForm();
                 scene.getStylesheets().add(css);
 
