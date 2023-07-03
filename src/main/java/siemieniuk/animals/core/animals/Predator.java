@@ -34,19 +34,21 @@ public final class Predator extends Animal {
 	public void run() {
 		try {
 			while (isAlive()) {
-				if (currentMode.equals(PredatorMode.HUNTING)) {
-					if (preyToEat == null || !preyToEat.isAlive()) {
-						setNewTarget();
-					} else {
-						if (!getPos().equals(preyToEat.getPos())) {
-							move();
+				switch (currentMode) {
+					case HUNTING -> {
+						if (preyToEat == null || !preyToEat.isAlive()) {
+							setNewTarget();
 						} else {
-							attackMyPrey();
+							if (!getPos().equals(preyToEat.getPos())) {
+								move();
+							} else {
+								attackMyPrey();
+							}
 						}
+						TimeUnit.MILLISECONDS.sleep((long)(1000.0/getSpeed()));
 					}
-					TimeUnit.MILLISECONDS.sleep((long)(1000.0/getSpeed()));
-				} else {
-					relax();
+
+					case RELAXATION -> relax();
 				}
 			}
 		} catch (InterruptedException e) {
