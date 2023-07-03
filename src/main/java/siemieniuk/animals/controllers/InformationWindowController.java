@@ -1,6 +1,5 @@
 package siemieniuk.animals.controllers;
 
-import siemieniuk.animals.core.DetailsPrintable;
 import siemieniuk.animals.core.locations.*;
 import siemieniuk.animals.gui.AnimalView;
 import siemieniuk.animals.math.Coordinates;
@@ -110,10 +109,10 @@ public final class InformationWindowController implements LocationVisitor {
      * This method is used for changing content of window.
      * @param   dpList the list of printable objects.
      */
-    public void changeDisplay(List<DetailsPrintable> dpList) {
+    public void changeDisplay(List<Object> dpList) {
         assert dpList.size() != 0;
-        Iterator<DetailsPrintable> it = dpList.iterator();
-        DetailsPrintable currentObj = it.next();
+        Iterator<Object> it = dpList.iterator();
+        Object currentObj = it.next();
         if (currentObj != null) {
             if (currentObj instanceof Animal animal) {
                 AnimalView view = AnimalViewFactory.getAnimalView(animal);

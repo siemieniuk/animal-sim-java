@@ -1,6 +1,5 @@
 package siemieniuk.animals.controllers;
 
-import siemieniuk.animals.core.DetailsPrintable;
 import siemieniuk.animals.core.World;
 import siemieniuk.animals.core.randanimal.RandomAnimalAppender;
 import siemieniuk.animals.core.world_creation.WorldBuilder;
@@ -85,36 +84,34 @@ public final class MainController {
     private void showInformationWindow(MouseEvent event) {
         try {
             Coordinates pos = new Coordinates(WorldView.convertToWorldPos(event.getX(), event.getY()));
-            List<DetailsPrintable> objectsToPrint = world.getObjectsToDraw(pos);
+            List<Object> objectsToPrint = world.getObjectsAt(pos);
             Location loc = world.getLocation(pos);
 
-            if (objectsToPrint.size() > 0) {
-                URL url = MainGUI.class.getResource("scenes/InformationWindow.fxml");
-                FXMLLoader fxmlLoader = new FXMLLoader(url);
-                Parent root = fxmlLoader.load();
-                Scene scene = new Scene(root);
+            URL url = MainGUI.class.getResource("scenes/InformationWindow.fxml");
+            FXMLLoader fxmlLoader = new FXMLLoader(url);
+            Parent root = fxmlLoader.load();
+            Scene scene = new Scene(root);
 
-                String css = Objects.requireNonNull(MainGUI.class.getResource("style/InformationWindow.css"))
-                        .toExternalForm();
-                scene.getStylesheets().add(css);
+            String css = Objects.requireNonNull(MainGUI.class.getResource("style/InformationWindow.css"))
+                    .toExternalForm();
+            scene.getStylesheets().add(css);
 
-                InformationWindowController ic = fxmlLoader.getController();
-                if (loc != null) {
-                    ic.changeLocation(loc);
-                } else {
-                    ic.configureNoLocation(pos);
-                }
-                ic.changeDisplay(objectsToPrint);
-
-                Stage stage = new Stage();
-                stage.setTitle("Details");
-                stage.setScene(scene);
-                stage.sizeToScene();
-                stage.show();
-                stage.setMinHeight(stage.getHeight());
-                stage.setMaxHeight(stage.getHeight());
-                stage.setMinWidth(240.0);
+            InformationWindowController ic = fxmlLoader.getController();
+            if (loc != null) {
+                ic.changeLocation(loc);
+            } else {
+                ic.configureNoLocation(pos);
             }
+            ic.changeDisplay(objectsToPrint);
+
+            Stage stage = new Stage();
+            stage.setTitle("Details");
+            stage.setScene(scene);
+            stage.sizeToScene();
+            stage.show();
+            stage.setMinHeight(stage.getHeight());
+            stage.setMaxHeight(stage.getHeight());
+            stage.setMinWidth(240.0);
         } catch (IOException e) {
             e.printStackTrace();
         }

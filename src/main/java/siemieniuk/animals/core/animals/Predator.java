@@ -1,6 +1,5 @@
 package siemieniuk.animals.core.animals;
 
-import siemieniuk.animals.core.DetailsPrintable;
 import siemieniuk.animals.core.World;
 import siemieniuk.animals.core.typing.WorldObjectType;
 import siemieniuk.animals.math.Coordinates;
@@ -14,7 +13,7 @@ import java.util.concurrent.TimeUnit;
  * @version 0.1
  *
  */
-public final class Predator extends Animal implements DetailsPrintable {
+public final class Predator extends Animal {
 	private PredatorMode currentMode;
 	private Prey preyToEat = null;
 
@@ -144,17 +143,6 @@ public final class Predator extends Animal implements DetailsPrintable {
 	 */
 	public void switchMode(PredatorMode newMode) {
 		this.currentMode = newMode;
-	}
-
-	/**
-	 * Sets object-specific string to describe the object's state
-	 * @return Text to display
-	 */
-	@Override
-	public String getDetails() {
-		return "Predator:" +
-				"\n" + super.getDetails() +
-				"\nCurrent mode: " + currentMode + "\n";
 	}
 
 	public PredatorMode getCurrentMode() {

@@ -281,17 +281,4 @@ public final class Prey extends Animal {
 	public String getFoodDetails() {
 		return foodLevel + " / " + MAX_FOOD_LEVEL;
 	}
-
-	/**
-	 * Sets object-specific string to describe the object's state
-	 * @return Text to display
-	 */
-	@Override
-	public String getDetails() {
-		return "Prey:" +
-				"\n" + super.getDetails() +
-				"\nFood level: " + foodLevel +
-				"\nWater level: " + waterLevel + "\n";
-	}
-
 }

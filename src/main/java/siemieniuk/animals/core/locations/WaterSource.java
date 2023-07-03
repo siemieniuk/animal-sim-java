@@ -1,6 +1,5 @@
 package siemieniuk.animals.core.locations;
 
-import siemieniuk.animals.core.DetailsPrintable;
 import siemieniuk.animals.core.typing.LocationVisitor;
 import siemieniuk.animals.core.typing.WorldObjectType;
 import siemieniuk.animals.math.Coordinates;
@@ -10,7 +9,7 @@ import siemieniuk.animals.math.Coordinates;
  * @author Szymon Siemieniuk
  * @version 0.1
  */
-public final class WaterSource extends Source implements DetailsPrintable {
+public final class WaterSource extends Source {
 	
 	/**
 	 * A simple constructor
@@ -26,16 +25,6 @@ public final class WaterSource extends Source implements DetailsPrintable {
 	public WaterSource() {
         super();
     }
-
-	/**
-	 * Sets object-specific string to describe the object's state
-	 * @return Text to display
-	 */
-	@Override
-	public String getDetails() {
-		return super.getDetails() + "Water Source\n"
-				                  + "called " + getName() + "\n";
-	}
 
 	@Override
 	public void accept(LocationVisitor visitor) {

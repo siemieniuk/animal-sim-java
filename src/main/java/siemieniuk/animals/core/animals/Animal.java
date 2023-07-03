@@ -1,6 +1,5 @@
 package siemieniuk.animals.core.animals;
 
-import siemieniuk.animals.core.DetailsPrintable;
 import siemieniuk.animals.core.WorldObjectMetadata;
 import siemieniuk.animals.math.Coordinates;
 
@@ -8,7 +7,7 @@ import siemieniuk.animals.math.Coordinates;
  * This class is abstract. Represents animal. Each subclass must be runnable.
  * @author Szymon Siemieniuk
  */
-public abstract class Animal implements DetailsPrintable, WorldObjectMetadata, Runnable {
+public abstract class Animal implements WorldObjectMetadata, Runnable {
     private static Integer createdAnimals = 0;
     private final Integer id;
     private volatile Coordinates pos = null;
@@ -121,15 +120,6 @@ public abstract class Animal implements DetailsPrintable, WorldObjectMetadata, R
 
     public void kill() {
         this.health = -1000.0;
-    }
-
-    @Override
-    public String getDetails() {
-        return "Name: " + name +
-                "\nSpecies: " + species +
-                "\nHealth: " + health +
-                "\nSpeed: " + speed +
-                "\nStrength: " + strength;
     }
 
     public String getName() {

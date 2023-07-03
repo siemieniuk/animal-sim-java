@@ -1,6 +1,5 @@
 package siemieniuk.animals.core.locations;
 
-import siemieniuk.animals.core.DetailsPrintable;
 import siemieniuk.animals.core.animals.Prey;
 import siemieniuk.animals.core.typing.LocationVisitor;
 import siemieniuk.animals.core.typing.WorldObjectType;
@@ -15,7 +14,7 @@ import java.util.concurrent.Semaphore;
  * not worry about being eaten by predator
  * @author Szymon Siemieniuk
  */
-public final class Hideout extends Location implements DetailsPrintable {
+public final class Hideout extends Location {
 	private final int capacity;
 
 	private final Semaphore sem;
@@ -93,15 +92,5 @@ public final class Hideout extends Location implements DetailsPrintable {
 	@Override
 	public String toString() {
 		return "Hideout";
-	}
-
-	/**
-	 * Sets object-specific string to describe the object's state
-	 * @return Text to display
-	 */
-	@Override
-	public String getDetails() {
-		return super.getDetails() + "Hideout\n"
-				+ "used by " + usedBy.size() + "/" + capacity + " animals\n";
 	}
 }

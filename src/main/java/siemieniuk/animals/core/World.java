@@ -149,13 +149,11 @@ public final class World implements Runnable {
 	 * @param pos The position for which the list must be generated
 	 * @return A list of objects to draw on canvas
 	 */
-	public List<DetailsPrintable> getObjectsToDraw(Coordinates pos) {
-		List<DetailsPrintable> list = new ArrayList<>();
+	public List<Object> getObjectsAt(Coordinates pos) {
+		List<Object> list = new ArrayList<>();
 		if (locations.get(pos) != null) {
 			Location loc = locations.get(pos);
-			if (loc instanceof DetailsPrintable) {
-				list.add((DetailsPrintable) loc);
-			}
+			list.add(loc);
 		}
 		for (Animal a : animals.values()) {
 			if (a.getPos().equals(pos)) {
@@ -183,7 +181,8 @@ public final class World implements Runnable {
 	 * @return list of preys
 	 */
 	public synchronized List<Prey> getPreys() {
-		return animals.values().stream()
+		return animals.values()
+				.stream()
 				.filter(Prey.class::isInstance)
 				.map(Prey.class::cast)
 				.collect(Collectors.toList());

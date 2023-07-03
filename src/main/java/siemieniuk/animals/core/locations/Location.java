@@ -35,16 +35,6 @@ public abstract class Location implements WorldObjectMetadata {
 		return pos;
 	}
 
-	/**
-	 * Sets object-specific string to describe the object's state
-	 * @return Text to display
-	 */
-	public String getDetails() {
-		return "LOCATION: " +
-				"\nPosition: " + pos  +
-				"\nType: ";
-	}
-
 	public String toString() {
 		return getClass() + " " + pos;
 	}
