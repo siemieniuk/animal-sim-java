@@ -3,6 +3,7 @@ module com.siemieniuk.animals {
     requires javafx.fxml;
 
     requires org.kordamp.ikonli.javafx;
+    requires lombok;
 
     opens siemieniuk.animals to javafx.fxml;
     exports siemieniuk.animals to javafx.graphics;

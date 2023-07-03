@@ -43,9 +43,15 @@ public final class MainController {
             URL path = MainGUI.class.getResource("conf/release.hobhw");
             world = WorldBuilder.create(path);
             ImageLoader.init();
+
             Thread threadWorld = new Thread(world);
             threadWorld.setName("World");
             threadWorld.start();
+
+            URL pathToPreys = MainGUI.class.getResource("conf/preys.txt");
+            URL pathToPredators = MainGUI.class.getResource("conf/predators.txt");
+            URL pathToNames = MainGUI.class.getResource("conf/names.txt");
+            RandomAnimalAppender.loadConfig(pathToPreys, pathToPredators, pathToNames);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             Platform.exit();
@@ -59,8 +65,6 @@ public final class MainController {
         Image img = new Image(path, 100.0, 100.0, true, false);
         bigLogo.setImage(img);
 
-//        sidebar.getChildren().add(new ParametrizedAnimalCreationView());
-//        paramAnimalView = new ParametrizedAnimalCreationView();
         AnimationTimer at = new AnimationTimer() {
             @Override
             public void handle(long now) {

@@ -1,0 +1,6 @@
+Lion
+Tiger
+Bear
+Snake
+Crocodile
+Eagle

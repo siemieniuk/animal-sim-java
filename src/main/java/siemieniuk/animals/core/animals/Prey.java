@@ -1,5 +1,6 @@
 package siemieniuk.animals.core.animals;
 
+import lombok.Builder;
 import siemieniuk.animals.core.World;
 import siemieniuk.animals.core.animals.preyrouter.HideoutRouter;
 import siemieniuk.animals.core.animals.preyrouter.PlantSourceRouter;
