@@ -21,6 +21,15 @@
     -fx-fill: #EEE8E3;
 }
 
+.text, #componentTitle {
+    -fx-fill: #EEE8E3;
+}
+
+.subpanel {
+    -fx-border-insets: 5;
+    -fx-border-color: black;
+}
+
 #bigLogo {
     -fx-width: 30;
     -fx-height: 30;

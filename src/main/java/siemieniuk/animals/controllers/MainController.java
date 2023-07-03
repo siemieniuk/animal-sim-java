@@ -3,6 +3,7 @@ package siemieniuk.animals.controllers;
 import siemieniuk.animals.core.World;
 import siemieniuk.animals.core.randanimal.RandomAnimalAppender;
 import siemieniuk.animals.core.world_creation.WorldBuilder;
+import siemieniuk.animals.gui.ParametrizedAnimalCreationView;
 import siemieniuk.animals.math.Coordinates;
 import siemieniuk.animals.core.locations.Location;
 import siemieniuk.animals.images.ImageLoader;
@@ -58,9 +59,6 @@ public final class MainController {
         String path = Objects.requireNonNull(MainGUI.class.getResource("images/logo_big.png")).toExternalForm();
         Image img = new Image(path, 100.0, 100.0, true, false);
         bigLogo.setImage(img);
-
-//        sidebar.getChildren().add(new ParametrizedAnimalCreationView());
-//        paramAnimalView = new ParametrizedAnimalCreationView();
         AnimationTimer at = new AnimationTimer() {
             @Override
             public void handle(long now) {

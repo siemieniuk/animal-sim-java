@@ -20,7 +20,7 @@
          <WorldView fx:id="canvas" height="400.0" onMouseClicked="#showInformationWindow" styleClass="canvas"/>
 <!--         <Canvas height="400.0" styleClass="canvas" />-->
       </StackPane>
-      <VBox layoutX="400.0" maxWidth="200.0" minWidth="200.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox fx:id="sidebar" layoutX="400.0" maxWidth="200.0" minWidth="200.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>

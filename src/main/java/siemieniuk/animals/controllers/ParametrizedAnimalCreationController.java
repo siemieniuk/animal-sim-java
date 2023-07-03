@@ -9,7 +9,7 @@ public class ParametrizedAnimalCreationController {
 
     @FXML
     public void initialize() {
-        System.out.println("lalala");
+
     }
 
     // TODO: Write

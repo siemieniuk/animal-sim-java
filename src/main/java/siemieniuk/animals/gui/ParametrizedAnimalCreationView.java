@@ -10,11 +10,10 @@ import java.util.Objects;
 
 public class ParametrizedAnimalCreationView extends GridPane {
     public ParametrizedAnimalCreationView() {
-        super();
         try {
             URL path = Objects.requireNonNull(MainGUI.class.getResource("scenes/ParametrizedAnimalCreation.fxml"));
             FXMLLoader fxmlLoader = new FXMLLoader(path);
-//            fxmlLoader.setRoot(this);
+            fxmlLoader.setRoot(this);
             fxmlLoader.load();
         } catch (IOException e) {
             e.printStackTrace();
