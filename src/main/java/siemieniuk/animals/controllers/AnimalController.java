@@ -19,6 +19,7 @@ public abstract class AnimalController implements AnimalObservable {
     @FXML private Text healthLabel;
     @FXML private Text name;
     @FXML private Text species;
+    @FXML private Text stats;
     @FXML private ImageView icon;
     @FXML private Button deleteAnimalBtn;
 
@@ -33,6 +34,8 @@ public abstract class AnimalController implements AnimalObservable {
         species.setText(observedAnimal.getSpecies());
         icon.setImage(ImageLoader.getImage(observedAnimal.getMetadataCode()));
         update();
+        stats.setText(String.format("⚔ %.0f | \uD83D\uDDF2 %.0f",
+                                    observedAnimal.getStrength(), observedAnimal.getSpeed()));
     }
 
     @Override

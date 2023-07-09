@@ -102,7 +102,7 @@ public abstract class Animal implements WorldObjectMetadata, Runnable {
         }
     }
 
-    protected double getSpeed() {
+    public double getSpeed() {
         return speed;
     }
 

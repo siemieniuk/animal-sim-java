@@ -2,7 +2,6 @@ package siemieniuk.animals.core.animals.preyrouter;
 
 import siemieniuk.animals.core.World;
 import siemieniuk.animals.core.locations.Location;
-import siemieniuk.animals.core.typing.WorldObjectType;
 import siemieniuk.animals.math.Coordinates;
 
 import java.util.*;
@@ -27,21 +26,21 @@ public abstract class PreyRouter {
         this.target = null;
     }
 
-    protected void findPlanToNearest(WorldObjectType type) {
-        setTargetToNearest(type);
+    protected void findPlanToNearest(Class<?> sourceType) {
+        setTargetToNearest(sourceType);
         setPlan();
     }
 
     /**
      * Finds the closest target of type T.
-     * @param type Object being any class
+     * @param sourceType Object being any class
      */
-    private void setTargetToNearest(WorldObjectType type) {
-        assert type.isLocation();
+    private void setTargetToNearest(Class<?> sourceType) {
+        assert sourceType.isAssignableFrom(Location.class);
         Coordinates res = source;
         int minDistance = Integer.MAX_VALUE;
         for (Location l : locations.values()) {
-            if (l.getMetadataCode().equals(type)) {
+            if (l.getClass().isAssignableFrom(sourceType)) {
                 Coordinates lPos = l.getPos();
                 int dist = lPos.getManhattanDistanceTo(source);
                 if (dist < minDistance) {

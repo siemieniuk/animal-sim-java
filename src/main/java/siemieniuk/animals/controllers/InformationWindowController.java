@@ -110,7 +110,10 @@ public final class InformationWindowController implements LocationVisitor {
      * @param   dpList the list of printable objects.
      */
     public void changeDisplay(List<Object> dpList) {
-        assert dpList.size() != 0;
+        if (dpList.size() == 0) {
+            return;
+        }
+
         Iterator<Object> it = dpList.iterator();
         Object currentObj = it.next();
         if (currentObj != null) {
