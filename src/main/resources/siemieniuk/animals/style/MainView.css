@@ -5,7 +5,6 @@
 .button {
     -fx-background-color: #A47551;
     -fx-text-fill: #FFFFFF;
-    -fx-max-width: infinity;
 }
 
 #title {
@@ -21,11 +20,44 @@
     -fx-fill: #EEE8E3;
 }
 
+.text, #componentTitle {
+    -fx-fill: #EEE8E3;
+}
+
+.subpanel {
+    -fx-border-insets: 5;
+    -fx-border-color: black;
+}
+
+.text-field {
+    -fx-pref-width: 95;
+    -fx-pref-height: 4;
+    -fx-alignment: center-left;
+}
+
+.s2 .button {
+    -fx-pref-width: 150;
+}
+
+.radio-button .radio {
+    -fx-border-width: 1px;
+    -fx-border-color: #000;
+    -fx-background-color: white;
+    -fx-background-image: null;
+    -fx-border-radius: 4px;
+    -fx-padding: 1px;
+}
+
+.radio-button .dot {
+    -fx-background-radius: 4px;
+    -fx-padding: 3px;
+}
+
 #bigLogo {
     -fx-width: 30;
     -fx-height: 30;
 }
 
 .bgArea {
-    -fx-background-color: #282727;
+    /*-fx-background-color: #282727;*/
 }

@@ -72,22 +72,6 @@
     -fx-fill: #EEE7E2;
     -fx-font-style: italic;
 }
-
-/*
-#healthLabel {
-    -fx-fill: #A45151;
-    -fx-fill: #EEE7E2;
-    -fx-font-style: italic;
-}
-
-#waterLabel {
-    -fx-fill: #5170A4;
-}
-
-#foodLabel {
-    -fx-fill: #A4A251;
-}
-*/
 .animal-view #foodBar {
     -fx-accent: #A4A251;
 }
@@ -95,12 +79,3 @@
 .animal-view #waterBar {
     -fx-accent: #5170A4;
 }
-
-
-/*
-#A45151;
-
-#A4A251;
-
-#5170A4
-*/

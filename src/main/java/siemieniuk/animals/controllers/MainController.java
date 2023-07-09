@@ -3,6 +3,7 @@ package siemieniuk.animals.controllers;
 import siemieniuk.animals.core.World;
 import siemieniuk.animals.core.randanimal.RandomAnimalAppender;
 import siemieniuk.animals.core.world_creation.WorldBuilder;
+import siemieniuk.animals.gui.ParametrizedAnimalCreationView;
 import siemieniuk.animals.math.Coordinates;
 import siemieniuk.animals.core.locations.Location;
 import siemieniuk.animals.images.ImageLoader;

@@ -6,9 +6,9 @@ import siemieniuk.animals.core.animals.Prey;
 
 public class AnimalViewFactory {
     public static AnimalView getAnimalView(Animal animal) {
-        return switch (animal.getMetadataCode()) {
-            case PREY -> new PreyView((Prey) animal);
-            case PREDATOR -> new PredatorView((Predator) animal);
+        return switch (animal.getClass().getSimpleName()) {
+            case "Prey" -> new PreyView((Prey) animal);
+            case "Predator" -> new PredatorView((Predator) animal);
             default -> throw new IllegalArgumentException("Unknown type! Should be animal!");
         };
     }
