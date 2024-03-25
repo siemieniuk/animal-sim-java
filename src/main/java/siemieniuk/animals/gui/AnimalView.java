@@ -7,8 +7,6 @@ import javafx.scene.layout.GridPane;
  * @author  Szymon Siemieniuk
  */
 public abstract class AnimalView extends GridPane {
-    private boolean wasDeleteClicked = false;
-
     AnimalView() {
         getStyleClass().clear();
         getStyleClass().add("animal-view");

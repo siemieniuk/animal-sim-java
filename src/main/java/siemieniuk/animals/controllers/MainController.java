@@ -12,8 +12,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import siemieniuk.animals.MainGUI;
-import siemieniuk.animals.core.World;
+import siemieniuk.animals.core.WorldRunnable;
+import siemieniuk.animals.core.animals.Animal;
+import siemieniuk.animals.core.animals.AnimalRepository;
 import siemieniuk.animals.core.locations.Location;
+import siemieniuk.animals.core.locations.LocationRepository;
 import siemieniuk.animals.core.randanimal.RandomAnimalAppender;
 import siemieniuk.animals.core.world_creation.WorldBuilder;
 import siemieniuk.animals.gui.WorldView;
@@ -23,6 +26,7 @@ import siemieniuk.animals.math.Coordinates;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -35,7 +39,8 @@ public final class MainController {
     @FXML private ImageView bigLogo;
     @FXML private VBox sidebar;
     @FXML private ParametrizedAnimalCreationController pacController;
-    private World world = null;
+    private AnimalRepository animalRepository;
+    private LocationRepository locationRepository;
 
     /**
      * Default constructor; loads default <em>release.hobhw</em> file as a base for the world
@@ -43,10 +48,13 @@ public final class MainController {
     public MainController() {
         try {
             URL path = MainGUI.class.getResource("conf/release.hobhw");
-            world = WorldBuilder.create(path);
+            this.locationRepository = WorldBuilder.create(path);
+            this.animalRepository = new AnimalRepository();
+
             ImageLoader.init();
 
-            Thread threadWorld = new Thread(world);
+            WorldRunnable worldRunnable = new WorldRunnable(animalRepository);
+            Thread threadWorld = new Thread(worldRunnable);
             threadWorld.setName("World");
             threadWorld.start();
 
@@ -74,24 +82,33 @@ public final class MainController {
             }
         };
         at.start();
+        pacController.setRepositories(animalRepository, locationRepository);
+
+        canvas.setRepositories(animalRepository, locationRepository);
     }
 
     @FXML
     private void createRandomPrey() {
-        RandomAnimalAppender.newPrey();
+        RandomAnimalAppender.newPrey(animalRepository, locationRepository);
     }
 
     @FXML
     private void createRandomPredator() {
-        RandomAnimalAppender.newPredator();
+        RandomAnimalAppender.newPredator(animalRepository, locationRepository);
     }
 
     @FXML
     private void showInformationWindow(MouseEvent event) {
         try {
             Coordinates pos = new Coordinates(WorldView.convertToWorldPos(event.getX(), event.getY()));
-            List<Object> objectsToPrint = world.getObjectsAt(pos);
-            Location loc = world.getLocation(pos);
+
+            List<Animal> animalsToShow = animalRepository.getAnimalsAt(pos);
+            List<Object> objectsToPrint = new ArrayList<>();
+            Location locationToPrint = locationRepository.getLocation(pos);
+            if (locationToPrint != null) {
+                objectsToPrint.add(locationRepository.getLocation(pos));
+            }
+            objectsToPrint.addAll(animalsToShow);
 
             URL url = MainGUI.class.getResource("scenes/InformationWindow.fxml");
             FXMLLoader fxmlLoader = new FXMLLoader(url);
@@ -103,8 +120,9 @@ public final class MainController {
             scene.getStylesheets().add(css);
 
             InformationWindowController ic = fxmlLoader.getController();
-            if (loc != null) {
-                ic.changeLocation(loc);
+            ic.setAnimalRepository(animalRepository);
+            if (locationToPrint != null) {
+                ic.changeLocation(locationToPrint);
             } else {
                 ic.configureNoLocation(pos);
             }

@@ -1,16 +1,27 @@
 package siemieniuk.animals.core.animals;
 
+import lombok.Getter;
+import lombok.Setter;
 import siemieniuk.animals.core.WorldObjectMetadata;
+import siemieniuk.animals.core.locations.LocationRepository;
 import siemieniuk.animals.math.Coordinates;
+
+import java.util.List;
 
 /**
  * This class is abstract. Represents animal. Each subclass must be runnable.
  * @author Szymon Siemieniuk
  */
+@Getter
 public abstract class Animal implements WorldObjectMetadata, Runnable {
+    private AnimalRepository animalRepository;
+    private LocationRepository locationRepository;
+
+    @Setter
+    private volatile Coordinates pos = null;
+
     private static Integer createdAnimals = 0;
     private final Integer id;
-    private volatile Coordinates pos = null;
     private String name;
     private volatile double health;
     private final double MAX_HEALTH;
@@ -31,7 +42,10 @@ public abstract class Animal implements WorldObjectMetadata, Runnable {
      * @param strength Strength of an animal
      * @param species Animal's species
      */
-    public Animal(String name, int health, int speed, int strength, String species) {
+    public Animal(AnimalRepository animalRepository, LocationRepository locationRepository,
+                  String name, int health, int speed, int strength, String species) {
+        this.animalRepository = animalRepository;
+        this.locationRepository = locationRepository;
     	this.name = name;
     	this.health = health;
         this.MAX_HEALTH = health;
@@ -70,28 +84,12 @@ public abstract class Animal implements WorldObjectMetadata, Runnable {
 
     public void releaseResources() {}
 
-    public Integer getId() {
-        return id;
-    }
-
-    public Coordinates getPos() {
-        return pos;
-    }
-
-    public void setPos(Coordinates pos) {
-        this.pos = pos;
-    }
-
-    public double getHealth() {
-        return health;
+    protected List<Prey> getKnownPreys() {
+        return animalRepository.getPreys();
     }
 
     public double getHealthRatio() {
         return health / MAX_HEALTH;
-    }
-
-    public double getMAX_HEALTH() {
-        return MAX_HEALTH;
     }
 
     public String getHealthDetails() {
@@ -100,14 +98,6 @@ public abstract class Animal implements WorldObjectMetadata, Runnable {
         } else {
             return String.format("%.0f / %.0f", health, MAX_HEALTH);
         }
-    }
-
-    public double getSpeed() {
-        return speed;
-    }
-
-    public double getStrength() {
-        return strength;
     }
 
     /**
@@ -122,11 +112,4 @@ public abstract class Animal implements WorldObjectMetadata, Runnable {
         this.health = -1000.0;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getSpecies() {
-        return species;
-    }
 }
