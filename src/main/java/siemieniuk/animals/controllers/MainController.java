@@ -1,13 +1,5 @@
 package siemieniuk.animals.controllers;
 
-import siemieniuk.animals.core.World;
-import siemieniuk.animals.core.randanimal.RandomAnimalAppender;
-import siemieniuk.animals.core.world_creation.WorldBuilder;
-import siemieniuk.animals.gui.ParametrizedAnimalCreationView;
-import siemieniuk.animals.math.Coordinates;
-import siemieniuk.animals.core.locations.Location;
-import siemieniuk.animals.images.ImageLoader;
-import siemieniuk.animals.gui.WorldView;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -20,11 +12,19 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import siemieniuk.animals.MainGUI;
+import siemieniuk.animals.core.World;
+import siemieniuk.animals.core.locations.Location;
+import siemieniuk.animals.core.randanimal.RandomAnimalAppender;
+import siemieniuk.animals.core.world_creation.WorldBuilder;
+import siemieniuk.animals.gui.WorldView;
+import siemieniuk.animals.images.ImageLoader;
+import siemieniuk.animals.math.Coordinates;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * This class represents the controller of the main window.
@@ -34,6 +34,7 @@ public final class MainController {
     @FXML private WorldView canvas;
     @FXML private ImageView bigLogo;
     @FXML private VBox sidebar;
+    @FXML private ParametrizedAnimalCreationController pacController;
     private World world = null;
 
     /**
