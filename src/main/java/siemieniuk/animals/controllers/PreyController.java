@@ -1,6 +1,8 @@
 package siemieniuk.animals.controllers;
 
+import siemieniuk.animals.core.animals.AnimalRepository;
 import siemieniuk.animals.core.animals.Prey;
+import siemieniuk.animals.core.locations.LocationRepository;
 import siemieniuk.animals.core.typing.WorldObjectType;
 import siemieniuk.animals.gui.PreyView;
 import javafx.animation.KeyFrame;
@@ -16,8 +18,8 @@ public final class PreyController extends AnimalController {
     @FXML private ProgressBar waterBar;
     @FXML private Text waterLabel;
 
-    public PreyController(Prey animal, PreyView view) {
-        super(animal, view);
+    public PreyController(AnimalRepository animalRepository, Prey animal, PreyView view) {
+        super(animalRepository, animal, view);
     }
 
     @FXML

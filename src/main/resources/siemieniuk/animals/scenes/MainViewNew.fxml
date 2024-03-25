@@ -1,19 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import siemieniuk.animals.gui.WorldView?>
-<?import siemieniuk.animals.gui.ParametrizedAnimalCreationView?>
-
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
+<?import siemieniuk.animals.gui.WorldView?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="siemieniuk.animals.controllers.MainController">
    <children>
@@ -46,7 +38,7 @@
                <Button mnemonicParsing="false" onAction="#createRandomPrey" prefHeight="24.0" prefWidth="80" styleClass="button" text="Prey" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
             </children>
          </GridPane>
-         <ParametrizedAnimalCreationView />
+          <fx:include fx:id="pac" source="ParametrizedAnimalCreation.fxml"/>
       </VBox>
    </children>
 </AnchorPane>

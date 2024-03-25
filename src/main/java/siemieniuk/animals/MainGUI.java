@@ -23,12 +23,9 @@ public class MainGUI extends Application {
         });
 
         final FXMLLoader parentLoader = new FXMLLoader();
+        parentLoader.setLocation(getClass().getResource("scenes/MainViewNew.fxml"));
 
-        Parent root;
-        try (InputStream sceneStream = MainGUI.class.getResourceAsStream("scenes/MainViewNew.fxml")) {
-            root = parentLoader.load(sceneStream);
-        }
-
+        Parent root = parentLoader.load();
         Scene scene = new Scene(root);
         scene.getStylesheets().add(0, Objects.requireNonNull(getClass().getResource("style/MainView.css")).toExternalForm());
 

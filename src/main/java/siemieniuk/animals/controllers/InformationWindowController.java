@@ -1,5 +1,7 @@
 package siemieniuk.animals.controllers;
 
+import lombok.Setter;
+import siemieniuk.animals.core.animals.AnimalRepository;
 import siemieniuk.animals.core.locations.*;
 import siemieniuk.animals.gui.AnimalView;
 import siemieniuk.animals.math.Coordinates;
@@ -27,6 +29,9 @@ public final class InformationWindowController implements LocationVisitor {
     @FXML private Text title;
     @FXML private Text position;
     @FXML private Text capacity;
+
+    @Setter
+    private AnimalRepository animalRepository;
 
     public void changeLocation(Location location) {
         location.accept(this);
@@ -110,7 +115,7 @@ public final class InformationWindowController implements LocationVisitor {
      * @param   dpList the list of printable objects.
      */
     public void changeDisplay(List<Object> dpList) {
-        if (dpList.size() == 0) {
+        if (dpList.isEmpty()) {
             return;
         }
 
@@ -118,13 +123,13 @@ public final class InformationWindowController implements LocationVisitor {
         Object currentObj = it.next();
         if (currentObj != null) {
             if (currentObj instanceof Animal animal) {
-                AnimalView view = AnimalViewFactory.getAnimalView(animal);
+                AnimalView view = AnimalViewFactory.getAnimalView(animalRepository, animal);
                 animalsVB.getChildren().add(view);
             }
         }
         while (it.hasNext()) {
             currentObj = it.next();
-            AnimalView view = AnimalViewFactory.getAnimalView((Animal) currentObj);
+            AnimalView view = AnimalViewFactory.getAnimalView(animalRepository, (Animal) currentObj);
             animalsVB.getChildren().add(view);
         }
     }

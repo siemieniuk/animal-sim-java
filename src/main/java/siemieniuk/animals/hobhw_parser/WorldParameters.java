@@ -1,5 +1,6 @@
 package siemieniuk.animals.hobhw_parser;
 
+import lombok.Getter;
 import siemieniuk.animals.math.Coordinates;
 
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.List;
  * This class stores parameters necessary to build a new world.
  * @author Szymon Siemieniuk
  */
+@Getter
 public class WorldParameters {
     private int xSize;
     private int ySize;
@@ -78,39 +80,12 @@ public class WorldParameters {
         intersections.add(c);
     }
 
-    public int getxSize() {
-        return xSize;
-    }
-
     public void setxSize(int xSize) {
         this.xSize = xSize;
-    }
-
-    public int getySize() {
-        return ySize;
     }
 
     public void setySize(int ySize) {
         this.ySize = ySize;
     }
 
-    public List<Coordinates> getHideouts() {
-        return hideouts;
-    }
-
-    public List<Coordinates> getWaterSources() {
-        return waterSources;
-    }
-
-    public List<Coordinates> getPlantSources() {
-        return plantSources;
-    }
-
-    public List<Coordinates> getPaths() {
-        return paths;
-    }
-
-    public List<Coordinates> getIntersections() {
-        return intersections;
-    }
 }

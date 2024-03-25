@@ -1,6 +1,5 @@
 package siemieniuk.animals.core.animals;
 
-import siemieniuk.animals.core.World;
 import siemieniuk.animals.core.animals.preyrouter.HideoutRouter;
 import siemieniuk.animals.core.animals.preyrouter.PlantSourceRouter;
 import siemieniuk.animals.core.animals.preyrouter.PreyRouter;
@@ -43,8 +42,9 @@ public final class Prey extends Animal {
 	 * @param waterDecrease How much water level will animal lose after each step
 	 * @param foodDecrease How much food level will animal lose after each step
 	 */
-	public Prey(String name, int health, int speed, int strength, String species, int waterDecrease, int foodDecrease) {
-		super(name, health, speed, strength, species);
+	public Prey(AnimalRepository animalRepository, LocationRepository locationRepository,
+				String name, int health, int speed, int strength, String species, int waterDecrease, int foodDecrease) {
+		super(animalRepository, locationRepository, name, health, speed, strength, species);
 		this.foodDecrease = foodDecrease;
 		this.foodLevel = MAX_FOOD_LEVEL;
 		this.waterDecrease = waterDecrease;
@@ -83,11 +83,11 @@ public final class Prey extends Animal {
 	protected void setNewTarget() throws InterruptedException {
 		PreyRouter router;
 		if (isHungry()) {
-			router = new PlantSourceRouter(getPos());
+			router = new PlantSourceRouter(getLocationRepository(), getPos());
 		} else if (isThirsty()) {
-			router = new WaterSourceRouter(getPos());
+			router = new WaterSourceRouter(getLocationRepository(), getPos());
 		} else {
-			router = new HideoutRouter(getPos());
+			router = new HideoutRouter(getLocationRepository(), getPos());
 		}
 		plan = router.getPlan();
 		targetLocation = router.getTarget();
@@ -110,7 +110,7 @@ public final class Prey extends Animal {
 	 * @return True if it can be attacked, false otherwise
 	 */
 	public boolean canBeAttacked() {
-		return !(World.getInstance().getLocation(getPos()) instanceof Hideout);
+		return !(getLocationRepository().getLocation(getPos()) instanceof Hideout);
 	}
 
 	/**
@@ -195,7 +195,7 @@ public final class Prey extends Animal {
 	@Override
 	public void releaseResources() {
 		if (isUsingMutex) {
-			Location loc = (World.getInstance().getLocation(getPos()));
+			Location loc = (getLocationRepository().getLocation(getPos()));
 			if (loc instanceof Intersection) {
 				((Intersection) loc).unsetUsedBy();
 			} else if (loc instanceof Source) {
@@ -212,7 +212,7 @@ public final class Prey extends Animal {
 	 */
 	@Override
 	public void move() {
-		Location newLoc = World.getInstance().getLocation(nextStep);
+		Location newLoc = getLocationRepository().getLocation(nextStep);
 		if (newLoc instanceof Intersection) {
 			((Intersection) newLoc).setUsedBy(this);
 			isUsingMutex = true;
@@ -262,7 +262,7 @@ public final class Prey extends Animal {
 	 */
 	public void reproduceWithProbability(double probability) {
 		if (Math.random() < probability) {
-			RandomAnimalAppender.newPrey();
+			RandomAnimalAppender.newPrey(getAnimalRepository(), getLocationRepository());
 		}
 	}
 

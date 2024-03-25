@@ -1,6 +1,7 @@
 package siemieniuk.animals.core.animals;
 
-import siemieniuk.animals.core.World;
+import lombok.Getter;
+import siemieniuk.animals.core.locations.LocationRepository;
 import siemieniuk.animals.core.typing.WorldObjectType;
 import siemieniuk.animals.math.Coordinates;
 
@@ -13,6 +14,7 @@ import java.util.concurrent.TimeUnit;
  * @version 0.1
  *
  */
+@Getter
 public final class Predator extends Animal {
 	private PredatorMode currentMode;
 	private Prey preyToEat = null;
@@ -25,8 +27,9 @@ public final class Predator extends Animal {
      * @param strength Strength of animal
      * @param species Animal's species
      */
-	public Predator(String name, int health, int speed, int strength, String species) {
-		super(name, health, speed, strength, species);
+	public Predator(AnimalRepository animalRepository, LocationRepository locationRepository,
+					String name, int health, int speed, int strength, String species) {
+		super(animalRepository, locationRepository, name, health, speed, strength, species);
 		this.currentMode = PredatorMode.RELAXATION;
 	}
 
@@ -65,7 +68,7 @@ public final class Predator extends Animal {
 			if (isSameLocationAsPrey() && preyToEat.canBeAttacked()) {
 				preyToEat.beAttacked(getStrength());
 				if (!preyToEat.isAlive()) {
-					World.getInstance().removeAnimal(preyToEat);
+					getAnimalRepository().remove(preyToEat);
 					preyToEat = null;
 					switchMode(PredatorMode.RELAXATION);
 				}
@@ -80,7 +83,7 @@ public final class Predator extends Animal {
 		}
 		int minDist = Integer.MAX_VALUE;
 		int currentDist;
-		for (Prey p : World.getInstance().getPreys()) {
+		for (Prey p : getKnownPreys()) {
 			if (p.canBeAttacked()) {
 				currentDist = getPos().getManhattanDistanceTo(p.getPos());
 				if (currentDist < minDist) {
@@ -147,11 +150,4 @@ public final class Predator extends Animal {
 		this.currentMode = newMode;
 	}
 
-	public PredatorMode getCurrentMode() {
-		return currentMode;
-	}
-
-	public Prey getPreyToEat() {
-		return preyToEat;
-	}
 }

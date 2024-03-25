@@ -1,5 +1,8 @@
 package siemieniuk.animals.math;
 
+import lombok.Getter;
+
+@Getter
 public class Pair<L, R> {
     private final L left;
     private final R right;
@@ -9,11 +12,4 @@ public class Pair<L, R> {
         this.right = second;
     }
 
-    public L getLeft() {
-        return left;
-    }
-
-    public R getRight() {
-        return right;
-    }
 }

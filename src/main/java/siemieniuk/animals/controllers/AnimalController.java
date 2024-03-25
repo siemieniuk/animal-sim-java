@@ -1,20 +1,21 @@
 package siemieniuk.animals.controllers;
 
-import siemieniuk.animals.core.World;
-import siemieniuk.animals.gui.AnimalView;
-import siemieniuk.animals.core.animals.Animal;
-import siemieniuk.animals.core.typing.AnimalObservable;
-import siemieniuk.animals.images.ImageLoader;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import siemieniuk.animals.core.animals.Animal;
+import siemieniuk.animals.core.animals.AnimalRepository;
+import siemieniuk.animals.core.typing.AnimalObservable;
+import siemieniuk.animals.gui.AnimalView;
+import siemieniuk.animals.images.ImageLoader;
 
 public abstract class AnimalController implements AnimalObservable {
     private final Animal observedAnimal;
     private final AnimalView observedView;
+    private final AnimalRepository animalRepository;
     @FXML private ProgressBar healthBar;
     @FXML private Text healthLabel;
     @FXML private Text name;
@@ -23,7 +24,8 @@ public abstract class AnimalController implements AnimalObservable {
     @FXML private ImageView icon;
     @FXML private Button deleteAnimalBtn;
 
-    public AnimalController(Animal animal, AnimalView view) {
+    public AnimalController(AnimalRepository animalRepository, Animal animal, AnimalView view) {
+        this.animalRepository = animalRepository;
         this.observedAnimal = animal;
         this.observedView = view;
     }
@@ -55,8 +57,9 @@ public abstract class AnimalController implements AnimalObservable {
 
     @FXML
     public void deleteAnimal() {
+        System.out.println("Empty animalRepository: " + animalRepository == null);
         if (observedAnimal != null) {
-            World.getInstance().removeAnimal(observedAnimal);
+            animalRepository.remove(observedAnimal);
         }
         ((Pane)observedView.getParent()).getChildren().remove(observedView);
     }

@@ -1,8 +1,10 @@
 package siemieniuk.animals.core.randanimal;
 
-import siemieniuk.animals.core.World;
+import siemieniuk.animals.core.animals.AnimalRepository;
 import siemieniuk.animals.core.animals.Predator;
 import siemieniuk.animals.core.animals.Prey;
+import siemieniuk.animals.core.locations.LocationRepository;
+import siemieniuk.animals.math.Coordinates;
 
 import java.io.*;
 import java.net.URL;
@@ -14,6 +16,7 @@ public class RandomAnimalAppender {
     private static List<String> preySpecies;
     private static List<String> predatorSpecies;
     private static List<String> names;
+
 
     public static void loadConfig(URL pathToPreys, URL pathToPredators, URL pathToNames) {
         preySpecies = new ArrayList<>();
@@ -43,24 +46,31 @@ public class RandomAnimalAppender {
     }
 
     private static final Random random = new Random();
-    public static void newPrey() {
+    public static void newPrey(AnimalRepository animalRepository, LocationRepository locationRepository) {
         String name = randomName();
         int health = 100;
         int speed = 1;
         int strength = (int) normalDistribution(4.0, 1.0);
         String species = randomPreySpecies();
-        Prey prey = new Prey(name, health, speed, strength, species, 2, 3);
-        World.getInstance().createAnimal(prey);
+
+        Prey prey = new Prey(animalRepository, locationRepository, name, health, speed, strength, species, 2, 3);
+        Coordinates coordinates = locationRepository.getRandomPathLocation();
+        prey.setPos(coordinates);
+//        World.getInstance().createAnimal(prey);
+        animalRepository.push(prey);
     }
 
-    public static void newPredator() {
+    public static void newPredator(AnimalRepository animalRepository, LocationRepository locationRepository) {
         String name = randomName();
         int health = 100;
         int speed = 2;
         int strength = (int) normalDistribution(12.0, 2.0);
         String species = randomPredatorSpecies();
-        Predator p = new Predator(name, health, speed, strength, species);
-        World.getInstance().createAnimal(p);
+
+        Predator p = new Predator(animalRepository, locationRepository, name, health, speed, strength, species);
+        Coordinates coordinates = locationRepository.getRandomValidPosition();
+        p.setPos(coordinates);
+        animalRepository.push(p);
     }
 
     private static double normalDistribution(double mean, double stdev) {

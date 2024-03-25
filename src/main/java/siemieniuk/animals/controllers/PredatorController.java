@@ -1,6 +1,8 @@
 package siemieniuk.animals.controllers;
 
+import siemieniuk.animals.core.animals.AnimalRepository;
 import siemieniuk.animals.core.animals.Predator;
+import siemieniuk.animals.core.locations.LocationRepository;
 import siemieniuk.animals.gui.PredatorView;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -11,8 +13,8 @@ import javafx.util.Duration;
 public final class PredatorController extends AnimalController {
     @FXML private Text currentMode;
 
-    public PredatorController(Predator predator, PredatorView view) {
-        super(predator, view);
+    public PredatorController(AnimalRepository animalRepository, Predator predator, PredatorView view) {
+        super(animalRepository, predator, view);
     }
 
     @FXML

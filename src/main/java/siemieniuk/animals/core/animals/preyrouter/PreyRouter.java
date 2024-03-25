@@ -1,7 +1,8 @@
 package siemieniuk.animals.core.animals.preyrouter;
 
-import siemieniuk.animals.core.World;
+import lombok.Getter;
 import siemieniuk.animals.core.locations.Location;
+import siemieniuk.animals.core.locations.LocationRepository;
 import siemieniuk.animals.math.Coordinates;
 
 import java.util.*;
@@ -14,16 +15,18 @@ import java.util.concurrent.ConcurrentHashMap;
 public abstract class PreyRouter {
     private final Coordinates source;
     private Coordinates target;
-    private List<Coordinates> plan;
-    private static final ConcurrentHashMap<Coordinates, Location> locations = World.getInstance().getLocations();
 
+    @Getter
+    private List<Coordinates> plan;
+    private final LocationRepository locationRepository;
     /**
      * Constructor by Coordinates
      * @param source object of class Coordinates
      */
-    public PreyRouter(Coordinates source) {
+    public PreyRouter(LocationRepository locationRepository, Coordinates source) {
         this.source = source;
         this.target = null;
+        this.locationRepository = locationRepository;
     }
 
     protected void findPlanToNearest(Class<?> sourceType) {
@@ -39,7 +42,7 @@ public abstract class PreyRouter {
         assert sourceType.isAssignableFrom(Location.class);
         Coordinates res = source;
         int minDistance = Integer.MAX_VALUE;
-        for (Location l : locations.values()) {
+        for (Location l : locationRepository.getLocations().values()) {
             if (l.getClass().isAssignableFrom(sourceType)) {
                 Coordinates lPos = l.getPos();
                 int dist = lPos.getManhattanDistanceTo(source);
@@ -53,7 +56,7 @@ public abstract class PreyRouter {
     }
 
     public Location getTarget() {
-        return locations.get(target);
+        return locationRepository.getLocations().get(target);
     }
 
     /**
@@ -102,10 +105,6 @@ public abstract class PreyRouter {
         }
     }
 
-    public List<Coordinates> getPlan() {
-        return plan;
-    }
-
     /**
      * Finds all neighbor locations (distance=1 horizontally, diagonally or vertically)
      * @param pos A specific position
@@ -118,7 +117,7 @@ public abstract class PreyRouter {
                 int newX = pos.getX() + x;
                 int newY = pos.getY() + y;
                 Coordinates tmp = new Coordinates(newX, newY);
-                if (locations.get(tmp) != null) {
+                if (locationRepository.getLocations().get(tmp) != null) {
                     if (!tmp.equals(pos)) {
                         res.add(tmp);
                     }
@@ -136,6 +135,8 @@ public abstract class PreyRouter {
     private List<Coordinates> getVonNeumannNeighborhood(Coordinates pos) {
         List<Coordinates> res = new ArrayList<>();
         Coordinates tmp = new Coordinates(pos.getX() + 1, pos.getY());
+
+        ConcurrentHashMap<Coordinates, Location> locations = locationRepository.getLocations();
         if (locations.get(tmp) != null) {
             res.add(tmp);
         }

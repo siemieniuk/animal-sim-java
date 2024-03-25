@@ -1,6 +1,5 @@
 package siemieniuk.animals.core.world_creation;
 
-import siemieniuk.animals.core.World;
 import siemieniuk.animals.core.locations.*;
 import siemieniuk.animals.hobhw_parser.HobhwParser;
 import siemieniuk.animals.hobhw_parser.WorldParameters;
@@ -19,14 +18,17 @@ import java.util.concurrent.ConcurrentHashMap;
 public class WorldBuilder {
     private static final int MIN_DIST = 4;
     private WorldBuilder() {}
-    public static World create(int howManySources, int howManyHideouts, int xSize, int ySize){
+
+    public static LocationRepository create(int howManySources, int howManyHideouts, int xSize, int ySize){
         Coordinates.setMaxDimensions(xSize, ySize);
         List<Coordinates> coordinates = generateCoordinates(xSize, ySize, howManySources+howManyHideouts);
+
         ConcurrentHashMap<Coordinates, Location> locations = new ConcurrentHashMap<>();
         generateWaterSources(locations, coordinates.subList(0, howManySources / 2));
         generatePlantSources(locations, coordinates.subList(howManySources/2, howManySources));
         generateHideouts(locations, coordinates.subList(howManySources, coordinates.size()));
-        return World.init(locations, xSize, ySize);
+
+        return new LocationRepository(locations, xSize, ySize);
     }
 
     /**
@@ -35,17 +37,19 @@ public class WorldBuilder {
      * @return the new world
      * @throws FileNotFoundException File was not found
      */
-    public static World create(URL src) throws FileNotFoundException {
+    public static LocationRepository create(URL src) throws FileNotFoundException {
         HobhwParser parser = new HobhwParser(src);
         WorldParameters params = parser.parse();
         Coordinates.setMaxDimensions(params.getxSize(), params.getySize());
+
         ConcurrentHashMap<Coordinates, Location> locations = new ConcurrentHashMap<>();
         generateWaterSources(locations, params.getWaterSources());
         generatePlantSources(locations, params.getPlantSources());
         generateHideouts(locations, params.getHideouts());
         generateIntersections(locations, params.getIntersections());
         generatePaths(locations, params.getPaths());
-        return World.init(locations, params.getxSize(), params.getySize());
+
+        return new LocationRepository(locations, params.getxSize(), params.getySize());
     }
 
     private static void generatePlantSources(ConcurrentHashMap<Coordinates, Location> locations, List<Coordinates> coordinates) {
